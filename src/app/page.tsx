@@ -11,7 +11,8 @@ export default function Home() {
   const [currentScreen, setCurrentScreen] = useState('loading'); // 'loading', 'landing', 'home'
   const [typewriterText, setTypewriterText] = useState('');
   const [scrollY, setScrollY] = useState(0);
-  const [carrousel, setCarrousel] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+
   
 
   // Efecto typewriter para la pantalla de carga
@@ -124,24 +125,59 @@ export default function Home() {
         {/* Contenido principal con padding superior para evitar superposición con navbar */}
         <main className="relative bg-[#111111] pt-18">
         {/* Hero Section */}
-        {/* <section className="h-[100%] bg-[#f1efe0] relative">
-          <div className="relative w-full h-[1220px]">
-          <RippleEffect
-            className="absolute inset-0 bg-none"
-            style={{
-              backgroundImage: 'url(/forest.png)',
-              backgroundSize: 'contain',
-              backgroundPosition: 'center'
-            }}
-            autoDrops={false}
-            options={{ perturbance: 0.02, dropRadius: 40 }}
+        <section className="h-[100%] bg-[#f1efe0] relative">
+          
+          <div className="relative w-full h-[950px]">
+          <video
+            src="/costurera.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
           />
-          </div>  
-        </section > */}
+          {/* Overlay dinámico */}
+        {isOpen && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 z-10 transition-all duration-500">
+            <h2 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">
+              casa sansón.
+            </h2>
+            <p className="text-white text-lg">
+              lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+            </p>
+            <p className="text-white text-lg">
+              lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+            </p>
+            <p className="text-white text-lg">
+              lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+            </p>
+            <p className="text-white text-lg">
+              lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+            </p>
+            <p className="text-white text-lg">
+              lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+            </p><p className="text-white text-lg">
+              lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+            </p><p className="text-white text-lg">
+              lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Botón toggle debajo del video */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="absolute left-1/2 -translate-x-1/2 bottom-10 px-6 py-3 bg-black  text-white shadow-lg hover:bg-black/80 transition z-20"
+      >
+        {isOpen ? "X" : "Filosofía"}
+      </button>
+    </section>
+  
 
         {/* Mensaje con nuestra filosofia y foto 1 */}
         <ScrollReveal animation="up" delay={200}>
-          <section className="py-16 bg-[#222222] border-gray-700 mb-24  h-[80vh] w-full mx-auto grid grid-cols-2">
+          <section className="py-16 bg-[url(/black.jpeg)] bg-cover bg-center border-gray-700  h-[80vh] w-full mx-auto grid grid-cols-2">
             <ScrollReveal animation="left" delay={400}>
               <div className="flex flex-col justify-center ml-[20%] mr-[20%] mt-[40%]">
                 <h2 className="text-4xl font-bold mb-6 text-white">Filosofia</h2>
@@ -172,7 +208,7 @@ export default function Home() {
 
         {/* Mensaje con nuestra filosofia y foto 2 */}
         <ScrollReveal animation="up" delay={200}>
-          <section className="py-16 bg-[#222222] border-gray-700 mb-24  h-[80vh] w-full mx-auto grid grid-cols-2">
+          <section className="py-16 bg-black bg-cover bg-center border-gray-700   h-[80vh] w-full mx-auto grid grid-cols-2">
             {/* Columna izquierda - Imagen */}
             <ScrollReveal animation="left" delay={400}>
               <div className="flex justify-end items-center ml-[17%] ">
@@ -205,7 +241,7 @@ export default function Home() {
 
         {/* Mensaje con nuestra filosofia y foto 3 */}
         <ScrollReveal animation="down" delay={200}>
-          <section className="py-16 bg-[#222222] border-gray-700 pt-0 mt-0 mb-24  h-[80vh] w-[100%] mx-auto grid grid-cols-2">
+          <section className="py-16 bg-black bg-cover bg-center border-gray-700 pt-0 mt-0 mb-24  h-[120vh] w-[100%] mx-auto grid grid-cols-2">
             <ScrollReveal animation="left" delay={400}>
               <div className="col-span-1">
                 <h2 className="text-4xl font-bold flex col-span-1 mt-[30%] ml-14 mr-14 items-center mb-12 text-white">
@@ -216,20 +252,21 @@ export default function Home() {
                   En la página de about us crea una comunidad al guiar al usuario a través de la visión de la marca, muestra los bocetos que hicieron reales sus productos y usa un lenguaje que es directo.
                   Incluye una sección de Chat with Us, donde le permite a sus clientes compartir sus ideas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
                 </p>
+                <img src="/logo.png" alt="Arte" className="w-[200px] h-[200px] ml-[20%]" />
               </div>
             </ScrollReveal>
             <ScrollReveal animation="right" delay={600}>
               <div className="flex col-span-1 mt-[14%] mb-[45%] mr-[10%] justify-end">
                <RippleEffect
-            className="absolute inset-0 bg-none w-[60px] h-[600px]"
-            style={{
-              backgroundImage: 'url(/jacob_elordi.png)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
-            }}
-            autoDrops={false}
-            options={{ perturbance: 0.02, dropRadius: 40 }}
-          />
+                className="block bg-none w-[600px] h-[1000px] object-cover"
+                style={{
+                  backgroundImage: 'url(/arte.jpg)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+                autoDrops={false}
+                options={{ perturbance: 0.02, dropRadius: 80 }}
+              />
               </div>
             </ScrollReveal>
           </section>
