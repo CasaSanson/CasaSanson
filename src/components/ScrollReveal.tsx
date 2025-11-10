@@ -38,7 +38,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
   return (
     <div
-      ref={ref}
+      ref={ref as React.RefObject<HTMLDivElement>}
       className={`${getAnimationClass()} ${className}`}
       style={style}
     >
