@@ -1,59 +1,97 @@
 "use client";
 
-import RippleEffect from "@/components/RippleEffect";
 
 export default function About() {
-  return (
-    <>
-    <main className="bg-gradient-to-t from-[#ffffff] to-[#222222] min-h-screen w-screen pt-18 relative">
-      <section className="py-16 border-gray-700 mb-24 h-[100vh] w-full mx-auto ">
-        <div className="flex flex-col justify-center items-center">
-          <h2 className="text-4xl font-bold animate-fade-in mb-6 pt-16 text-white">Casa Sansón</h2>
-          <p className="text-white font-serif text-lg animate-fade-in">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-          </p>
-        </div>
-        <div className="group relative w-[40%] left-[50%] translate-x-[-50%] h-[1000px] flex items-center justify-center overflow-hidden mt-[5%] border-4 border-black">
-  {/* Imagen 1: visible por defecto */}
-  <img
-    src="/about2.png"
-    alt="Vogue"
-    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-100 group-hover:opacity-0"
-  />
+    return (
+        <main className="bg-white min-h-screen w-[100%] mx-auto">
+            {/* section de la coleccion */}
+            <section className="w-full mx-auto bg-white grid grid-cols-2 h-[100vh] ">
+                <div className="col-span-1">
+                  <p className="text-black text-lg w-[60%] mx-auto mt-[60%]">
+                  Una historia, una tradición, una cultura…
+                  </p>
+                  <p className="text-black text-lg w-[60%] mx-auto">
+                  Nuestro mundo nos llevó a aunar ideas
+                  e ilusiones con el propósito de crear Casa Sansón
+                  </p>
+                </div>
+                <div className="col-span-1">
+                  <img src="/face.jpg" alt="Vogue" className="w-full h-[92%]" />
+                </div>
+            </section>
 
-  {/* Imagen 2: aparece en hover */}
-  <img
-    src="/about3.jpg"
-    alt="Jacob Elordi"
-    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100"
-  />
-</div>
+            {/* First Columns */}
+            <section className="w-full mx-auto bg-white grid grid-cols-3 mt-[10%] h-[50vh] ">
+                <div className="col-span-1">
+                  <img src="/apolix.jpeg" alt="Vogue" className="w-[90%] ml-[10%] h-[90%] object-cover" />
+                </div>
+                <div className="col-span-1">
+                  <p className="text-black text-lg w-[60%] mt-[30%] mx-auto">
+                  Creamos prendas para ser queridas y recordadas.
+                  <br />
+                  <br />
+                  Somos fieles a nuestros principios de sostenibilidad con nuestro entorno,
+                  <br />
+                  <br />
+                  procurando siempre preservar este precioso mundo.
+                  </p>
+                </div>
+                <div className="col-span-1">
+                  <img src="/lanaabout.jpg" alt="Vogue" className="w-full h-[50%] object-cover" />
+                </div>
+            </section>
 
-      </section>
+            {/* Second Columns */}
+            <section className="w-full mx-auto bg-white grid grid-cols-2 mt-[10%] h-[50vh] ">
+                <div className="col-span-1">
+                  <img src="/hombre.jpg" alt="Vogue" className="w-[80%] ml-[10%] h-[80%] object-cover" />
+                </div>
+                <div className="col-span-1">
+                  <p className="text-black text-lg w-[60%] mt-[10%] mx-auto">
+                  Creamos prendas para ser queridas y recordadas.
+                  <br />
+                  <br />
+                  Somos fieles a nuestros principios de sostenibilidad con nuestro entorno,
+                  <br />
+                  <br />
+                  procurando siempre preservar este precioso mundo.
+                  </p>
+                  <p className="text-black text-lg w-[60%] mt-[10%] mx-auto">
+                  Creamos prendas para ser queridas y recordadas.
+                  <br />
+                  <br />
+                  Somos fieles a nuestros principios de sostenibilidad con nuestro entorno,
+                  <br />
+                  <br />
+                  procurando siempre preservar este precioso mundo.
+                  </p>
+                </div>
+            </section>
 
-      {/* section de la historia de la marca */}
-      <section className="py-16 border-gray-700 mb-24 h-[120vh] w-full mx-auto bg-[#111111] ">
-        <div className="grid grid-cols-2 justify-center items-center">
-          <div className="col-span-1">
-            <h2 className="text-4xl font-bold animate-fade-in mb-6 pt-16 ml-[10%] text-white">Casa Sansón</h2>
-            <p className="text-white font-serif text-lg animate-fade-in mr-[60%] ml-[10%]">
-              Casa Sansón is a brand that sells products that are made with love and care.
-            </p>
-          </div>  
-        </div>
-        <div className="grid grid-cols-3 ml-[10%] justify-center items-center mt-[10%] ">
-          <img src="/about3.jpg" alt="About" className="col-span-1 w-[70%] h-[100%] object-cover border-2 border-gray-500" />
-          <img src="/about5.png" alt="About" className="col-span-1 w-[70%] h-[100%] object-cover border-2 border-gray-500" />
-          <img src="/about3.jpg" alt="About" className="col-span-1 w-[70%] h-[100%] object-cover border-2 border-gray-500" />
-        </div>
-      </section>
-      {/* section de la historia de la marca */}
-      <section className="py-16 border-gray-700 mb-24 h-[110vh] w-full mx-auto bg-[#111111] ">
-        <div className="flex flex-col justify-center items-center">
-          <h2 className="text-4xl font-bold animate-fade-in mb-6 pt-16 text-white">Casa Sansón</h2>
-        </div>
-      </section>
-    </main>
-    </>
-  );
+            {/* Third Columns */}
+            <section className="w-full mx-auto bg-white grid grid-cols-3 mt-[20%] h-[50vh] ">
+                <div className="col-span-1">
+                  <img src="/lospanas.jpg" alt="Vogue" className="w-[70%] ml-[10%] h-[70%] object-cover" />
+                </div>
+                <div className="col-span-1">
+                  <p className="text-black text-lg w-[60%] mt-[20%] mx-auto">
+                  Creamos prendas para ser queridas y recordadas.
+                  <br />
+                  <br />
+                  Somos fieles a nuestros principios de sostenibilidad con nuestro entorno,
+                  <br />
+                  <br />
+                  procurando siempre preservar este precioso mundo.
+                  </p>
+                </div>
+                <div className="col-span-1">
+                  <img src="/birds.jpg" alt="Vogue" className="w-full h-[70%] mr-[10%]" />
+                </div>
+            </section>
+
+            {/* footer */}
+
+          
+        </main>
+    );
 }

@@ -43,6 +43,9 @@ const config: Config = {
         brand: {
           400: '#6b7280',
         },
+        cloth: {
+          black: '#361010',
+        },
         'background': 'var(--background)',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
