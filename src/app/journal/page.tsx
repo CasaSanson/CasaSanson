@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import RippleEffect from "@/components/RippleEffect";
+import Footer from "@/components/footer/Footer";
 
 export default function Journal() {
     const collage=[
@@ -71,14 +72,14 @@ export default function Journal() {
         <section className="py-16 mb-24 bg-[#FDE6BB] w-full mx-auto">
             <div className="w-[60%] mx-auto">
                 <div className="flex justify-center items-center grid grid-cols-2">
-                   <h2 className="text-4xl font-bold mt-[20%] ">
+                   <h2 className="text-xl md:text-4xl font-bold mt-[20%] ">
                     A quien corresponda:
                    </h2>
-                   <p className="text-black text-md ml-[60%] ">
+                   <p className="text-black text-sm md:text-md ml-[60%] ">
                     2 de noviembre de 2025
                    </p>
                 </div>
-            <p className="text-black text-lg mt-[10%] w-full sm:text-base md:text-lg lg:text-xl xl:text-lg">
+            <p className="text-black text-sm md:text-lg mt-[10%] w-full sm:text-base md:text-lg lg:text-xl xl:text-lg">
                         Dejaré mi casa por ti,
             dejaré mi barrio y me iré
             lejos de aquí.
@@ -131,8 +132,8 @@ export default function Journal() {
             las piedras del camino, lo que nos es querido siempre queda atrás.
             </p>
             </div>
-            <div className="w-[60%] mx-auto grid grid-cols-[2fr_1fr] gap-10 pt-16">
-                <p className="text-black text-lg w-full mx-auto">
+            <div className="w-[60%] mx-auto gap-10 pt-16">
+                <p className="text-black text-sm md:text-lg w-full mx-auto">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. 
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
@@ -149,11 +150,6 @@ export default function Journal() {
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.  
                 </p>
-                <img
-                src="/tiempo.png"
-                alt="Forest"
-                className="w-[500px] h-[500px] object-cover opacity-80"
-                />
             </div>
             <div className="w-[60%] mx-auto  pt-24">
             <p className="text-black text-lg w-full mx-auto">
@@ -169,13 +165,7 @@ export default function Journal() {
                />
             </div>
         </section>
-        <footer className="bg-[#111111] text-white py-8">
-          <div className="container mx-auto px-4">
-            <p className="text-center">
-              &copy; 2025 Casa Sansón. Todos los derechos reservados.
-            </p>
-          </div>
-        </footer>
+       <Footer />
       </main> 
     </div>
   );

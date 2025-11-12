@@ -2,11 +2,23 @@
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, ShoppingCartIcon } from "lucide-react";
 const Navbar = () => {
   const [show, setShow] = useState(true);
+  const [currentScreen, setCurrentScreen] = useState('home');
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+
+ useEffect(() => {
+  const handleSkipToHome = () => {
+    setCurrentScreen('home');
+  };
+  
+    window.addEventListener('skipToHome', handleSkipToHome);
+    return () => window.removeEventListener('skipToHome', handleSkipToHome);
+  }, []);
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,39 +49,43 @@ const Navbar = () => {
         {/* LOGO */}
         <div className="flex text-white">
         <Link
-          href="/"
-          className="text-white text-lg font-bold hover:text-gray-500 focus:text-red-500"
-        >
-          Casa Sansón
-        </Link>
+  href="#"
+  onClick={(e) => {
+    e.preventDefault();
+    window.dispatchEvent(new Event('skipToHome')); // dispara el evento
+  }}
+  className="text-white text-lg font-bold hover:text-gray-500 focus:text-red-500"
+>
+  Casa Sansón
+</Link>
         </div>
         {/* about us */}
         <Link
           href="/about"
           className="text-white text-lg font-bold hover:text-gray-500 focus:text-red-500"
         >
-          About Us
+          Nosotros
         </Link>
         {/* collections */}
         <Link
-          href="/collections"
+          href="/catalogo"
           className="text-white text-lg font-bold hover:text-gray-500 focus:text-red-500"
         >
-          Collections
+          Catálogo
         </Link>
         {/* journal */}
         <Link
           href="/journal"
           className="text-white text-lg font-bold hover:text-gray-500 focus:text-red-500"
         >
-          Journal
+          Diario
         </Link>
         {/* cart */}
         <Link
           href="/cart"
           className="text-white text-lg font-bold hover:text-gray-500 focus:text-red-500"
         >
-          Cart
+          <ShoppingCartIcon className="w-6 h-6" />
         </Link>
       </div>
       <button onClick={toggleMenu} className="text-white text-lg font-bold hover:text-gray-500 px-4 focus:text-white sm:hidden">
@@ -98,7 +114,7 @@ const Navbar = () => {
           href="/catalogo"
           className="text-black text-lg hover:text-gray-500 focus:text-red-500 block"
         >
-          Colecciones
+          Catálogo
         </Link>
         {/* journal */}
         <Link
@@ -112,7 +128,7 @@ const Navbar = () => {
           href="/cart"
           className="text-black text-lg hover:text-gray-500 focus:text-red-500 block"
         >
-          Carrito
+          <ShoppingCartIcon className="w-6 h-6" />
         </Link>
       </div>
     </nav>

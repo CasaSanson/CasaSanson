@@ -46,10 +46,10 @@ export default function Catalogo() {
             {/* Productos */}
             <section className="w-full mx-auto bg-white bg-cover bg-center h-full pt-[15%] md:pt-[5%]">
                 <h1 className="text-4xl text-center text-black">Productos</h1>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-[95%] mx-auto pt-[10%] md:pt-[5%]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[95%] mx-auto pt-[10%] md:pt-[5%]">
                     {products.map((product) => (
                         <div key={product.id} className="flex flex-col items-start justify-start">
-                           <Link href={`/catalogo/${product.id}`} className="w-full h-full">
+                           <Link href={`/catalogo/ver/${product.id}`} className="w-full h-full">
                                 <img src={product.image} alt={product.name} className="w-full h-full" />
                            </Link>
                             <div className="flex flex-col items-start justify-start w-full">

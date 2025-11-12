@@ -16,8 +16,16 @@ export default function Home() {
   const [scrollY, setScrollY] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    window.dispatchEvent(new Event('skipToHome'));
+  }, []);
+  useEffect(() => {
+    // Detectar si la pantalla es pequeña
+    if (window.innerWidth < 768) { // 768px = punto de corte md de Tailwind
+      setCurrentScreen('home'); // Forzar home en pantallas pequeñas
+    }
+  }, []);
   
-
   // Efecto typewriter para la pantalla de carga
   useEffect(() => {
     const fullText = "cargando...";
@@ -269,19 +277,24 @@ export default function Home() {
           </section>
         </ScrollReveal>
 
-        {/* Mensaje con nuestra filosofia y foto 3 */}
+        {/* 3*/}
         <ScrollReveal animation="down" delay={200}>
           <section className="py-16 bg-white bg-cover bg-center border-gray-700 h-auto md:h-[80vh] w-auto md:w-full mx-auto grid grid-cols-1 md:grid-cols-2">
             <ScrollReveal animation="left" delay={400}>
               <div className="col-span-1flex flex-col md:justify-between px-4 md:px-10 py-4 md:py-10 md:mt-[11%]">
                 <h2 className="text-2xl md:text-4xl mb-10 text-black">
-                  diario
+                  Diario
                 </h2>
                 <p className="text-black text-sm md:text-lg mb-7">
                   Esta página me gusta por las animaciones, transiciones y elementos visuales que son muy atractivos.
                   En la página de about us crea una comunidad al guiar al usuario a través de la visión de la marca, muestra los bocetos que hicieron reales sus productos y usa un lenguaje que es directo.
                   Incluye una sección de Chat with Us, donde le permite a sus clientes compartir sus ideas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                </p>          
+                </p>
+                <p className="text-black text-sm md:text-lg mb-7">
+                  Esta página me gusta por las animaciones, transiciones y elementos visuales que son muy atractivos.
+                  En la página de about us crea una comunidad al guiar al usuario a través de la visión de la marca, muestra los bocetos que hicieron reales sus productos y usa un lenguaje que es directo.
+                  Incluye una sección de Chat with Us, donde le permite a sus clientes compartir sus ideas. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                </p>
               </div>
             </ScrollReveal>
             <ScrollReveal animation="right" delay={600}>

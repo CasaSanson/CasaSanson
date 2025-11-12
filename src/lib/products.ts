@@ -2,7 +2,7 @@ export const products = [
     {
         id: 1,
         name: "Sansón Blazer",
-        description: "Un blazer de lana de alta calidad",
+        description: "Un blazer de lana de alta calidad Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
         price: "$3800 MXN",
         color: "Negro",
         image: "/catalogo_mujer.jpg",
