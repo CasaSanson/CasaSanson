@@ -16,15 +16,7 @@ export default function Home() {
   const [scrollY, setScrollY] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    window.dispatchEvent(new Event('skipToHome'));
-  }, []);
-  useEffect(() => {
-    // Detectar si la pantalla es pequeña
-    if (window.innerWidth < 768) { // 768px = punto de corte md de Tailwind
-      setCurrentScreen('home'); // Forzar home en pantallas pequeñas
-    }
-  }, []);
+
   
   // Efecto typewriter para la pantalla de carga
   useEffect(() => {
@@ -86,7 +78,7 @@ export default function Home() {
 
         <div className="relative text-center z-10">
 
-          <h1 className="text-8xl md:text-4xl text-gray-300 mb-4 tracking-tight drop-shadow-lg">
+          <h1 className="text-2xl md:text-4xl text-gray-300 mb-4 tracking-tight drop-shadow-lg">
             {typewriterText}
           </h1>
         </div>
@@ -113,12 +105,12 @@ export default function Home() {
         </div>
         <div className="absolute top-0 left-1/2 w-[3px] h-[20%] bg-gray-500 animate-line-down"></div>
         <div className="absolute bottom-0 left-1/2 w-[3px] h-[20%] bg-gray-500 animate-line-up"></div>
-        <div className="relative z-10 bg-black/30 pointer-events-none flex flex-col items-center justify-center text-center w-auto md:w-[40%] h-auto md:h-[100%] mx-auto px-8 animate-slideUp">
+        <div className="relative z-10 bg-black/30 pointer-events-none flex flex-col items-center justify-center text-center w-auto md:w-[40%] h-[50%] md:h-[100%] mx-auto px-8 animate-slideUp">
         
           {/* Logo o título principal */}
           <div className="mb-12">
             <h1 className="text-5xl md:text-6xl justify-center text-white mb-4 drop-shadow-lg">
-             Casa Xoria
+             Casa Sansón
             </h1>
             <div className="w-full h-[1px] bg-gray-500 mx-auto mb-8"></div>
             <p className="text-xl  text-gray-300 font-light drop-shadow-md">
@@ -134,10 +126,10 @@ export default function Home() {
 
           {/* Botón de entrada */}
           <button
-            onClick={handleEnterWebsite}
+            //onClick={handleEnterWebsite}
             className="group relative pointer-events-auto px-12 py-4 bg-black backdrop-blur-sm text-white text-xl rounded-none border-2 border-black transition-all duration-700 hover:bg-gray-500/20 hover:text-black hover:border-black/50 hover:shadow-2xl transform hover:scale-105 drop-shadow-lg"
           >
-            <span className="relative z-30">Explorar</span>
+            <span className="relative z-30">Coming Soon...</span>
             <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
           </button>
 
@@ -192,7 +184,7 @@ export default function Home() {
       {/* Botón toggle debajo del video */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group absolute left-1/2 -translate-x-1/2 bottom-10 pointer-events-auto px-4 md:px-12 py-2 md:py-4 bg-black backdrop-blur-sm text-white text-sm md:text-xl rounded-none border-2 border-black transition-all duration-700 hover:bg-gray-500/20 hover:text-black hover:border-black/50 hover:shadow-2xl transform hover:scale-105 drop-shadow-lg"
+        className="group absolute left-1/2 -translate-x-1/2 bottom-10 pointer-events-auto px-4 md:px-12 py-2 md:py-4 bg-black backdrop-blur-sm text-white text-sm md:text-xl rounded-none border-2 border-black transition-all duration-700 hover:bg-gray-500/20 hover:text-black hover:border-black/50 hover:shadow-2xl transform hover:scale-105 drop-shadow-lg z-50"
       >
         {isOpen ? "X" : "Manifiesto"}
       </button>

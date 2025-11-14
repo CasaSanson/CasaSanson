@@ -10,15 +10,15 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 
- useEffect(() => {
-  const handleSkipToHome = () => {
-    setCurrentScreen('home');
-  };
-  
+  useEffect(() => {
+    const handleSkipToHome = () => {
+      setCurrentScreen('home');
+    };
+
     window.addEventListener('skipToHome', handleSkipToHome);
     return () => window.removeEventListener('skipToHome', handleSkipToHome);
   }, []);
-  
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,43 +40,38 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 bg-[#111111]  py-4 transition-transform duration-300 ${
-        show ? "translate-y-0" : "-translate-y-full"
-      }`} 
+      className={`fixed top-0 left-0 w-full z-50 bg-[#111111]  py-4 transition-transform duration-300 ${show ? "translate-y-0" : "-translate-y-full"
+        }`}
     >
       {/* Desktop Menu */}
       <div className="hidden md:flex  justify-center space-x-12 text-white ">
         {/* LOGO */}
         <div className="flex text-white">
-        <Link
-  href="#"
-  onClick={(e) => {
-    e.preventDefault();
-    window.dispatchEvent(new Event('skipToHome')); // dispara el evento
-  }}
-  className="text-white text-lg font-bold hover:text-gray-500 focus:text-red-500"
->
-  Casa Sansón
-</Link>
+          <Link
+            href="/"
+            className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400"
+          >
+            Casa Sansón
+          </Link>
         </div>
         {/* about us */}
         <Link
           href="/about"
-          className="text-white text-lg font-bold hover:text-gray-500 focus:text-red-500"
+          className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400"
         >
           Nosotros
         </Link>
         {/* collections */}
         <Link
           href="/catalogo"
-          className="text-white text-lg font-bold hover:text-gray-500 focus:text-red-500"
+          className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400"
         >
           Catálogo
         </Link>
         {/* journal */}
         <Link
           href="/journal"
-          className="text-white text-lg font-bold hover:text-gray-500 focus:text-red-500"
+          className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400"
         >
           Diario
         </Link>
@@ -95,12 +90,12 @@ const Navbar = () => {
       <div className={`${isMenuOpen ? "block" : "hidden"} sm:hidden bg-white space-y-4 pb-3 px-4 pt-4`}>
         {/* LOGO */}
         <div className="flex text-white block">
-        <Link 
-          href="/"
-          className="text-black text-lg hover:text-gray-500 focus:text-white"
-        >
-          Casa Sansón
-        </Link>
+          <Link
+            href="/"
+            className="text-black text-lg hover:text-gray-500 focus:text-white"
+          >
+            Casa Sansón
+          </Link>
         </div>
         {/* about us */}
         <Link

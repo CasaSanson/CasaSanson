@@ -19,7 +19,8 @@ interface FormData {
     codigoPostal: string;
     pais: string;
     metodoEnvio: string;
-    comentarios: string;
+    talla: string;
+    personalizado: string;
 }
 
 export default function CompraPage() {
@@ -40,7 +41,8 @@ export default function CompraPage() {
         codigoPostal: '',
         pais: 'México',
         metodoEnvio: 'estandar',
-        comentarios: ''
+        talla: '',
+        personalizado: '',
     });
 
     const [errors, setErrors] = useState<Partial<FormData>>({});
@@ -93,7 +95,7 @@ export default function CompraPage() {
         try {
             // Primero, guardar el pedido en Supabase
             const { data: orderData, error: orderError } = await supabase
-                .from('orders')
+                .from('CS_ORDERS')
                 .insert({
                     product_id: product?.id || 0,
                     product_name: product?.name || '',
@@ -112,7 +114,8 @@ export default function CompraPage() {
                     subtotal: subtotal,
                     total: total,
                     status: 'pending',
-                    comentarios: formData.comentarios || null
+                    size: size,
+                    personalized: text,
                 })
                 .select()
                 .single();
@@ -137,7 +140,6 @@ export default function CompraPage() {
                     subtotal: subtotal,
                     total: total,
                     status: 'pending',
-                    comentarios: formData.comentarios || null
                 });
                 alert(`Error al guardar el pedido: ${orderError.message}`);
                 return;

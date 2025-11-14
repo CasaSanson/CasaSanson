@@ -1,7 +1,1 @@
-{
-  "/catalogo/page": "app/catalogo/page.js",
-  "/catalogo/ver/[id]/page": "app/catalogo/ver/[id]/page.js",
-  "/catalogo/comprar/[id]/page": "app/catalogo/comprar/[id]/page.js",
-  "/about/page": "app/about/page.js",
-  "/page": "app/page.js"
-}
+{}

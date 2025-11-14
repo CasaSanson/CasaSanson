@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{\"components/RippleEffect.jsx -> jquery\":{\"id\":\"components/RippleEffect.jsx -> jquery\",\"files\":[\"static/chunks/_app-pages-browser_node_modules_jquery_dist_jquery_js.js\"]},\"components/RippleEffect.jsx -> jquery.ripples\":{\"id\":\"components/RippleEffect.jsx -> jquery.ripples\",\"files\":[\"static/chunks/_app-pages-browser_node_modules_jquery_ripples_dist_jquery_ripples_js.js\"]}}"
+self.__REACT_LOADABLE_MANIFEST="{}"

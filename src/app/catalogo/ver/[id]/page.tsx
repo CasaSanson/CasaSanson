@@ -151,7 +151,7 @@ export default function TiendaVerPage({ params }: { params: { id: string } }) {
                                     </Select>
                                 </div>
                                 <div className="mt-4">
-                                    <AccordionComponent />
+                                    <AccordionComponent product={product} />
                                     </div>
                                 <div className="flex space-x-3 mt-10">
                                     <Link href={{
