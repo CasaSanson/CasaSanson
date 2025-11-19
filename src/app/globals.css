@@ -311,3 +311,15 @@
   transform: translateY(calc(var(--parallax-offset, 0) * 0.5));
   transition: transform 0.1s ease-out;
 }
+
+/* Estilos para react-phone-number-input - Reducir tamaño de la bandera */
+.PhoneInputCountryIcon {
+  width: 1.5em !important;
+  height: 1.5em !important;
+}
+
+.PhoneInputCountryIconImg {
+  width: 1.5em !important;
+  height: 1.5em !important;
+  object-fit: contain;
+}

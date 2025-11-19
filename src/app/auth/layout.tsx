@@ -1,4 +1,4 @@
-import NavbarWrapperAuth from "@/components/navbar/NavbarWrapperAuth";
+import NavbarWrapperAuth from "@/components/NAVBAR/NavbarWrapperAuth";
 
 
 export default function AuthLayout({

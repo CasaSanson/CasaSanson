@@ -1,1 +1,9 @@
-{}
+{
+  "/catalogo/page": "app/catalogo/page.js",
+  "/about/page": "app/about/page.js",
+  "/journal/page": "app/journal/page.js",
+  "/catalogo/ver/[id]/page": "app/catalogo/ver/[id]/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/page": "app/page.js",
+  "/catalogo/success/page": "app/catalogo/success/page.js"
+}

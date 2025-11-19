@@ -3,6 +3,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { MenuIcon, ShoppingCartIcon } from "lucide-react";
+import Image from "next/image";
 const Navbar = () => {
   const [show, setShow] = useState(true);
   const [currentScreen, setCurrentScreen] = useState('home');
@@ -44,30 +45,31 @@ const Navbar = () => {
         }`}
     >
       {/* Desktop Menu */}
-      <div className="hidden md:flex  justify-center space-x-12 text-white ">
+      <div className="hidden md:flex justify-center space-x-20 text-white items-center ">
         {/* LOGO */}
         <div className="flex text-white">
           <Link
             href="/"
-            className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400"
+            className=""
           >
-            Casa Sansón
+            <Image 
+            width={100}
+            height={100}
+            src="/sanson_white.png" 
+            alt=""
+            className="object-cover">
+            </Image>
           </Link>
         </div>
-        {/* about us */}
-        <Link
-          href="/about"
-          className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400"
-        >
-          Nosotros
-        </Link>
+        
         {/* collections */}
         <Link
           href="/catalogo"
-          className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400"
+          className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400 items-center"
         >
           Catálogo
         </Link>
+
         {/* journal */}
         <Link
           href="/journal"
@@ -75,13 +77,15 @@ const Navbar = () => {
         >
           Diario
         </Link>
-        {/* cart */}
+        {/* about us */}
         <Link
-          href="/cart"
-          className="text-white text-lg font-bold hover:text-gray-500 focus:text-red-500"
+          href="/about"
+          className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400"
         >
-          <ShoppingCartIcon className="w-6 h-6" />
+          Nosotros
         </Link>
+        {/* cart */}
+        
       </div>
       <button onClick={toggleMenu} className="text-white text-lg font-bold hover:text-gray-500 px-4 focus:text-white sm:hidden">
         <MenuIcon name="menu" className="w-6 h-6" />
