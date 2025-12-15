@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import Header from "@/components/shop/buy/Header";
+// Para catalogo/comprar/[id]/page.tsx
 import ClientForm from "@/components/shop/buy/ClientForm";
+import Header from "@/components/shop/buy/Header";
 import Summary from "@/components/shop/buy/Summary";
 
 export default function CompraPage() {        
