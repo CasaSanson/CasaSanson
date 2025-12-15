@@ -1,11 +1,5 @@
 'use client'
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import InstaxPhoto from "@/components/Instax";
-import liquidChrome, { LiquidChrome } from "@/components/LiquidChrome";
-import WaterRipple from "@/components/WaterRiple";
-import ScrollReveal from "@/components/ScrollReveal";
-import LoadingScreen from "@/components/LoadingScreen";
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/home/Header";
 import Columns from "@/components/home/Columns";

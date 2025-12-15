@@ -1,6 +1,19 @@
 "use client";
 import { useState } from "react";
-import { FormData } from "@/lib/shop/formData";
+export interface FormData {
+    nombre: string;
+    apellido: string;
+    email: string;
+    telefono: string;
+    direccion: string;
+    ciudad: string;
+    codigoPostal: string;
+    pais: string;
+    metodoEnvio: string;
+    talla: string;
+    personalizado: string;
+}
+
 import { products } from "@/lib/products";
 import { useParams, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
