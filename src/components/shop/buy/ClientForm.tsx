@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { FormData } from "@/lib/shop/formData";
+import { FormData } from "../../../lib/shop/formData";
 import { products } from "@/lib/products";
 import { useParams, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
