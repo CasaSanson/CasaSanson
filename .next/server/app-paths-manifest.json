@@ -1,7 +1,7 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/api/stripe/checkout/route": "app/api/stripe/checkout/route.js",
   "/about/page": "app/about/page.js",
+  "/api/stripe/checkout/route": "app/api/stripe/checkout/route.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/api/stripe/session/[sessionId]/route": "app/api/stripe/session/[sessionId]/route.js",
   "/catalogo/comprar/[id]/page": "app/catalogo/comprar/[id]/page.js",
@@ -10,7 +10,7 @@
   "/journal/page": "app/journal/page.js",
   "/page": "app/page.js",
   "/catalogo/success/page": "app/catalogo/success/page.js",
-  "/auth/dashboard/page": "app/auth/dashboard/page.js",
   "/auth/dashboard/pedidos/page": "app/auth/dashboard/pedidos/page.js",
-  "/auth/page": "app/auth/page.js"
+  "/auth/page": "app/auth/page.js",
+  "/auth/dashboard/page": "app/auth/dashboard/page.js"
 }

@@ -1,8 +1,8 @@
 "use client";
-import Footer from "@/components/footer/footer";
-import Flipbook from "@/components/JOURNAL/Flipbook";
-import Collage from "@/components/JOURNAL/Collage";
-import Letter from "@/components/JOURNAL/Letter";
+import Footer from "@/components/footer/Footer";
+import Flipbook from "@/components/journal/Flipbook";
+import Collage from "@/components/journal/Collage";
+import Letter from "@/components/journal/Letter";
 
 export default function Journal() {
   return (

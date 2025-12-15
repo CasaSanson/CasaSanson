@@ -1,5 +1,5 @@
 "use client";
-import Footer from "../../components/footer/footer";
+import Footer from "../../components/footer/Footer";
 import AboutCS from "@/components/about/AboutCS";
 export default function About() {
     return (
