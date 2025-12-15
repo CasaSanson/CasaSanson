@@ -5,6 +5,7 @@ export interface ProductVariant {
     color: string;
     price?: number;
     stock: number;
+    personalizedText: string;
   }
   
   export interface Product {

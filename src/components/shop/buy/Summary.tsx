@@ -5,7 +5,6 @@ import { Product, ProductVariant } from "@/lib/shop/interfaces";
 interface SummaryProps {
   product: Product;
   selectedVariant: ProductVariant | null;
-  personalizedText: string;
   quantity: number;
   metodoEnvio: string;
 }
@@ -13,7 +12,6 @@ interface SummaryProps {
 export default function Summary({
   product,
   selectedVariant,
-  personalizedText,
   quantity,
   metodoEnvio,
 }: SummaryProps) {
@@ -21,6 +19,7 @@ export default function Summary({
   const subtotal = precioNumerico * quantity;
   const envio = metodoEnvio === "express" ? 250 : metodoEnvio === "estandar" ? 150 : 0;
   const total = subtotal + envio;
+  
 
   return (
     <div className="bg-white p-6  shadow-lg shadow-gray-300 h-fit border border-gray-900">
@@ -32,7 +31,7 @@ export default function Summary({
         </div>
         <div className="flex-1">
           <p className="text-xl text-gray-600">Talla: {selectedVariant?.size || "N/A"}</p>
-          <p className="text-xl text-gray-600">Personalizado: {personalizedText || "N/A"}</p>
+          <p className="text-xl text-gray-600">Personalizado: {selectedVariant?.personalizedText || "N/A"}</p>
           <p className="text-xl text-gray-600">Cantidad: {quantity}</p>
           <p className="text-xl text-gray-600">Envío: {metodoEnvio}</p>
         </div>
