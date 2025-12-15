@@ -6,7 +6,7 @@ import liquidChrome, { LiquidChrome } from "@/components/LiquidChrome";
 import WaterRipple from "@/components/WaterRiple";
 import ScrollReveal from "@/components/ScrollReveal";
 import LoadingScreen from "@/components/LoadingScreen";
-import Footer from "@/components/FOOTER/Footer";
+import Footer from "@/components/footer/footer";
 import Header from "@/components/HOME/Header";
 import Columns from "@/components/HOME/Columns";
 import Tape from "@/components/HOME/Tape";

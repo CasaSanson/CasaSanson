@@ -1,6 +1,5 @@
 import './globals.css'
-import NavbarWrapper from "@/components/NAVBAR/NavbarWrapper";
-import Footer from "@/components/FOOTER/Footer";
+import NavbarWrapper from "@/components/navbar/NavbarWrapper";
 import { SessionProvider } from "@/components/src/components/SessionProvider";
 
 export const metadata = {

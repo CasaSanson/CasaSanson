@@ -6,9 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Lock } from "lucide-react";
-import Header from "@/components/SHOP/BUY/Header";
-import ClientForm from "@/components/SHOP/BUY/ClientForm";
-import Summary from "@/components/SHOP/BUY/Summary";
+import Header from "@/components/shop/BUY/Header";
+import ClientForm from "@/components/shop/BUY/ClientForm";
+import Summary from "@/components/shop/BUY/Summary";
 
 export default function CompraPage() {        
     return (
