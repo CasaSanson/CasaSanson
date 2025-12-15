@@ -1,24 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
-import { products } from '@/lib/products';
+import { supabase } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
   try {
-    const { productId, quantity, customerInfo, orderId } = await request.json();
+    const { productId, variantId, quantity, customerInfo, orderId } = await request.json();
 
-    // Buscar el producto
-    const product = products.find(p => p.id === productId);
-    if (!product) {
+    // Buscar producto en Supabase
+    const { data: product, error } = await supabase
+      .from("products")
+      .select("*, product_variants(*)")
+      .eq("id", productId)
+      .single();
+
+    if (error || !product) {
       return NextResponse.json({ error: 'Producto no encontrado' }, { status: 404 });
     }
 
-    // Extraer el precio numérico del string
-    const priceMatch = product.price.match(/\$?([0-9,]+\.?[0-9]*)/);
-    if (!priceMatch) {
-      return NextResponse.json({ error: 'Precio inválido' }, { status: 400 });
-    }
-
-    const unitAmount = Math.round(parseFloat(priceMatch[1].replace(',', '')) * 100); // Convertir a centavos
+    const variant = product.product_variants?.find((v: { id: string; price?: number }) => v.id === variantId);
+    const unitAmount = Math.round(((variant?.price ?? product.base_price) || 0) * 100); // centavos
 
     // Calcular costo de envío según el método elegido en el formulario (no volver a preguntar en Stripe)
     const shippingMethod = customerInfo?.metodoEnvio as string | undefined;
@@ -35,7 +35,11 @@ export async function POST(request: NextRequest) {
             product_data: {
               name: product.name,
               description: product.description,
-              images: [`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}${product.image}`],
+              images: [
+                product.image.startsWith("http")
+                  ? product.image
+                  : `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}${product.image}`,
+              ],
             },
             unit_amount: unitAmount,
           },

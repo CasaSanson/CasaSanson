@@ -160,6 +160,7 @@ export default function ClientForm({
                 },
                 body: JSON.stringify({
                     productId: product.id,
+                    variantId: selectedVariant?.id,
                     quantity: quantity,
                     customerInfo: formData,
                     orderId: orderData.id // Pasar el ID del pedido a Stripe
