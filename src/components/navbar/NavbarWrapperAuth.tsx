@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import NavbarAuth from './NavbarAuth'
 
-export default function NavbarWrapper() {
+export default function NavbarWrapperAuth() {
   const pathname = usePathname()
   const isAuthRoute = pathname?.startsWith('/auth/') 
 

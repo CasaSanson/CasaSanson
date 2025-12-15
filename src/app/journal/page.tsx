@@ -1,5 +1,5 @@
 "use client";
-import Footer from "../../components/FOOTER/Footer";
+import Footer from "@/components/FOOTER/Footer";
 import Flipbook from "@/components/JOURNAL/Flipbook";
 import Collage from "@/components/JOURNAL/Collage";
 import Letter from "@/components/JOURNAL/Letter";
