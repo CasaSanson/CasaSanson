@@ -1,14 +1,8 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "next/navigation";
-import { products } from "@/lib/products";
-import Image from "next/image";
-import Link from "next/link";
-
-import { Lock } from "lucide-react";
-import Header from "@/components/shop/BUY/Header";
-import ClientForm from "@/components/shop/BUY/ClientForm";
-import Summary from "@/components/shop/BUY/Summary";
+import Header from "@/components/shop/buy/Header";
+import ClientForm from "@/components/shop/buy/ClientForm";
+import Summary from "@/components/shop/buy/Summary";
 
 export default function CompraPage() {        
     return (

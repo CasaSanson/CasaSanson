@@ -1,12 +1,6 @@
 "use client"
 import React, { useState, useEffect } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { products } from "@/lib/products"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { AccordionComponent } from "@/components/Accordion"
-import Selected from "@/components/shop/SELECTED/Selected"
+import Selected from "@/components/shop/selected/Selected"
 
 export default function TiendaVerPage({ params }: { params: { id: string } }) {
     const { id } = params
