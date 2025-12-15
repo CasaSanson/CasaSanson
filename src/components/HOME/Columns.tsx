@@ -21,17 +21,15 @@ export default function Columns(){
               </div>
             </ScrollReveal>
             <ScrollReveal animation="right" delay={600}>
-              <div className="hidden md:flex justify-start items-center mr-0 md:mr-[17%] shadow-2xl shadow-white h-auto md:h-[600px] w-[500px] md:w-[600px]">
-               <RippleEffect
-                  className="block bg-none w-auto md:w-[80%] md:mr-[10%] h-[500px] md:h-[600px] "
-                  style={{
-                    backgroundImage: 'url(/face.jpg)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                  }}
-                  autoDrops={false}
-                  options={{ perturbance: 0.02, dropRadius: 40 }}
-                />
+              <div className="hidden md:flex justify-start items-center mr-0 md:mr-[5%] shadow-2xl shadow-white h-auto md:h-[600px] w-[500px] md:w-[600px]">
+               <video
+                src="/video_muestra.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover">
+               </video>
               </div>
               <div className="block md:hidden justify-start items-center mr-0 md:mr-[17%] shadow-2xl shadow-white h-auto md:h-[600px] w-[500px] md:w-[600px]">
                 <img src="/face.jpg" alt="Face" className="w-full h-full object-cover" />

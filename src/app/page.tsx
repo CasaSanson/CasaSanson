@@ -17,10 +17,7 @@ export default function Home() {
   const [currentScreen, setCurrentScreen] = useState('loading'); // 'loading', 'landing', 'home'
   const [typewriterText, setTypewriterText] = useState('');
   const [scrollY, setScrollY] = useState(0);
-  
-
-
-  
+    
   // Efecto typewriter para la pantalla de carga
   useEffect(() => {
     const fullText = "cargando...";

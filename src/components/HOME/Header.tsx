@@ -9,7 +9,7 @@ export default function Header(){
           
           <div className="relative w-[100%] md:w-full h-[500px] md:h-[950px] mx-auto">
           <video
-            src="/costurera.mp4"
+            src="/lore_video.mp4"
             autoPlay
             loop
             muted

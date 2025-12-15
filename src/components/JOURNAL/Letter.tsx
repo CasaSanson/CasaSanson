@@ -1,95 +1,63 @@
 "use client";
+import Image from "next/image";
 
 export default function Letter() {
-    return(
+    return (
         <>
-        <div className="w-[60%] mx-auto">
-                <div className="flex justify-center items-center grid grid-cols-2">
-                   <h2 className="text-xl md:text-4xl font-bold mt-[20%] ">
-                    A quien corresponda:
-                   </h2>
-                   <p className="text-black text-sm md:text-md ml-[60%] ">
-                    2 de noviembre de 2025
-                   </p>
+            <div className="w-[60%] flex flex-col mx-auto ">
+                <div className="flex justify-center items-center ">
+                    <h2 className="text-xl md:text-4xl font-bold mt-15 ">
+                        La Intención Detrás de Casa Sansón
+                    </h2>
                 </div>
-            <p className="text-black text-sm md:text-lg mt-[10%] w-full sm:text-base md:text-lg lg:text-xl xl:text-lg">
-                        Dejaré mi casa por ti,
-            dejaré mi barrio y me iré
-            lejos de aquí.
-            crusare llorando el jardín,
-            y con tus recuerdos partiré
-            lejos de aquí.
-
-            De día viviré
-            pensando en tus sonrisas,
-            de noche las estrellas
-            me acompañarán.
-            Serás como una luz
-            que alumbre mi camino;
-            me voy, pero te juro
-            que mañana volveré.
-
-            y al partir, un beso y una flor,
-            un te quiero, una caricia y un adiós;
-            es ligero equipaje
-            para tan largo viaje,
-            las penas pesan en el corazón.
-            Más allá del mar habrá una flor
-            donde cada mañana brille más;
-            forjarán mi destino
-            las piedras del camino, lo que nos es querido siempre queda atrás
-
-            Dejaré mi casa por ti,
-            dejaré mi barrio y me iré
-            lejos de aquí.
-            cruzaré llorando el jardín,
-            y con tus recuerdos partiré
-            lejos de aquí.
-
-            De día viviré
-            pensando en tus sonrisas,
-            de noche las estrellas
-            me acompañarán.
-            Serás como una luz
-            que alumbre mi camino;
-            me voy, pero te juro
-            que mañana volveré.
-            y al partir, un beso y una flor,
-            un te quiero, una caricia y un adiós;
-            es ligero equipaje
-            para tan largo viaje,
-            las penas pesan en el corazón.
-            Más allá del mar habrá una flor
-            donde cada mañana brille más;
-            forjarán mi destino
-            las piedras del camino, lo que nos es querido siempre queda atrás.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. 
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. 
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.  
-                </p>
-                <p className="text-black text-lg w-full mx-auto pt-24 flex flex-col mx-auto text-left">
-                Con cariño,
-               </p>
-               <p className="text-black text-lg w-full mx-auto pt-4">
-                Lorena Casas.
-               </p>
-               <img
-               src="/firma_lore-removebg-preview.png"
-               alt="Forest"
-               className="w-[200px] h-[200px] object-cover opacity-80"
-               />
+                <div className="space-y-4 mt-5">
+                    <p className="text-black text-lg">
+                        (Mariano) Gracias por estar aquí y por elegir formar parte de este proyecto que nace del deseo profundo de acompañarte en los momentos más significativos de tu camino.
+                    </p>
+                    <p className="text-black">
+                        (Lorena) Casa Sansón nació de ese deseo, sí, pero también de una convicción: la de transformar la manera en que entendemos el acto de vestir. No se trata solo de prendas, sino del lenguaje silencioso que construimos con ellas. Creemos que la elegancia no pertenece a lo rígido, sino que nace del movimiento.
+                    </p>
+                    <p className="text-black">
+                        (José) Y para que ese movimiento sea auténtico, buscamos que cada persona sienta en su piel el cobijo suave de una tela de alta calidad, brindada por la naturaleza. Queremos que se sientan en congruencia con su cuerpo y con la sensualidad de una prenda que cae sobre su silueta. Es fundamental que caminen con fuerza y propósito.
+                    </p>
+                    <p className="text-black">
+                        (José) Y para que ese movimiento sea auténtico, buscamos que cada persona sienta en su piel el cobijo suave de una tela de alta calidad, brindada por la naturaleza. Queremos que se sientan en congruencia con su cuerpo y con la sensualidad de una prenda que cae sobre su silueta. Es fundamental que caminen con fuerza y propósito.
+                    </p>
+                    <p className="text-black">
+                        (Lorena) Diseñamos para celebrar la anatomía humana, para desdibujar los límites de lo formal y permitir que cada pieza respire con quien la lleva. La belleza, para nosotros, vive más allá de lo clásico, de lo aceptado, de lo seguro. No nace de un logo ni de lo que dictan las tendencias. Es una forma de hablar sin palabras.
+                    </p>
+                    <p className="text-black">
+                        (Mariano) Cuando pienso en lo que quiero que sientas al usar nuestras prendas, imagino esa chispa que aparece cuando te expones a experiencias que te transforman, o cuando estrenas algo que te conecta contigo mismo. Nuestras piezas están hechas para despertar esa energía creativa que te impulsa a pensar distinto, explorar más y nutrir tu presencia.
+                    </p>
+                    <p>
+                        (José) Esa chispa debe ir acompañada de una sensación de bienestar físico total. Esto es lo que debemos infundir en cada pieza: ese ajuste, ese viento y esa comodidad perfecta que da la libertad. Es la misma sensación que encuentro al nadar, al correr o al pintar con movimiento constante. Nuestra ropa está diseñada para que camines dentro del mundo con confianza, naturalidad y empatía.
+                    </p>
+                    <p>
+                        (Lorena) Esa sensación de libertad y de seguridad es la que quiero que experimente quien observe cada pieza y, sobre todo, quien la lleve puesta. Es la misma conexión entre los textiles —su peso, su textura, su movimiento—, las siluetas y el espacio que celebramos en cada colección. Porque, en esencia, para mí, vestir es una extensión honesta de lo que soy.
+                    </p>
+                    <p>
+                        (Mariano) Por eso elegimos fibras naturales. No es un capricho: es una forma de honrar la conexión que sentimos con la naturaleza, con lo que respira contigo y se adapta a tu cuerpo con suavidad. Queremos que al vestirlas sientas seguridad y confianza, y que te permitan vivir con libertad en tu cuerpo y en tu mente.
+                    </p>
+                    <p>
+                        (José) Las fibras naturales son nuestro puente hacia lo real. Son la forma en que la naturaleza entra en la vida cotidiana y se convierte en expresión.
+                    </p>
+                    <p className="text-black text-lg w-full mx-auto pt-24 flex flex-col mx-auto text-left">
+                        Con cariño,
+                    </p>
+                    <p className="text-black text-lg w-full mx-auto pt-4">
+                        Casa Sansón.
+                    </p>
+                </div>
+                
+            </div>
+            <div className="flex flex-col mx-auto">
+                    <Image
+                        src="/sanson_black.png"
+                        alt="logo"
+                        width={500}
+                        height={500}
+                        className="flex mx-auto">
+                    </Image>
             </div>
         </>
     )

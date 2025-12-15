@@ -30,7 +30,9 @@ export default function Landing(){
         
           {/* Logo o título principal */}
           <div className="mb-2">
-            <Image src="/sanson_white.png" alt="Casa Sansón" width={400} height={400} className="mx-auto"></Image>
+
+            <Image src="/sanson_white.png" alt="Casa Sansón" width={400} height={400} className="mx-auto md:hidden"></Image>
+            <h1 className="text-5xl text-white hidden md:block mb-7">Casa Sansón</h1>
             
             <div className="w-full h-[1px] bg-gray-500 mx-auto mb-8"></div>
             <p className="text-xl  text-gray-300 font-light drop-shadow-md">

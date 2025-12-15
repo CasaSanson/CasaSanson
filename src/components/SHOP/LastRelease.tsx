@@ -3,7 +3,7 @@
 export default function LastRelease(){
     return(
         <>
-        <section className="hidden md:block w-full mx-auto bg-black h-[20%] pt-[15%] md:pt-[5%]">
+        <section className="hidden md:block w-full mx-auto bg-black h-full pt-[15%] md:pt-[7%]">
                 <h1 className="text-4xl font-bold text-center text-white">Nuestros Diseños</h1>
             </section>
 
