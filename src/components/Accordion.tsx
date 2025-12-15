@@ -5,7 +5,13 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
-export function AccordionComponent({ product }: { product: { id: number; description: string } }) { 
+import { Product } from "@/lib/shop/interfaces";
+
+interface AccordionComponentProps {
+  product: Product;
+}
+
+export function AccordionComponent({ product }: AccordionComponentProps) { 
   return (
     <Accordion
       type="single"
@@ -16,11 +22,10 @@ export function AccordionComponent({ product }: { product: { id: number; descrip
       <AccordionItem value="item-1">
         <AccordionTrigger className="text-sm text-gray-800">Información del producto</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
-          <p>
-            {product.description}
-          </p>
+          <p>{product.description}</p>
         </AccordionContent>
       </AccordionItem>
+
       <AccordionItem value="item-2">
         <AccordionTrigger className="text-sm text-gray-800">Detalles de envío</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
@@ -32,6 +37,7 @@ export function AccordionComponent({ product }: { product: { id: number; descrip
           </p>
         </AccordionContent>
       </AccordionItem>
+
       <AccordionItem value="item-3">
         <AccordionTrigger>Política de devolución</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">

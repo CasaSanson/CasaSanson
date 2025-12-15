@@ -14,19 +14,30 @@ export interface FormData {
     personalizado: string;
 }
 
-import { products } from "@/lib/products";
-import { useParams, useSearchParams } from "next/navigation";
+import { Product, ProductVariant } from "@/lib/shop/interfaces";
 import { supabase } from "@/lib/supabase";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
-export default function ClientForm(){
-    const { id } = useParams();
-    const searchParams = useSearchParams();
-    const quantity = parseInt(searchParams.get('quantity') || '1');
-    const text = searchParams.get('text') || '';
-    const size = searchParams.get('size') || '';
-    const product = products.find((product) => product.id === parseInt(id as string));
+interface ClientFormProps {
+    product: Product;
+    selectedVariant: ProductVariant | null;
+    setSelectedVariant: React.Dispatch<React.SetStateAction<ProductVariant | null>>;
+    personalizedText: string;
+    setPersonalizedText: React.Dispatch<React.SetStateAction<string>>;
+    quantity: number;
+}
+
+export default function ClientForm({
+    product,
+    selectedVariant,
+    setSelectedVariant,
+    personalizedText,
+    setPersonalizedText,
+    quantity,
+}: ClientFormProps){
+    const text = personalizedText;
+    const size = selectedVariant?.size || "";
     const [formData, setFormData] = useState<FormData>({
         nombre: '',
         apellido: '',
@@ -37,8 +48,8 @@ export default function ClientForm(){
         codigoPostal: '',
         pais: 'México',
         metodoEnvio: 'estandar',
-        talla: '',
-        personalizado: '',
+        talla: size,
+        personalizado: text,
     });
     const validateForm = (): boolean => {
         const newErrors: Partial<FormData> = {};
@@ -87,12 +98,13 @@ export default function ClientForm(){
         
         try {
             // Primero, guardar el pedido en Supabase
+            const variantPrice = selectedVariant?.price ?? product.base_price;
             const { data: orderData, error: orderError } = await supabase
-                .from('CS_ORDERS')
+                .from('orders')
                 .insert({
-                    product_id: product?.id || 0,
-                    product_name: product?.name || '',
-                    product_price: precioNumerico,
+                    product_id: product.id,
+                    product_name: product.name,
+                    product_price: variantPrice,
                     quantity: quantity,
                     customer_nombre: formData.nombre,
                     customer_apellido: formData.apellido,
@@ -116,9 +128,9 @@ export default function ClientForm(){
             if (orderError) {
                 console.error('Error al guardar el pedido:', orderError);
                 console.error('Datos que se intentaron insertar:', {
-                    product_id: product?.id || 0,
-                    product_name: product?.name || '',
-                    product_price: precioNumerico,
+                    product_id: product.id,
+                    product_name: product.name,
+                    product_price: variantPrice,
                     quantity: quantity,
                     customer_nombre: formData.nombre,
                     customer_apellido: formData.apellido,
@@ -147,7 +159,7 @@ export default function ClientForm(){
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    productId: product?.id,
+                    productId: product.id,
                     quantity: quantity,
                     customerInfo: formData,
                     orderId: orderData.id // Pasar el ID del pedido a Stripe
@@ -166,8 +178,8 @@ export default function ClientForm(){
             setIsLoading(false);
         }
     };
-    const precioNumerico = parseFloat(product.price.replace(/[^0-9.]/g, ''));
-    const subtotal = precioNumerico * quantity;
+    const variantPrice = selectedVariant?.price ?? product.base_price;
+    const subtotal = variantPrice * quantity;
     const envio = formData.metodoEnvio === 'express' ? 250 : formData.metodoEnvio === 'estandar' ? 150 : 0; 
     const total = subtotal + envio;
     return(

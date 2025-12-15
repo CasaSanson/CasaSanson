@@ -1,8 +1,36 @@
 "use client";
 import { products } from "@/lib/products";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { Product, ProductVariant } from "@/lib/shop/interfaces";
 
+  
 export default function Store(){
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const fetchProducts = async () => {
+          const { data, error } = await supabase
+            .from("products")
+            .select(`
+              *,
+              product_variants (*)
+            `)
+            .eq("active", true);
+    
+          if (error) {
+            console.error("Error fetching products:", error);
+          } else {
+            setProducts(data);
+          }
+          setLoading(false);
+        };
+    
+        fetchProducts();
+      }, []);
+    
+      if (loading) return <p>Cargando productos...</p>;
     return(
         <section className="w-full mx-auto bg-white bg-cover bg-center h-full pt-[15%] md:pt-[5%]">
                 <h1 className="text-4xl text-center text-black">Productos</h1>
@@ -10,11 +38,11 @@ export default function Store(){
                     {products.map((product) => (
                         <div key={product.id} className="flex flex-col items-start justify-start">
                            <Link href={`/catalogo/ver/${product.id}`} className="w-full aspect-square overflow-hidden">
-                                <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                                <img src={product.image} alt={product.name} className="w-full rounded-sm h-full object-cover" />
                            </Link>
                             <div className="flex flex-col items-start justify-start w-full">
-                                <h2 className="text-md text-black pt-[4%]">{product.name}</h2>
-                                <p className="text-black text-md pt-[4%]">{product.price}</p>
+                                <h2 className="text-2xl text-black pt-[4%]">{product.name}</h2>
+                                <p className="text-black text-xl "> ${product.base_price}</p>
                             </div>
                         </div>
                     ))}
