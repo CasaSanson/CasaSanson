@@ -1,6 +1,6 @@
 "use client";
 
-const Footer = () => {
+export default function Footer() {
     return (
         <footer className="bg-[#111111] pt-[5%] text-white py-8">
             <div className="container mx-auto px-4">
@@ -11,5 +11,3 @@ const Footer = () => {
         </footer>
     );
 };
-
-export default Footer;
