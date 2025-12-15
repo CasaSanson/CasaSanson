@@ -2,7 +2,7 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { retrieveCheckoutSession } from '@/lib/stripe';
+
 
 export const dynamic = 'force-dynamic'
 

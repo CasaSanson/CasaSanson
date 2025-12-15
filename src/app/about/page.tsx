@@ -1,10 +1,10 @@
 "use client";
 import Footer from "../../components/footer/Footer";
-import AboutCS from "@/components/about/AboutCS";
+import AboutComponent from "@/components/about/About";
 export default function About() {
     return (
         <main className="bg-white min-h-screen w-[100%] mx-auto">
-          <AboutCS/>
+          <AboutComponent/>
           <Footer/>
         </main>
     );

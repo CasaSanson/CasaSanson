@@ -3,7 +3,7 @@ import Image from "next/image";
 import { products } from "@/lib/products";
 import { useSearchParams } from "next/navigation";
 import { useParams } from "next/navigation";
-import FormData from "@/lib/SHOP/formData";
+import FormData from "@/lib/shop/FormData";
 import { useState } from "react";
 
 export default function Summary(){

@@ -1,5 +1,5 @@
 "use client";
-export default function AboutCS(){
+export default function About(){
     return(
         <>
         {/* section de la coleccion */}
