@@ -1,4 +1,4 @@
-interface FormData {
+export interface FormData {
     nombre: string;
     apellido: string;
     email: string;
@@ -11,5 +11,3 @@ interface FormData {
     talla: string;
     personalizado: string;
 }
-
-export default FormData;
