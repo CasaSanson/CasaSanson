@@ -1,7 +1,6 @@
 "use client";
 import LastRelease from "@/components/shop/LastRelease";
 import Store from "@/components/shop/Store";
-import Link from "next/link";
 
 export default function Catalogo() {
     return (
