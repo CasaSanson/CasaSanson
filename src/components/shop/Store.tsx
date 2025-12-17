@@ -37,12 +37,12 @@ export default function Store(){
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-2 max-w-[90%] mx-auto pt-[5%] ">
                     {products.map((product) => (
                         <div key={product.id} className="flex flex-col items-start justify-start">
-                           <Link href={`/catalogo/ver/${product.id}`} className="w-full aspect-square overflow-hidden">
-                                <img src={product.image} alt={product.name} className="w-full rounded-sm h-full object-cover" />
+                           <Link href={`/catalogo/ver/${product.id}`} className="w-full rounded-xl overflow-hidden border-2 border-gray-300">
+                                <img src={product.image} alt={product.name} className="w-full  h-full object-cover" />
                            </Link>
                             <div className="flex flex-col items-start justify-start w-full">
                                 <h2 className="text-2xl text-black pt-[4%]">{product.name}</h2>
-                                <p className="text-black text-xl "> ${product.base_price}</p>
+                                <p className="text-black text-xl mb-7"> ${product.base_price}</p>
                             </div>
                         </div>
                     ))}

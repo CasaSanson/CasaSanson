@@ -41,7 +41,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 bg-[#111111]  py-4 transition-transform duration-300 ${show ? "translate-y-0" : "-translate-y-full"
+      className={`fixed top-2 mx-auto items-center h-30 left-0 w-full z-50 bg-gradient-to-r from-[#454444] to-[#232323] py-2 transition-transform duration-300 ${show ? "translate-y-0" : "-translate-y-full"
         }`}
     >
       {/* Desktop Menu */}
@@ -53,8 +53,8 @@ const Navbar = () => {
             className=""
           >
             <Image 
-            width={100}
-            height={100}
+            width={120}
+            height={10}
             src="/sanson_white.png" 
             alt=""
             className="object-cover">

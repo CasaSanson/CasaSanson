@@ -42,14 +42,13 @@ export default function Collage(){
     
     return(
         <>
-        <div className="block md:hidden w-[90%] h-[88%] mx-auto" >
+        <div className="block md:hidden w-[90%] h-full mx-auto" >
             <img
             src={collage[currentIndex].src}
             alt={collage[currentIndex].alt}
             className={collage[currentIndex].className}
           />
-          <button onClick={prevSlide} className="ml-[10%] absolute top-1/2 left-4 transform -translate-y-1/2 text-white text-2xl bg-black rounded-full p-2"></button>
-          <button onClick={nextSlide} className="mr-[10%] absolute top-1/2 right-4 transform -translate-y-1/2 text-white text-2xl bg-black rounded-full p-2"></button>
+
           </div>
           <div className="flex justify-center mt-4 space-x-2">
             {collage.map((_, index) => (
@@ -57,7 +56,7 @@ export default function Collage(){
                 key={index}
                 onClick={() => setCurrentIndex(index)}
                 className={`w-2 h-2 rounded-full ${
-                    currentIndex === index ? "bg-gray-800" : "bg-gray-300"
+                    currentIndex === index ? "bg-transparent" : "bg-gray-300"
                 }`}
                 ></button>
             ))}

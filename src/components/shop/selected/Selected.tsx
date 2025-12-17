@@ -58,18 +58,18 @@ export default function Selected({ params }: { params: { id: string } }) {
 
     return (
         <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
-            <div className="max-w-9xl mx-auto mt-[6%] md:mt-[2%]">
+            <div className="max-w-9xl mx-auto mt-[6%] md:mt-10">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-start">
 
                     {/* Imagen izquierda */}
-                    <div className="col-span-1 flex justify-center lg:justify-start">
-                        <div className="relative overflow-hidden shadow-2xl cursor-zoom-in">
+                    <div className="col-span-1 flex justify-center lg:justify-start border-3 border-gray-800">
+                        <div className="relative overflow-hidden shadow-2xl cursor-zoom-in ">
                             <Image
                                 src={product.image}
                                 alt={product.name}
                                 width={600}
                                 height={600}
-                                className={`transition-transform duration-300 ${isZoomed ? "scale-150" : "scale-100"}`}
+                                className={`transition-transform duration-300 ${isZoomed ? "scale-150" : "scale-100"} `}
                                 style={{ transformOrigin: `${mousePosition.x}% ${mousePosition.y}%` }}
                             />
                         </div>
@@ -77,7 +77,7 @@ export default function Selected({ params }: { params: { id: string } }) {
 
                     {/* Interior chaqueta / personalización */}
                     <div className="col-span-1 hidden md:block px-6 relative">
-                        <img src="/interior_verde.png" alt="Interior chaqueta" className="w-full h-full object-cover" />
+                        <img src="/interior_verde.png" alt="Interior chaqueta" className="w-full h-full object-cover border-3 border-gray-300 border" />
                         {personalizedText && (
                             <p
                                 className="absolute text-gray-800 text-xl font-semibold"
