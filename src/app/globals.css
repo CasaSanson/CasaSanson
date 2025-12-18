@@ -80,6 +80,10 @@
   cursor: default;
 }
 
+select:hover {
+  cursor: pointer
+}
+
 
 /* Animaciones personalizadas */
 @keyframes fadeIn {

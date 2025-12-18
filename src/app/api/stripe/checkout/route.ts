@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
         orderId: orderId,
         productId: productId.toString(),
         quantity: quantity.toString(),
+        variantId: variantId ?? '',
         customerName: `${customerInfo.nombre} ${customerInfo.apellido}`,
         customerPhone: customerInfo.telefono,
         shippingMethod: customerInfo.metodoEnvio,

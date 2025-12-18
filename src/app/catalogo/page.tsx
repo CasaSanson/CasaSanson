@@ -2,6 +2,8 @@
 import LastRelease from "@/components/shop/LastRelease";
 import Store from "@/components/shop/Store";
 
+
+
 export default function Catalogo() {
     return (
         <main className="bg-white min-h-screen w-[100%] mx-auto">
