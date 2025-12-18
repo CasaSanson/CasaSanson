@@ -3,9 +3,9 @@ export default function About(){
     return(
         <>
         {/* section de la coleccion */}
-        <section className="w-full mx-auto bg-white grid grid-cols-1 md:grid-cols-2 h-auto md:h-[100vh] ">
+        <section className="w-full mx-auto bg-cs-white grid grid-cols-1 md:grid-cols-2 h-full md:h-[100vh] ">
                 <div className="col-span-1">
-                  <p className="text-black text-lg w-[60%] mx-auto mt-[40%] md:mt-[53%] m-7">
+                  <p className="text-black text-lg w-[60%] h-full mx-auto mt-[40%] md:mt-[53%] m-7">
                   Una historia, una tradición, una cultura…
                   </p>
                   <p className="text-black text-lg w-[60%] mx-auto m-7">
@@ -19,28 +19,28 @@ export default function About(){
             </section>
 
             {/* First Columns */}
-            <section className="w-full mx-auto bg-black grid grid-cols-1 md:grid-cols-3 mt-[10%] md:h-[50vh] h-auto ">
+            <section className="w-full mx-auto bg-obsidian/90 grid grid-cols-1 md:grid-cols-3 mt-[10%] md:h-[50vh] h-auto ">
                 <div className="col-span-1">
-                  <img src="/apolix.jpeg" alt="Vogue" className="w-[90%] ml-[10%] h-[90%] object-cover" />
+                  <img src="/apolix.jpeg" alt="Vogue" className="w-[90%] ml-[10%] h-full object-cover" />
                 </div>
-                <div className="col-span-1 bg-black">
-                  <p className="text-white text-lg w-[60%] mt-[30%] mx-auto">
+                <div className="col-span-1 bg-gradient-to-r from-black to-gray-800">
+                  <p className="text-white text-lg w-[60%] mb-7 mt-[30%] mx-auto">
                   Creamos prendas para ser queridas y recordadas.
                   <br />
                   <br />
-                  Somos fieles a nuestros principios de sostenibilidad con nuestro entorno,
+                  Somos fieles a nuestros principios de sostenibilidad con nuestro entorno, procurando siempre preservar este precioso mundo.
                   <br />
                   <br />
-                  procurando siempre preservar este precioso mundo.
+                  
                   </p>
                 </div>
                 <div className="col-span-1">
-                  <img src="/lanaabout.jpg" alt="Vogue" className="w-full h-[50%] object-cover" />
+                  <img src="/lanaabout.jpg" alt="Vogue" className="w-full h-full object-cover" />
                 </div>
             </section>
 
             {/* Second Columns */}
-            <section className="w-full mx-auto bg-white grid grid-cols-1 md:grid-cols-2 mt-[10%] md:h-[50vh] h-auto ">
+            <section className="w-full mx-auto bg-cs-white grid grid-cols-1 md:grid-cols-2 mt-[10%] md:h-[50vh] h-auto ">
                 <div className="col-span-1">
                   <img src="/hombre.jpg" alt="Vogue" className="w-[80%] ml-[10%] h-[80%] object-cover" />
                 </div>
@@ -67,7 +67,7 @@ export default function About(){
             </section>
 
             {/* Third Columns */}
-            <section className="w-full mx-auto bg-white grid grid-cols-1 md:grid-cols-3 mt-[20%] md:h-[50vh] h-auto ">
+            <section className="w-full mx-auto bg-cs-white grid grid-cols-1 md:grid-cols-3 mt-[20%] md:h-[50vh] h-auto ">
                 <div className="col-span-1">
                   <img src="/lospanas.jpg" alt="Vogue" className="w-[70%] ml-[10%] h-[70%] object-cover" />
                 </div>

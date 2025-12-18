@@ -2,13 +2,14 @@
 import { useState } from "react"
 import RippleEffect from "@/components/RippleEffect";
 import Image from "next/image";
+import Link from "next/link";
 
 
 
 export default function Landing(){
     
   const handleEnterWebsite = () => {
-    window.dispatchEvent(new Event('skipToHome')); // Dispara el evento
+    window.dispatchEvent(new Event('enterhome')); // Dispara el evento
   };
     return(
         <div className="fixed inset-0  bg-cover bg-center h-screen w-screen flex items-center justify-center z-50 relative overflow-hidden">
@@ -47,13 +48,14 @@ export default function Landing(){
           </div>
 
           {/* Botón de entrada */}
+          <Link href={"/home"}>
           <button
-            onClick={handleEnterWebsite}
             className="group relative pointer-events-auto px-12 py-4 bg-black backdrop-blur-sm text-white text-xl rounded-none border-2 border-black transition-all duration-700 hover:bg-gray-500/20 hover:text-black hover:border-black/50 hover:shadow-2xl transform hover:scale-105 drop-shadow-lg"
           >
             <span className="relative z-30">Coming Soon...</span>
             <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
           </button>
+          </Link>
 
         </div>
       </div>

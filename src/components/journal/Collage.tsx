@@ -36,7 +36,7 @@ export default function Collage(){
       useEffect(() => {
         const interval = setInterval(() => {
           nextSlide();
-        }, 800);
+        }, 900);
         return () => clearInterval(interval);
       }, [currentIndex]);
     
@@ -56,7 +56,7 @@ export default function Collage(){
                 key={index}
                 onClick={() => setCurrentIndex(index)}
                 className={`w-2 h-2 rounded-full ${
-                    currentIndex === index ? "bg-transparent" : "bg-gray-300"
+                    currentIndex === index ? "bg-transparent" : "bg-transparent"
                 }`}
                 ></button>
             ))}

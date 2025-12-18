@@ -8,7 +8,7 @@ export default function LastRelease(){
             </section>
 
             {/* section de las imagenes de la coleccion con hover */}
-            <section className="hidden md:block w-full mx-auto bg-[url(/black.jpeg)] bg-cover bg-center w-[80%] h-[100vh]">
+            <section className="hidden md:block w-full mx-auto bg-gradient-to-r from-cs-obsidian to-gray-700 bg-cover bg-center w-[80%] h-[100vh]">
                 <div className="grid grid-cols-2 w-[70%] mx-auto h-[820px]">
                 <div className="group relative h-[700px] mt-[10%] flex items-center justify-center overflow-hidden  border-4 border-black">
                     <img

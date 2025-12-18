@@ -76,7 +76,7 @@ export default function Selected({ params }: { params: { id: string } }) {
                     </div>
 
                     {/* Interior chaqueta / personalización */}
-                    <div className="col-span-1 hidden md:block px-6 relative">
+                    <div className="col-span-1  px-6 relative">
                         <img src="/interior_verde.png" alt="Interior chaqueta" className="w-full h-full object-cover border-3 border-gray-300 border" />
                         {personalizedText && (
                             <p
@@ -123,7 +123,7 @@ export default function Selected({ params }: { params: { id: string } }) {
 
 
                             {/* Personalización */}
-                            <div className="hidden md:block mt-10">
+                            <div className="mt-10">
                                 <p className="text-lg text-gray-800">Para:</p>
                                 <input
                                     type="text"
@@ -131,6 +131,7 @@ export default function Selected({ params }: { params: { id: string } }) {
                                     className="w-full mb-2 mt-2 border border-black px-4 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-black transition duration-200"
                                     value={personalizedText}
                                     onChange={(e) => setPersonalizedText(e.target.value)}
+                                    maxLength={9}
                                 />
                             </div>
 
