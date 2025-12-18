@@ -95,24 +95,5 @@ export default function Home() {
       
     );
   }
-
-  // Solo mostrar la home page cuando currentScreen sea 'home'
-  if (currentScreen === 'home') {
-    return (
-      <>
-        {/* Contenido principal con padding superior para evitar superposición con navbar */}
-        <main className="relative bg-[#111111] pt-18">
-        {/* Hero Section */}
-        <Header/>
-        {/* Columnas*/}
-        <Columns/>
-        {/*Tape*/}
-        <Tape/>
-        {/* Footer */}
-        <Footer />
-        </main>
-      </>
-    );
-  }
   return null;
 }

@@ -92,6 +92,12 @@ const config: Config = {
   			cloth: {
   				black: '#361010'
   			},
+  			cs: {
+  				obsidian: 'var(--cs-obsidian)',
+  				white: 'var(--cs-white)',
+  				ivory: 'var(--cs-ivory)',
+  				nude: 'var(--cs-nude)'
+  			},
   			background: 'var(--background)',
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',

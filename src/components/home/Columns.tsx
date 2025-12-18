@@ -3,14 +3,14 @@ import ScrollReveal from "../ScrollReveal";
 import RippleEffect from "../RippleEffect";
 export default function Columns(){
     return(
-        <div>
-        <ScrollReveal animation="up" delay={200}>
-          <section className="py-16 bg-white bg-cover bg-center border-gray-700  h-[100vh] md:h-[80vh] w-full mx-auto grid grid-cols-1 md:grid-cols-2">
-            <ScrollReveal animation="left" delay={400}>
+        <div className="overflow-x-hidden">
+        <ScrollReveal animation="up" delay={50}>
+          <section className="py-16 bg-cs-ivory bg-cover bg-center border-gray-700  h-full w-full md:h-full w-full mx-auto grid grid-cols-1 md:grid-cols-2">
+            <ScrollReveal animation="left" delay={50}>
               <div className="flex flex-col md:justify-between px-4 md:px-10 py-4 md:py-10 md:mt-[11%]">
                 <h2 className="text-2xl md:text-4xl mb-10 text-black">Esencia</h2>
                 <p className="text-black text-sm md:text-lg mb-7">
-                  En Casa Xaria creemos que la elegancia no nace de las estructuras, sino del movimiento.
+                  En Casa Sansón creemos que la elegancia no nace de las estructuras, sino del movimiento.
                 </p>
                 <p className="text-black text-sm md:text-lg mb-7">
                  Diseñamos prendas que celebran el cuerpo humano y la caída natural de las telas, desdibujando las líneas rígidas de lo formal.
@@ -20,7 +20,7 @@ export default function Columns(){
                 </p>
               </div>
             </ScrollReveal>
-            <ScrollReveal animation="right" delay={600}>
+            <ScrollReveal animation="right" delay={50}>
               <div className="hidden md:flex justify-start items-center mr-0 md:mr-[5%] shadow-2xl shadow-white h-auto md:h-[600px] w-[500px] md:w-[600px]">
                <video
                 src="/video_muestra.mp4"
@@ -31,8 +31,8 @@ export default function Columns(){
                 className="w-full h-full object-cover">
                </video>
               </div>
-              <div className="block md:hidden justify-start items-center mr-0 md:mr-[17%] shadow-2xl shadow-white h-auto md:h-[600px] w-[500px] md:w-[600px]">
-                <img src="/face.jpg" alt="Face" className="w-full h-full object-cover" />
+              <div className="block md:hidden justify-start items-center mr-0 md:mr-[17%] shadow-2xl shadow-white h-auto md:h-[600px] w-full md:w-[600px] mt-20">
+                <img src="/face.jpg" alt="Face" className=" h-full object-cover" />
               </div>
             </ScrollReveal>
           </section>
@@ -40,10 +40,10 @@ export default function Columns(){
 
 
         {/* Catalogo de la marca*/}
-        <ScrollReveal animation="up" delay={200}>
-          <section className="py-16 bg-white bg-cover bg-center border-gray-700 h-auto md:h-[80vh] w-auto md:w-full mx-auto grid grid-cols-1 md:grid-cols-2">
+        <ScrollReveal animation="up" delay={50}>
+          <section className="py-16 bg-cs-ivory bg-cover bg-center border-gray-700 h-auto md:h-[80vh] w-auto md:w-full mx-auto grid grid-cols-1 md:grid-cols-2">
             {/* Columna izquierda - Imagen */}
-            <ScrollReveal animation="left" delay={400}>
+            <ScrollReveal animation="left" delay={50}>
               <div className="hidden md:flex justify-center items-center md:justify-end md:items-center  ">
                <RippleEffect
             className="block bg-none w-auto md:w-[80%]  h-[500px] md:h-[700px]"
@@ -59,7 +59,7 @@ export default function Columns(){
             </ScrollReveal>
 
             {/* Columna derecha - Texto */}
-            <ScrollReveal animation="right" delay={600}>
+            <ScrollReveal animation="right" delay={50}>
               <div className="flex flex-col justify-center px-4 md:px-10 py-4 md:py-10 md:mt-[11%]">
                   <h2 className="text-2xl md:text-4xl mb-10 text-black">La primera prenda</h2>
                   <p className="text-black text-sm md:text-lg mb-7">
@@ -80,9 +80,9 @@ export default function Columns(){
         </ScrollReveal>
 
         {/* 3*/}
-        <ScrollReveal animation="down" delay={200}>
-          <section className="py-16 bg-white bg-cover bg-center border-gray-700 h-auto md:h-[80vh] w-auto md:w-full mx-auto grid grid-cols-1 md:grid-cols-2">
-            <ScrollReveal animation="left" delay={400}>
+        <ScrollReveal animation="down" delay={50}>
+          <section className="py-16 bg-cs-ivory bg-cover bg-center border-gray-700 h-auto md:h-[80vh] w-auto md:w-full mx-auto grid grid-cols-1 md:grid-cols-2">
+            <ScrollReveal animation="left" delay={50}>
               <div className="col-span-1flex flex-col md:justify-between px-4 md:px-10 py-4 md:py-10 md:mt-[11%]">
                 <h2 className="text-2xl md:text-4xl mb-10 text-black">
                   Diario
@@ -99,7 +99,7 @@ export default function Columns(){
                 </p>
               </div>
             </ScrollReveal>
-            <ScrollReveal animation="right" delay={600}>
+            <ScrollReveal animation="right" delay={50}>
               <div className="hidden md:flex col-span-1 mt-[14%] mb-[45%] mr-[10%] justify-end">
                 <RippleEffect
                   className="block bg-none w-[80%] mr-[10%] h-[600px] overflow-hidden"

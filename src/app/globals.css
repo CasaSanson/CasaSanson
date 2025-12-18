@@ -15,6 +15,10 @@
 @layer base {
   :root {
     --background: #111111;
+    --cs-obsidian: #101010;
+    --cs-white: #FDFCF8;
+    --cs-ivory: #F3F0E9;
+    --cs-nude:#E3DBCC;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;

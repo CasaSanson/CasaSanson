@@ -9,6 +9,7 @@ const Navbar = () => {
   const [currentScreen, setCurrentScreen] = useState('home');
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
 
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const Navbar = () => {
         {/* LOGO */}
         <div className="flex text-white">
           <Link
-            href="/"
+            href="/home"
             className=""
           >
             <Image 
@@ -91,43 +92,40 @@ const Navbar = () => {
         <MenuIcon name="menu" className="w-6 h-6" />
       </button>
       {/* Mobile Menu */}
-      <div className={`${isMenuOpen ? "block" : "hidden"} sm:hidden bg-white space-y-4 pb-3 px-4 pt-4`}>
+      <div className={`${isMenuOpen ? "block" : "hidden"} sm:hidden bg-gradient-tor from-gray-700 to-black space-y-10 pb-3 px-4 pt-4`}>
         {/* LOGO */}
         <div className="flex text-white block">
           <Link
-            href="/"
-            className="text-black text-lg hover:text-gray-500 focus:text-white"
+            href="/home"
+            className="text-white text-lg hover:text-gray-500 focus:text-gray-500"
+            onClick={() => setIsMenuOpen(false)}
           >
-            Casa Sansón
+            Inicio
           </Link>
         </div>
         {/* about us */}
         <Link
           href="/about"
-          className="text-black text-lg hover:text-gray-500 focus:text-red-500 block"
+          className="text-white text-lg hover:text-gray-500 focus:text-gray-500 block"
+          onClick={() => setIsMenuOpen(false)}
         >
           Nosotros
         </Link>
         {/* collections */}
         <Link
           href="/catalogo"
-          className="text-black text-lg hover:text-gray-500 focus:text-red-500 block"
+          className="text-white text-lg hover:text-gray-500 focus:text-gray-500 block"
+          onClick={() => setIsMenuOpen(false)}
         >
           Catálogo
         </Link>
         {/* journal */}
         <Link
           href="/journal"
-          className="text-black text-lg hover:text-gray-500 focus:text-red-500 block"
+          className="text-white text-lg hover:text-gray-500 focus:text-gray-500 block"
+          onClick={() => setIsMenuOpen(false)}
         >
           Diario
-        </Link>
-        {/* cart */}
-        <Link
-          href="/cart"
-          className="text-black text-lg hover:text-gray-500 focus:text-red-500 block"
-        >
-          <ShoppingCartIcon className="w-6 h-6" />
         </Link>
       </div>
     </nav>
