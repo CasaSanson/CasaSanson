@@ -19,6 +19,15 @@
     --cs-white: #FDFCF8;
     --cs-ivory: #F3F0E9;
     --cs-nude:#E3DBCC;
+    --cs-white-bone: #F3F1EC;
+    --cs-crema-mineral: #E6E0D6;
+    --cs-gris-ceniza: #B8B8B5;
+    --cs-gris-grafito: #5F5F5E;
+    --cs-rosa-polvo:#cfaeb4;
+    --cs-verde-musgo: #6f7b6a;
+    --cs-azul: #2f3a3f;
+    --cs-vino: #5a2a2a;
+    --cs-negro:#1c1c1b;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
@@ -76,7 +85,7 @@
 
 /* Configuración de fuente global */
 * {
-  font-family: 'Cardo-Regular';
+  font-family: 'Quicksand';
 }
 
 /* Cursor personalizado */

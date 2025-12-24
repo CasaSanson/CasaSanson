@@ -93,11 +93,20 @@ const config: Config = {
   				black: '#361010'
   			},
   			cs: {
-  				obsidian: 'var(--cs-obsidian)',
-  				white: 'var(--cs-white)',
-  				ivory: 'var(--cs-ivory)',
-  				nude: 'var(--cs-nude)'
-  			},
+				obsidian: 'var(--cs-obsidian)',
+				white: 'var(--cs-white)',
+				ivory: 'var(--cs-ivory)',
+				nude: 'var(--cs-nude)',
+				'white-bone': 'var(--cs-white-bone)',
+				'crema-mineral': 'var(--cs-crema-mineral)',
+				'gris-ceniza': 'var(--cs-gris-ceniza)',
+				'gris-grafito': 'var(--cs-gris-grafito)',
+				'rosa-polvo': 'var(--cs-rosa-polvo)',
+				'verde-musgo': 'var(--cs-verde-musgo)',
+				azul: 'var(--cs-azul)',
+				vino: 'var(--cs-vino)',
+				negro: 'var(--cs-negro)'
+			},
   			background: 'var(--background)',
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
@@ -142,20 +151,25 @@ const config: Config = {
   				'Kugile',
   				'serif'
   			],
-  			serif: [
-  				'Kugile',
-  				'Playfair Display',
-  				'Merriweather',
-  				'serif'
-  			],
-  			sans: [
-  				'Kugile',
-  				'Playfair Display',
-  				'Merriweather',
-  				'ui-sans-serif',
-  				'system-ui',
-  				'sans-serif'
-  			]
+			quicksand: [
+				'Quicksand',
+				'sans-serif'
+			],
+			serif: [
+				'Kugile',
+				'Playfair Display',
+				'Merriweather',
+				'serif'
+			],
+			sans: [
+				'Quicksand',
+				'Kugile',
+				'Playfair Display',
+				'Merriweather',
+				'ui-sans-serif',
+				'system-ui',
+				'sans-serif'
+			]
   		}
   	}
   },

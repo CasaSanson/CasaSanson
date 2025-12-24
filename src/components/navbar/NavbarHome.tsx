@@ -9,6 +9,7 @@ const Navbar = () => {
   const [currentScreen, setCurrentScreen] = useState('home');
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   
 
 
@@ -25,11 +26,14 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
-        setShow(false); // bajando → ocultar
+        setShow(true); // bajando → ocultar
       } else {
         setShow(true); // subiendo → mostrar
       }
       setLastScrollY(window.scrollY);
+      
+      // Detectar si ha scrolleado para cambiar el fondo
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -42,54 +46,58 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-2 mx-auto items-center h-30 left-0 w-full z-50 bg-gradient-to-r from-[#454444] to-[#232323] py-2 transition-transform duration-300 ${show ? "translate-y-0" : "-translate-y-full"
-        }`}
+      className={`fixed top-0 mx-auto items-center left-0 w-full z-50 transition-all duration-300 ${show ? "translate-y-0" : "-translate-y-full"} ${
+        isScrolled ? "bg-white h-20" : "bg-transparent h-30"
+      }`}
     >
       {/* Desktop Menu */}
-      <div className="hidden md:flex justify-center space-x-20 text-white items-center ">
+      <div className={`hidden md:flex items-center h-full px-4 md:px-8 ${isScrolled ? "text-black" : "text-black"}`}>
         {/* LOGO */}
-        <div className="flex text-white">
+        <div className="flex items-center h-full">
           <Link
             href="/home"
-            className=""
+            className="flex items-center h-full"
           >
             <Image 
-            width={120}
-            height={10}
-            src="/sanson_white.png" 
+            width={isScrolled ? 140 : 150}
+            height={isScrolled ? 30 : 50}
+            src={isScrolled ? "/sanson_black.png" : "/sanson_vino.png"}
             alt=""
-            className="object-cover">
+            className="object-contain transition-all duration-300">
             </Image>
           </Link>
         </div>
         
-        {/* collections */}
-        <Link
-          href="/catalogo"
-          className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400 items-center"
-        >
-          Catálogo
-        </Link>
+        {/* Navigation Links - Centered */}
+        <div className="flex-1 flex justify-center space-x-20">
+          {/* collections */}
+          <Link
+            href="/catalogo"
+            className={`font-bold focus:text-gray-400 items-center transition-all duration-300 ${isScrolled ? "text-black hover:text-gray-600 text-base" : "text-cs-vino hover:text-gray-300 text-lg"}`}
+          >
+            CATÁLOGO
+          </Link>
 
-        {/* journal */}
-        <Link
-          href="/journal"
-          className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400"
-        >
-          Diario
-        </Link>
-        {/* about us */}
-        <Link
-          href="/about"
-          className="text-white text-lg font-bold hover:text-gray-500 focus:text-gray-400"
-        >
-          Nosotros
-        </Link>
+          {/* journal */}
+          <Link
+            href="/journal"
+            className={`font-bold focus:text-gray-400 transition-all duration-300 ${isScrolled ? "text-black hover:text-gray-600 text-base" : "text-cs-vino hover:text-gray-300 text-lg"}`}
+          >
+            DIARIO
+          </Link>
+          {/* about us */}
+          <Link
+            href="/about"
+            className={`font-bold focus:text-gray-400 transition-all duration-300 ${isScrolled ? "text-black hover:text-gray-600 text-base" : "text-cs-vino hover:text-gray-300 text-lg"}`}
+          >
+            NOSOTROS
+          </Link>
+        </div>
         {/* cart */}
         
       </div>
-      <button onClick={toggleMenu} className="text-white text-lg font-bold hover:text-gray-500 px-4 focus:text-white sm:hidden">
-        <MenuIcon name="menu" className="w-6 h-6" />
+      <button onClick={toggleMenu} className={`font-bold px-4 focus:text-white sm:hidden transition-colors h-full flex items-center ${isScrolled ? "text-black hover:text-gray-600 text-base" : "text-white hover:text-gray-300 text-lg"}`}>
+        <MenuIcon name="menu" className={`${isScrolled ? "w-5 h-5" : "w-6 h-6"} transition-all duration-300`} />
       </button>
       {/* Mobile Menu */}
       <div className={`${isMenuOpen ? "block" : "hidden"} sm:hidden bg-gradient-tor from-gray-700 to-black space-y-10 pb-3 px-4 pt-4`}>

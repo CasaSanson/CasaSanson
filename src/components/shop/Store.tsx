@@ -33,16 +33,15 @@ export default function Store(){
       if (loading) return <p>Cargando productos...</p>;
     return(
         <section className="w-full mx-auto bg-cs-white bg-cover bg-center h-full pt-[15%] md:pt-[5%]">
-                <h1 className="text-4xl text-center text-black">Productos</h1>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-2 max-w-[90%] mx-auto pt-[5%] ">
                     {products.map((product) => (
                         <div key={product.id} className="flex flex-col items-start justify-start">
-                           <Link href={`/catalogo/ver/${product.id}`} className="w-full  overflow-hidden border-2 border-gray-300">
+                           <Link href={`/catalogo/ver/${product.id}`} className="w-full  overflow-hidden border-2 border-cs-vino">
                                 <img src={product.image} alt={product.name} className="w-full  h-full object-cover" />
                            </Link>
-                            <div className="flex flex-col items-start justify-start w-full">
-                                <h2 className="text-2xl text-black pt-[4%]">{product.name}</h2>
-                                <p className="text-black text-xl mb-7"> ${product.base_price}</p>
+                            <div className="flex flex-col justify-between w-full">
+                                <h2 className="text-lg font-bold text-cs-negro">{product.name}</h2>
+                                <p className="text-black text-lg mb-7">${product.base_price}</p>
                             </div>
                         </div>
                     ))}
