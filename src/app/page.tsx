@@ -1,9 +1,5 @@
 'use client'
 import { useState, useEffect } from "react";
-import Footer from "@/components/footer/Footer";
-import Header from "@/components/home/Header";
-import Columns from "@/components/home/Columns";
-import Tape from "@/components/home/Tape";
 import Landing from "@/components/home/landing/Landing";
 import CircularText from "@/components/CircularText";
 

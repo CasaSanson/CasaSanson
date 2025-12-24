@@ -8,7 +8,7 @@ export default function Catalogo() {
     return (
         <main className="bg-white min-h-screen w-[100%] mx-auto">
             {/* ÚLTIMO RELEASE */}
-            <LastRelease/>
+            {/* <LastRelease/> */}
             {/* Productos */}
             <Store/>
             {/* footer */}

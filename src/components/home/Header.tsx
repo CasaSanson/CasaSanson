@@ -20,22 +20,23 @@ export default function Header(){
         {isOpen && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 z-10 transition-all duration-500">
             <p className="text-white text-sm md:text-xl mb-4">
-              1. CREEMOS EN LA BELLEZA IMPERFECTA DEL MOVIMIENTO.
+              1. CREEMOS EN LA BELLEZA IMPERFECTA DEL MOVIMIENTO
             </p>
 
             <p className="text-white text-sm md:text-xl mb-4">
-              2. Honramos la sastrería desde la artesanía, no desde la norma.
+              2. HONRAMOS LA SASTRERÍA DESDE LA ARTESANÍA, NO DESDE LA NORMA
             </p>
+            
 
             <p className="text-white text-sm md:text-xl mb-4">
-              3. Diseñamos para todos los cuerpos que buscan congruencia, no etiquetas.
+              3. DISEÑAMOS PARA TODOS LOS CUERPOS QUE BUSCAN CONGRUENCIA, NO ETIQUETAS
             </p>
-
+  
             <p className="text-white text-sm md:text-xl mb-4">
-              4. La ropa debe acompañar el ritmo de la vida, no imponerla.
+              4. LA ROPA DEBE ACOMPAÑAR EL RITMO DE LA VIDA, NO IMPONERLA
             </p>
             <p className="text-white text-sm md:text-xl mb-4">
-              5. La calidad no es un lujo: es una forma de respeto.
+              5. LA CALIDAD NO ES UN LUJO: ES UNA FORMA DE RESPETO
             </p>
           </div>
         )}
@@ -44,7 +45,7 @@ export default function Header(){
       {/* Botón toggle debajo del video */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group absolute left-1/2 -translate-x-1/2 bottom-10 pointer-events-auto px-4 md:px-12 py-2 md:py-4 bg-black backdrop-blur-sm text-white text-sm md:text-xl rounded-none border-2 border-black transition-all duration-700 hover:bg-cs-verde-musgo hover:text--cs-azul hover:border-black/50 hover:shadow-2xl transform hover:scale-105 drop-shadow-lg z-50"
+        className="group absolute left-1/2 -translate-x-1/2 bottom-10 pointer-events-auto px-4 md:px-12 py-2 md:py-4 bg-black backdrop-blur-sm text-white text-sm md:text-xl rounded-none border-2 border-black transition-all duration-700 hover:bg-cs-verde-musgo hover:text--cs-azul hover:border-black/50 hover:shadow-2xl transform hover:scale-105 drop-shadow-lg z-40"
       >
         {isOpen ? "X" : "MANIFIESTO"}
       </button>
