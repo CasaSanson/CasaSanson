@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Tape(){
     return(
-        <section className="grid grid-cols-1 md:grid-cols-3 bg-gradient-to-b from-cs-ivory to-cs-obsidian h-auto md:h-[80vh]">
+        <section className="grid grid-cols-1 md:grid-cols-3 bg-white h-auto md:h-[80vh] mb-7">
             {/* primera columna */}
             <div className="col-span-1 flex flex-col space-y-1 mt-[10%]">
               <div className="row-span-1">

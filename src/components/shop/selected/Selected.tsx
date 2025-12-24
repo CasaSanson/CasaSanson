@@ -58,7 +58,7 @@ export default function Selected({ params }: { params: { id: string } }) {
 
     return (
         <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
-            <div className="max-w-9xl mx-auto mt-[6%] md:mt-10">
+            <div className="max-w-9xl mx-auto mt-[6%] md:mt-13">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-start">
 
                     {/* Imagen izquierda */}
@@ -108,9 +108,9 @@ export default function Selected({ params }: { params: { id: string } }) {
                                         onClick={() => handleSizeClick(size)}
                                         disabled={stock === 0}
                                         className={`border border-black px-4 py-2 text-sm transition-colors duration-300 ${selectedSize === size
-                                            ? "bg-gray-900 text-white"
+                                            ? "bg-cs-verde-musgo text-white"
                                             : stock > 0
-                                                ? "bg-white text-black hover:bg-black hover:text-white"
+                                                ? "bg-white text-black hover:bg-cs-verde-musgo hover:text-white"
                                                 : "bg-gray-200 text-gray-500 cursor-not-allowed"
                                             }`}
                                     >
@@ -167,7 +167,7 @@ export default function Selected({ params }: { params: { id: string } }) {
                                         query: { variantId: selectedVariant?.id, text: personalizedText },
                                     }}
                                 >
-                                    <button className="bg-black border border-black hover:bg-white text-white hover:text-black transition-colors duration-300 px-4 py-2">
+                                    <button className="bg-black border border-black hover:bg-cs-verde-musgo text-white hover:text-white transition-colors duration-300 px-4 py-2">
                                         Comprar ahora
                                     </button>
                                 </Link>

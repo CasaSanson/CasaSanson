@@ -8,9 +8,11 @@ export default function homenav(){
             {/* Hero Section */}
             <Header />
             {/* Columnas*/}
-            <Columns />
+            {/* <Columns /> */}
             {/*Tape*/}
+            <div className="mb-10">
             <Tape />
+            </div>
             {/* Footer */}
             <Footer />
         </main>
