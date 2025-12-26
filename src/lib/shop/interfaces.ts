@@ -16,5 +16,7 @@ export interface ProductVariant {
     image: string;
     active: boolean;
     product_variants: ProductVariant[];
+    maquila: boolean;
+    personalizacion: boolean;
   }
   
