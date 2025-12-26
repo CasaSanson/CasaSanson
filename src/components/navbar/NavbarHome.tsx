@@ -96,11 +96,11 @@ const Navbar = () => {
         {/* cart */}
         
       </div>
-      <button onClick={toggleMenu} className={`font-bold px-4 focus:text-white sm:hidden transition-colors h-full flex items-center ${isScrolled ? "text-black hover:text-gray-600 text-base" : "text-white hover:text-gray-300 text-lg"}`}>
+      <button onClick={toggleMenu} className={`font-bold  px-4 focus:text-white sm:hidden transition-colors h-full flex items-center ${isScrolled ? "text-black hover:text-gray-600 text-base" : "text-white hover:text-gray-300 text-lg"}`}>
         <MenuIcon name="menu" className={`${isScrolled ? "w-5 h-5" : "w-6 h-6"} transition-all duration-300`} />
       </button>
       {/* Mobile Menu */}
-      <div className={`${isMenuOpen ? "block" : "hidden"} sm:hidden bg-gradient-tor from-gray-700 to-black space-y-10 pb-3 px-4 pt-4`}>
+      <div className={`${isMenuOpen ? "block" : "hidden"} sm:hidden bg-black space-y-10 pb-3 px-4 pt-4`}>
         {/* LOGO */}
         <div className="flex text-white block">
           <Link

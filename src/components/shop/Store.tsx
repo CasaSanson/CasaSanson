@@ -30,7 +30,7 @@ export default function Store(){
         fetchProducts();
       }, []);
     
-      if (loading) return <p>Cargando productos...</p>;
+      if (loading) return <p className="mx-auto text-3xl  mt-[50%]">Cargando productos...</p>;
     return(
         <section className="w-full mx-auto bg-cs-white bg-cover bg-center h-full pt-[15%] md:pt-[5%]">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-2 max-w-[90%] mx-auto pt-[5%] ">
