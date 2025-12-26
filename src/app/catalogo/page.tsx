@@ -8,11 +8,11 @@ export default function Catalogo() {
     return (
         <main className="bg-white min-h-screen w-[100%] mx-auto">
             {/* ÚLTIMO RELEASE */}
-            <LastRelease/>
+            {/* <LastRelease/> */}
             {/* Productos */}
             <Store/>
             {/* footer */}
-            <footer className="bg-[#111111] pt-[5%] text-white py-8">
+            <footer className="hidden md-block bg-[#111111] pt-[5%] text-white py-8">
           <div className="container mx-auto px-4">
             <p className="text-center">
               &copy; 2025 Casa Sansón. Todos los derechos reservados.

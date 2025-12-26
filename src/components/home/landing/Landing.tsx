@@ -33,9 +33,9 @@ export default function Landing(){
           <div className="mb-2">
 
             <Image src="/sanson_white.png" alt="Casa Sansón" width={400} height={400} className="mx-auto md:hidden"></Image>
-            <h1 className="text-5xl text-white hidden md:block mb-7">Casa Sansón</h1>
+            <h1 className="text-4xl text-white hidden md:block mb-7">CASA SANSÓN</h1>
             
-            <div className="w-full h-[1px] bg-gray-500 mx-auto mb-8"></div>
+            <div className="text-gray-500 bg-transparent mx-auto mb-8">Est. 2025</div>
             <p className="text-xl  text-gray-300 font-light drop-shadow-md">
               La búsqueda de belleza y armonía a través de la forma y la materia.
             </p>
@@ -48,14 +48,14 @@ export default function Landing(){
           </div>
 
           {/* Botón de entrada */}
-          <Link href={"/home"}>
+
           <button
-            className="group relative pointer-events-auto px-12 py-4 bg-black backdrop-blur-sm text-white text-xl rounded-none border-2 border-black transition-all duration-700 hover:bg-gray-500/20 hover:text-black hover:border-black/50 hover:shadow-2xl transform hover:scale-105 drop-shadow-lg"
+            className="group relative pointer-events-auto px-12 py-4 bg-black  text-white text-xl rounded-none border-2 border-black transition-all duration-700 hover:bg-cs-verde-musgo hover:border-black/50 hover:shadow-2xl transform hover:scale-105 drop-shadow-lg"
           >
-            <span className="relative z-30">Coming Soon...</span>
+            <span className="relative z-30 text-md text-gray-500 ">COMING SOON...</span>
             <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
           </button>
-          </Link>
+    
 
         </div>
       </div>

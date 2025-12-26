@@ -7,9 +7,9 @@ import Letter from "@/components/journal/Letter";
 export default function Journal() {
   return (
     <div>
-      <main className="bg-gradient-to-b from-cs-ivory to-cs-nude  bg-center h-full mt-[11vh] w-screen pt-18 relative">
+      <main >
         <section className="h-auto  w-full mx-auto  border-b border-black">
-          <div className="hidden md:block">
+          <div className="hidden md:block mt-[8%]">
             <Flipbook />
           </div>
           <div className="block sm:hidden">
