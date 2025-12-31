@@ -1,5 +1,4 @@
 import Header from "@/components/home/Header"
-import Columns from "@/components/home/Columns"
 import Tape from "@/components/home/Tape"
 import Footer from "@/components/footer/Footer"
 import LastRelease from "@/components/shop/LastRelease"

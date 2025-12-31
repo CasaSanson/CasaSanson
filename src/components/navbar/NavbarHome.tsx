@@ -85,6 +85,14 @@ const Navbar = () => {
           >
             DIARIO
           </Link>
+          {/*Biblioteca Desktop*/}
+          <Link
+          href="/biblioteca"
+          className={`font-bold focus:text-gray-400 transition-all duration-300 ${isScrolled ? "text-black hover:text-gray-600 text-base" : "text-cs-vino hover:text-gray-300 text-lg"}`}
+          onClick={() => setIsMenuOpen(false)}
+        >
+          BIBLIOTECA
+        </Link>
           {/* about us */}
           <Link
             href="/about"
@@ -134,6 +142,13 @@ const Navbar = () => {
           onClick={() => setIsMenuOpen(false)}
         >
           Diario
+        </Link>
+        <Link
+          href="/biblioteca"
+          className="text-white text-lg hover:text-gray-500 focus:text-gray-500 block"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          Biblioteca
         </Link>
       </div>
     </nav>

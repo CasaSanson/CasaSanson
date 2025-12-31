@@ -3,7 +3,7 @@ import React from "react";
 export default function Flipbook() {
   return (
     <div
-     className="hidden md:block"
+     className="block"
       style={{
         position: "relative",
         width: "100%",

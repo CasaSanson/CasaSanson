@@ -1,11 +1,12 @@
 "use client";
 export default function About(){
+
     return(
         <>
         {/* section de la coleccion */}
         <section className="w-full mx-auto bg-cs-white grid grid-cols-1 md:grid-cols-2 h-full md:h-[100vh] ">
                 <div className="col-span-1">
-                  <p className="text-black text-lg w-[60%] h-full mx-auto mt-[40%] md:mt-[53%] m-7">
+                  <p className="text-black header-item text-lg w-[60%] h-full mx-auto mt-[40%] md:mt-[53%] m-7">
                   Una historia, una tradición, una cultura…
                   </p>
                   <p className="text-black text-lg w-[60%] mx-auto m-7">

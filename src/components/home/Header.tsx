@@ -5,9 +5,9 @@ import { useState } from "react";
 export default function Header(){
     const [isOpen, setIsOpen] = useState(false);
     return(
-        <section className="h-auto md:h-[100%] bg-[#f1efe0] relative">
+        <section className="h-auto md:h-full bg-[#f1efe0] relative">
           
-          <div className="relative w-[100%] md:w-full h-[500px] md:h-[950px] mx-auto">
+          <div className="relative w-[100%] md:w-full h-[500px] md:h-full mx-auto">
           <video
             src="/lore_video.mp4"
             autoPlay
