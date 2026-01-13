@@ -76,7 +76,7 @@ export default function Verjournal() {
     if (!carta) return <p className="mx-auto text-3xl mt-[50%]">Entrada no encontrada</p>;
 
     return (
-        <div className="mt-[10%] px-[20%]">
+        <div className="mt-[10%] md:px-[20%]">
             <Link href={"/journal"} className="inline-flex gap-1">
                 <ArrowLeftFromLine className="text-gray-500 hover:text-black cursor-pointer" />
                 <p className="text-lg uppercase text-gray-500 hover:text-black cursor-pointer">Regresar</p>

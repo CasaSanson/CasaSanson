@@ -8,7 +8,7 @@ export default function LastRelease() {
         <>
             {/* section de las imagenes de la coleccion con hover */}
             <section className=" w-full mx-auto bg-white bg-cover bg-center w-[80%] h-full">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-w-6xl mx-auto h-full">
+                <div className="grid grid-cols-1 px-4 md:grid-cols-2 gap-2 max-w-6xl mx-auto h-full">
                     {/*foto1*/}
                     <div className="group relative h-[700px] mt-[20%]  flex  overflow-hidden  border-4 border-cs-vino">
                         <img
@@ -27,7 +27,7 @@ export default function LastRelease() {
                         </Link>
                     </div>
                     {/*2*/}
-                    <div className="group relative h-[700px] mt-[20%]  flex  overflow-hidden  border-4 border-cs-vino">
+                    <div className="group relative h-[700px] md:mt-[20%]  flex  overflow-hidden  border-4 border-cs-vino">
                         <img
                             src="/catalogo1.png"
                             alt="Vogue"

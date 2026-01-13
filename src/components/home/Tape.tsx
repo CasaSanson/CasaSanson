@@ -11,7 +11,7 @@ export default function Tape(){
                   <img src="/1.png" alt="Lino" className="w-full mx-auto h-full object-cover hover:scale-105 transition-all duration-300" />
                 </Link>
               </div>
-              <div className="row-span-1 z-50 mx-auto">
+              <div className="row-span-1  mx-auto">
                 <button className="bg-white/60  text-black font-bold border-black border-2 hover:bg-cs-verde-musgo hover:text-white z-10 text-left p-4 w-auto h-10 pt-2 ml-2 mt-2">
                   MATERIALES
                 </button>
@@ -24,7 +24,7 @@ export default function Tape(){
                 <img src="/2.png" alt="Lino" className="w-full mx-auto h-full object-cover hover:scale-105 transition-all duration-300" />
                 </Link>
               </div>
-              <div className="row-span-1 z-50 mx-auto">
+              <div className="row-span-1  mx-auto">
               <button className="bg-white/60 text-black font-bold border-black border-2 hover:bg-cs-verde-musgo hover:text-white z-10 text-left p-4 w-auto h-10 pt-2 ml-2 mt-2">
                   VER MÁS
                 </button>
@@ -37,7 +37,7 @@ export default function Tape(){
                 <img src="/3.png" alt="Lino" className="w-full mx-auto Z-48 h-full object-cover hover:scale-105 transition-all duration-300" />
                 </Link>
               </div>
-              <div className="row-span-1 z-50 mx-auto mb-10">
+              <div className="row-span-1  mx-auto mb-10">
               <button className="bg-white/60 text-black font-bold border-black border-2 hover:bg-cs-verde-musgo hover:text-white z-10 text-left p-4 w-auto h-10 pt-2 ml-2 mt-2">
                   VER MÁS
                 </button>
