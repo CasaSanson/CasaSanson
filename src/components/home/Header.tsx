@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function Header(){
     const [isOpen, setIsOpen] = useState(false);
     return(
-        <section className="h-auto md:h-[100%] bg-[#f1efe0] relative">
+        <section className="h-full md:h-[100%] bg-[#f1efe0] relative">
           
           <div className="relative w-[100%] md:w-full h-[500px] md:h-[950px] mx-auto">
           <video
@@ -18,7 +18,7 @@ export default function Header(){
           />
           {/* Overlay dinámico */}
         {isOpen && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 z-10 transition-all duration-500">
+          <div className="absolute px-6 inset-0 flex flex-col items-center justify-center bg-black/50 z-10 transition-all duration-500">
             <p className="text-white text-sm md:text-xl mb-4">
               1. CREEMOS EN LA BELLEZA IMPERFECTA DEL MOVIMIENTO
             </p>

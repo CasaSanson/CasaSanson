@@ -45,8 +45,9 @@ const Navbar = () => {
   };
 
   return (
+    <>
     <nav
-      className={`fixed top-0 mx-auto items-center left-0 w-full z-50 transition-all duration-300 ${show ? "translate-y-0" : "-translate-y-full"} ${
+      className={`hidden md:block fixed top-0 mx-auto items-center left-0 w-full z-50 transition-all duration-300 ${show ? "translate-y-0" : "-translate-y-full"} ${
         isScrolled ? "bg-white h-20" : "bg-transparent h-30"
       }`}
     >
@@ -96,16 +97,27 @@ const Navbar = () => {
         {/* cart */}
         
       </div>
-      <button onClick={toggleMenu} className={`font-bold  px-4 focus:text-white sm:hidden transition-colors h-full flex items-center ${isScrolled ? "text-black hover:text-gray-600 text-base" : "text-white hover:text-gray-300 text-lg"}`}>
-        <MenuIcon name="menu" className={`${isScrolled ? "w-5 h-5" : "w-6 h-6"} transition-all duration-300`} />
+      </nav>
+      <nav className="fixed top-0 md:hidden z-50 w-full h-30 items-center">
+      <button onClick={toggleMenu} className="w-full bg-white flex h-20 items-center ">
+        <MenuIcon  className="text-black ml-4"/>
+        <Image
+         src="/sanson_black.png"
+         alt=""
+         width={100}
+         height={100}
+         className="justify-center flex">
+
+        </Image>
       </button>
+      
       {/* Mobile Menu */}
-      <div className={`${isMenuOpen ? "block" : "hidden"} sm:hidden bg-black space-y-10 pb-3 px-4 pt-4`}>
+      <div className={`${isMenuOpen ? "block" : "hidden"} sm:hidden bg-cs-verde-musgo space-y-10 pb-3 px-4 pt-4`}>
         {/* LOGO */}
         <div className="flex text-white block">
           <Link
             href="/home"
-            className="text-white text-lg hover:text-gray-500 focus:text-gray-500"
+            className="text-white text-lg hover:text-gray-500 focus:text-gray-500 uppercase"
             onClick={() => setIsMenuOpen(false)}
           >
             Inicio
@@ -114,7 +126,7 @@ const Navbar = () => {
         {/* about us */}
         <Link
           href="/about"
-          className="text-white text-lg hover:text-gray-500 focus:text-gray-500 block"
+          className="text-white text-lg hover:text-gray-500 focus:text-gray-500 block uppercase"
           onClick={() => setIsMenuOpen(false)}
         >
           Nosotros
@@ -122,7 +134,7 @@ const Navbar = () => {
         {/* collections */}
         <Link
           href="/catalogo"
-          className="text-white text-lg hover:text-gray-500 focus:text-gray-500 block"
+          className="text-white text-lg hover:text-gray-500 focus:text-gray-500 block uppercase"
           onClick={() => setIsMenuOpen(false)}
         >
           Catálogo
@@ -130,13 +142,14 @@ const Navbar = () => {
         {/* journal */}
         <Link
           href="/journal"
-          className="text-white text-lg hover:text-gray-500 focus:text-gray-500 block"
+          className="text-white text-lg hover:text-gray-500 focus:text-gray-500 block uppercase"
           onClick={() => setIsMenuOpen(false)}
         >
           Diario
         </Link>
       </div>
     </nav>
+    </>
   );
 };
 
