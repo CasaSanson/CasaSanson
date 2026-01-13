@@ -6,46 +6,43 @@ import Link from "next/link";
 
 
 
-export default function Landing(){
-    
+export default function Landing() {
+
   const handleEnterWebsite = () => {
     window.dispatchEvent(new Event('enterhome')); // Dispara el evento
   };
-    return(
-        <div className="fixed inset-0  bg-cover bg-center h-screen w-screen flex items-center justify-center z-50 relative overflow-hidden">
-        {/* Fondo con Ripple */}
-        <div className="absolute inset-0 ">
-          <RippleEffect
-            style={{
-              backgroundImage: 'url(/luna.jpeg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
-            }}
-            autoDrops={true}
-            options={{ perturbance: 0.02, dropRadius: 70 }}
-          />
-        </div>
-        <div className="absolute top-0 left-1/2 w-[3px] h-[20%] bg-gray-500 animate-line-down"></div>
-        <div className="absolute bottom-0 left-1/2 w-[3px] h-[20%] bg-gray-500 animate-line-up"></div>
-        <div className="relative z-10 bg-black/30 pointer-events-none flex flex-col items-center justify-center text-center w-auto md:w-[40%] h-[50%] md:h-[100%] mx-auto px-8 animate-slideUp">
-        
-          {/* Logo o título principal */}
-          <div className="mb-2">
+  return (
+    <div className="fixed inset-0  bg-cover bg-center h-screen w-screen flex items-center justify-center z-50 relative overflow-hidden">
+      {/* Fondo con Ripple */}
+      <div className="absolute inset-0 ">
+        <RippleEffect
+          style={{
+            backgroundImage: 'url(/luna.jpeg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+          autoDrops={true}
+          options={{ perturbance: 0.02, dropRadius: 70 }}
+        />
+      </div>
+      <div className="absolute top-0 left-1/2 w-[3px] h-[20%] bg-gray-500 animate-line-down"></div>
+      <div className="absolute bottom-0 left-1/2 w-[3px] h-[20%] bg-gray-500 animate-line-up"></div>
+      <div className="relative z-10 bg-black/30 pointer-events-none flex flex-col items-center justify-center text-center w-auto md:w-[40%] h-[50%] md:h-[100%] mx-auto px-8 animate-slideUp">
 
-            <Image src="/sanson_white.png" alt="Casa Sansón" width={400} height={400} className="mx-auto md:hidden"></Image>
-            <h1 className="text-4xl text-white hidden md:block mb-7">CASA SANSÓN</h1>
-            
-            <div className="text-gray-500 bg-transparent mx-auto mb-8">Est. 2025</div>
-            <p className="text-xl  text-gray-300 font-light drop-shadow-md">
-              La búsqueda de belleza y armonía a través de la forma y la materia.
-            </p>
+        {/* Logo o título principal */}
+        <div className="mb-2">
 
-           <p className="text-gray-300 text-md mt-10 mx-auto mb-7">
+          <Image src="/sanson_white.png" alt="Casa Sansón" width={400} height={400} className="mx-auto md:hidden"></Image>
+          <h1 className="text-4xl text-white hidden md:block mb-7">CASA SANSÓN</h1>
+
+          <div className="text-gray-500 bg-transparent mx-auto mb-8">Est. 2025</div>
+          <p className="text-xl  text-gray-300 font-light drop-shadow-md">
+            La búsqueda de belleza y armonía a través de la forma y la materia.
+          </p>
+
+          <p className="text-gray-300 text-md mt-10 mx-auto mb-7">
             Primavera/Verano 26/27
-           </p>
-
-
-          </div>
+          </p>
 
           {/* Botón de entrada */}
           <Link href={"/home"}>
@@ -58,8 +55,8 @@ export default function Landing(){
           </Link>
     
 
-        </div>
       </div>
+    </div>
 
-    )
+  )
 }
