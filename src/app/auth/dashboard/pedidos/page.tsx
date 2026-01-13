@@ -12,7 +12,6 @@ export default function Admin() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-
   useEffect(() => {
     if (status === 'loading') return
     if (!session) {
@@ -22,33 +21,23 @@ export default function Admin() {
 
     const fetchOrders = async () => {
       try {
-        // Consultamos ambas tablas
-        const [
-          { data: paidOrders, error: paidError },
-          { data: allOrders, error: allOrdersError },
-        ] = await Promise.all([
-          supabase.from('CS_ORDERS_PAID').select('*'),
-          supabase.from('CS_ORDERS').select('*'),
-        ])
+        setLoading(true)
+        setError(null)
+        
+        const { data: ordersData, error: ordersError } = await supabase
+          .from('orders')
+          .select('*')
+          .order('created_at', { ascending: false })
 
-        if (paidError || allOrdersError) throw paidError || allOrdersError
+        if (ordersError) {
+          throw ordersError
+        }
 
-        // Unir registros por el mismo id
-        const merged = (paidOrders || []).map((paid) => {
-          const orderInfo = allOrders?.find((o) => o.id === paid.id)
-          return {
-            ...paid,       // nombre, apellido, status, created_at
-            ...orderInfo,  // producto, talla, precio, cantidad, etc.
-          }
-        })
-
-        // Ordenar por fecha más reciente
-        merged.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-
-        setOrders(merged)
-      } catch (err) {
-        console.error(err)
-        setError('Error al cargar los pedidos')
+        setOrders(ordersData || [])
+      } catch (err: any) {
+        console.error('Error fetching orders:', err)
+        setError(err.message || 'Error al cargar los pedidos')
+        setOrders([])
       } finally {
         setLoading(false)
       }
