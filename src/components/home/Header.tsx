@@ -7,7 +7,7 @@ export default function Header(){
     return(
         <section className="h-auto md:h-full bg-[#f1efe0] relative">
           
-          <div className="relative w-[100%] md:w-full h-[500px] md:h-full mx-auto">
+          <div className="relative w-[100%] md:w-full h-[900px] md:h-full mx-auto">
           <video
             src="/lore_video.mp4"
             autoPlay
