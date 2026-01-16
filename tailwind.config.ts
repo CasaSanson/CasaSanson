@@ -146,13 +146,18 @@ const config: Config = {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
-  		fontFamily: {
-  			kugile: [
-  				'Kugile',
-  				'serif'
-  			],
+  		// ... existing code ...
+		fontFamily: {
+			kugile: [
+				'Kugile',
+				'serif'
+			],
 			quicksand: [
 				'Quicksand',
+				'sans-serif'
+			],
+			amarna: [
+				'Amarna',
 				'sans-serif'
 			],
 			serif: [
@@ -162,15 +167,13 @@ const config: Config = {
 				'serif'
 			],
 			sans: [
-				'Quicksand',
-				'Kugile',
-				'Playfair Display',
-				'Merriweather',
+				'Amarna',
 				'ui-sans-serif',
 				'system-ui',
 				'sans-serif'
 			]
-  		}
+		}
+// ... existing code ...
   	}
   },
   plugins: [require("tailwindcss-animate")],

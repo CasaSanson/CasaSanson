@@ -107,12 +107,19 @@ const Navbar = () => {
       </nav>
       <nav className="fixed md:hidden z-50 top-0 bg-white w-full h-20 flex items-center ">
 
-        <button onClick={toggleMenu} className="inline-flex  gap-2">
-          <MenuIcon className="font-bold text-gray-900 ml-4" />
+        <button onClick={toggleMenu} className="inline-flex  gap-2 transition-all duration-300 hover:scale-110 active:scale-95">
+          <MenuIcon className={`font-bold text-gray-900 ml-4 transition-transform duration-300 ${isMenuOpen ? 'rotate-90' : 'rotate-0'}`} />
         </button>
         <p className="font-bold text-2xl ml-[95px]">CASA SANSÓN</p>
         {/* Mobile Menu */}
-        <div className={`${isMenuOpen ? "block" : "hidden"} absolute top-full w-full sm:hidden bg-cs-verde-musgo space-y-10 pb-3 px-4 pt-4`}>
+        <div 
+          className={`absolute top-full w-full sm:hidden space-y-10 pb-3 px-4 pt-4 transition-all duration-300 ease-in-out ${
+            isMenuOpen 
+              ? "opacity-100 translate-y-0 pointer-events-auto" 
+              : "opacity-0 -translate-y-4 pointer-events-none"
+          }`}
+          style={{ backgroundColor: 'rgba(111, 123, 106, 0.7)' }}
+        >
           {/* LOGO */}
           <div className="flex text-white block">
             <Link
