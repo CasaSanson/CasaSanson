@@ -15,22 +15,32 @@ interface CompraPageProps {
 
 export default function CompraPage({ params: routeParams }: CompraPageProps) {
     const searchParams = useSearchParams();
-    const textParam = searchParams.get("text") || ""; 
+    const textParam = searchParams.get("text") || "";
 
     const { id } = routeParams;
-    const [metodoEnvio, setMetodoEnvio] = useState<string>("estandar");
-    const [product, setProduct] = useState<Product | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
-    const [personalizedText, setPersonalizedText] = useState(textParam);
-    const [quantity, setQuantity] = useState<number>(1); // Definimos quantity
 
-    // Actualizamos personalizedText desde query
+    // --- ESTADOS DE LA PÁGINA ---
+    const [loading, setLoading] = useState(true);
+    const [product, setProduct] = useState<Product | null>(null);
+    const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+    const [quantity, setQuantity] = useState<number>(1);
+    const [personalizedText, setPersonalizedText] = useState(textParam);
+    
+    // Estados compartidos para el envío
+    const [metodoEnvio, setMetodoEnvio] = useState<string>("estandar");
+    const [shippingRates, setShippingRates] = useState({
+        estandar: { precio: 150, rate_id: "" },
+        express: { precio: 250, rate_id: "" }
+    });
+
+    // --- EFECTOS ---
+
+    // 1. Actualizar texto personalizado desde la URL
     useEffect(() => {
         if (textParam) setPersonalizedText(textParam);
     }, [textParam]);
 
-    // Fetch producto desde Supabase
+    // 2. Cargar producto y variante inicial desde Supabase
     useEffect(() => {
         const fetchProduct = async () => {
             const { data, error } = await supabase
@@ -43,7 +53,7 @@ export default function CompraPage({ params: routeParams }: CompraPageProps) {
                 console.error("Error fetching product:", error);
             } else if (data) {
                 setProduct(data);
-                // Selecciona la primera variante con stock > 0
+                // Seleccionamos la primera variante disponible con stock
                 const firstAvailable = data.product_variants.find((v: ProductVariant) => v.stock > 0);
                 if (firstAvailable) setSelectedVariant(firstAvailable);
             }
@@ -53,10 +63,20 @@ export default function CompraPage({ params: routeParams }: CompraPageProps) {
         fetchProduct();
     }, [id]);
 
-    if (loading) return <p>Cargando producto...</p>;
-    if (!product) return <p>Producto no encontrado</p>;
+    // --- RENDERIZADO CONDICIONAL ---
+    if (loading) return (
+        <div className="min-h-screen flex items-center justify-center bg-white">
+            <div className="animate-spin h-8 w-8 border-4 border-black border-t-transparent rounded-full"></div>
+        </div>
+    );
 
-    // Creamos una variante con personalizedText para pasar a Summary
+    if (!product) return (
+        <div className="min-h-screen flex items-center justify-center bg-white text-black">
+            <p className="font-bold">Producto no encontrado</p>
+        </div>
+    );
+
+    // Creamos un objeto de variante que incluya el texto personalizado para el resumen
     const variantWithText = selectedVariant
         ? { ...selectedVariant, personalizedText }
         : null;
@@ -66,23 +86,28 @@ export default function CompraPage({ params: routeParams }: CompraPageProps) {
             <div className="container mx-auto max-w-6xl">
                 <Header />
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Formulario de compra */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+                    {/* COLUMNA IZQUIERDA: Formulario de cliente
+                        - Captura datos y maneja la lógica de Skydropx
+                    */}
                     <ClientForm
                         product={product}
                         quantity={quantity}
                         selectedVariant={selectedVariant}
-                        setSelectedVariant={setSelectedVariant}
-                        personalizedText={personalizedText}
-                        setPersonalizedText={setPersonalizedText}
+                        metodoEnvio={metodoEnvio}
+                        setMetodoEnvio={setMetodoEnvio}
+                        onRatesUpdate={setShippingRates} // Actualiza los costos en esta página
                     />
 
-                    {/* Summary con variante que incluye personalizedText */}
+                    {/* COLUMNA DERECHA: Resumen de compra
+                        - Muestra el desglose de precios actualizado en tiempo real
+                    */}
                     <Summary
                         product={product}
                         selectedVariant={variantWithText}
                         quantity={quantity}
                         metodoEnvio={metodoEnvio}
+                        shippingRates={shippingRates} // Recibe los costos dinámicos
                     />
                 </div>
             </div>
