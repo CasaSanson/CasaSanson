@@ -40,7 +40,7 @@ export default function Journal() {
   return (
     <div>
       <main>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 px-3 justify-left mt-[10%] flex flex-col text-left mx-auto mb-10">
+        <div className="gap-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 px-3 justify-left mt-[10%] flex flex-col text-left mx-auto mb-10">
           {entradas.map((ent) => (
             <div key={ent.id} className="flex image flex-col overflow-hidden">
               <div className="group relative h-[700px] mt-[10%] flex overflow-hidden">

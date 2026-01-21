@@ -2,15 +2,22 @@
 import Image from "next/image";
 import { Product } from "@/lib/shop/interfaces";
 
+// Definimos la estructura del objeto que viene del API
+interface ShippingRate {
+  precio: number;
+  nombre: string;
+  rate_id: string;
+}
+
 interface SummaryProps {
   product: Product;
-  selectedVariant: any; // Incluye personalizedText
+  selectedVariant: any; 
   quantity: number;
   metodoEnvio: string;
-  // Añadimos los precios dinámicos que vienen desde CompraPage
+  // CORRECCIÓN: Ahora son objetos, no números
   shippingRates: {
-    estandar: number;
-    express: number;
+    estandar: ShippingRate;
+    express: ShippingRate;
   };
 }
 
@@ -21,17 +28,15 @@ export default function Summary({
   metodoEnvio,
   shippingRates,
 }: SummaryProps) {
-  // Cálculo de precio del producto
   const precioNumerico = selectedVariant?.price || product.base_price;
   const subtotal = precioNumerico * quantity;
   
-  // Lógica de costo de envío SINCRONIZADA con los rates dinámicos
-  // Si no hay método seleccionado, el costo es 0
+  // CORRECCIÓN: Accedemos a .precio para evitar el error [object Object]
   const envioCosto = 
     metodoEnvio === "express" 
-      ? shippingRates.express 
+      ? (shippingRates.express?.precio || 0) 
       : metodoEnvio === "estandar" 
-        ? shippingRates.estandar 
+        ? (shippingRates.estandar?.precio || 0) 
         : 0;
 
   const total = subtotal + envioCosto;
@@ -86,6 +91,7 @@ export default function Summary({
             Envío {metodoEnvio === 'express' ? '(Express)' : '(Estándar)'}
           </span>
           <span className="font-medium">
+            {/* CORRECCIÓN: Mostramos el precio formateado */}
             {envioCosto > 0 ? `$${envioCosto.toLocaleString()} MXN` : '--'}
           </span>
         </div>
@@ -102,7 +108,7 @@ export default function Summary({
         </div>
       </div>
 
-      {/* Mensajes informativos según el envío */}
+      {/* Mensajes informativos */}
       <div className="mt-6 space-y-2">
         {metodoEnvio === 'express' ? (
           <div className="bg-blue-50 p-3 rounded border border-blue-100">
