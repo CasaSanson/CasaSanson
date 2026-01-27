@@ -8,9 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AccordionComponent } from "@/components/Accordion";
 import { Product, ProductVariant } from "@/lib/shop/interfaces";
 import { ToastContainer, toast } from 'react-toastify';
+import { useCart } from "@/context/CartContext";
 
 
 export default function Selected({ params }: { params: { id: string } }) {
+    const { addToCart, setIsCartOpen } = useCart();
     const { id } = params;
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
@@ -23,6 +25,7 @@ export default function Selected({ params }: { params: { id: string } }) {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [email, setEmail] = useState("");
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
 
     // Fetch producto desde Supabase
     useEffect(() => {
@@ -55,6 +58,20 @@ export default function Selected({ params }: { params: { id: string } }) {
         size: v.size,
         stock: v.stock,
     }));
+
+    const handleAddToCart = () => {
+        if (!selectedVariant) return;
+
+        addToCart({
+            ...product,
+            selectedVariant: selectedVariant,
+            personalizedText: personalizedText,
+            quantity: 1
+        });
+
+        // ¡Aquí está el truco!
+        setIsCartOpen(true);
+    };
 
     const selectedVariant = product.product_variants.find((v) => v.size === selectedSize);
     const displayPrice = selectedVariant?.price || product.base_price;
@@ -258,16 +275,31 @@ export default function Selected({ params }: { params: { id: string } }) {
                                         />
                                     </div>
                                 ) : (
-                                    <Link
-                                        href={{
-                                            pathname: `/catalogo/comprar/${product.id}`,
-                                            query: { variantId: selectedVariant?.id, text: personalizedText },
+                                    <button
+                                        onClick={() => {
+                                            if (!selectedVariant) {
+                                                toast.error("Por favor, selecciona una talla");
+                                                return;
+                                            }
+
+                                            // 1. Guardar en el carrito
+                                            addToCart({
+                                                ...product,
+                                                selectedVariant: selectedVariant,
+                                                personalizedText: personalizedText,
+                                                quantity: 1
+                                            });
+
+                                            // 2. Abrir el Drawer lateral
+                                            setIsCartOpen(true);
+
+                                            // 3. Feedback visual
+                                            toast.success("¡Añadido a Casa Sansón!");
                                         }}
+                                        className="bg-black border border-black hover:bg-cs-verde-musgo text-white transition-colors duration-300 px-4 py-2 w-full uppercase tracking-wider text-sm"
                                     >
-                                        <button className="bg-black border border-black hover:bg-cs-verde-musgo text-white hover:text-white transition-colors duration-300 px-4 py-2">
-                                            Comprar ahora
-                                        </button>
-                                    </Link>
+                                        Añadir al carrito
+                                    </button>
                                 )}
                             </div>
                         </div>

@@ -29,7 +29,7 @@ export default function AdminLibros(){
                 {/* BORRAR - También lleva a la LISTA pero para eliminar */}
                 <div className="border-4 border-red-600 rounded-xl overflow-hidden flex flex-col items-center w-64">
                     <Trash2 className="h-24 w-24 text-red-600 my-6" />
-                    <Link href="/auth/cartas/lista" className="w-full">
+                    <Link href="/auth/libros/lista" className="w-full">
                          <button className="text-white bg-red-600 p-4 text-2xl w-full font-bold hover:bg-red-700 transition-colors">
                             BORRAR LIBRO
                          </button>

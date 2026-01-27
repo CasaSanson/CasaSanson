@@ -50,7 +50,7 @@ export async function POST(req: Request) {
           area_level2: geo.city,
           area_level3: "Centro"
         },
-        parcel: { weight: 2.0, height: 20.0, width: 20.0, length: 10.0 }
+        parcel: { weight: 2.0, height: 70.0, width: 70.0, length: 10.0 }
       }
     };
 

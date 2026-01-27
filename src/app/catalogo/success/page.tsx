@@ -112,7 +112,7 @@ function SuccessContent() {
                 Seguir comprando
               </Link>
               <Link 
-                href="/" 
+                href="/home" 
                 className="flex-1 bg-white border border-black text-black py-3 px-4 hover:bg-gray-800 transition-colors duration-200 text-center"
               >
                 Ir al inicio

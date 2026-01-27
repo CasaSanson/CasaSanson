@@ -14,7 +14,6 @@ export default function homenav(){
             <Tape />
             </div>
             {/* Footer */}
-            <Footer />
         </main>
     )
 }

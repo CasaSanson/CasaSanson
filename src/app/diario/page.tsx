@@ -67,7 +67,6 @@ export default function Journal() {
             </div>
           ))}
         </div>
-        <Footer />
       </main>
     </div>
   );

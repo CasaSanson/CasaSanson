@@ -91,7 +91,7 @@ export default function AuthCrearCarta() {
                 {/* SECCIÓN 1: DATOS BÁSICOS Y PORTADAS */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-6 rounded-lg">
                     <div className="col-span-2">
-                        <h2 className="text-lg font-semibold mb-4 text-blue-700">1. Información Principal y Portadas (Bucket: carta cover)</h2>
+                        <h2 className="text-lg font-semibold mb-4 text-blue-700">1. Información Principal y Portadas</h2>
                     </div>
                     
                     <div className="flex flex-col gap-2">
