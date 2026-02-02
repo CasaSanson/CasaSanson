@@ -61,7 +61,7 @@ const Navbar = () => {
               <Link
                 key={item}
                 href={`/${item.toLowerCase().replace("ñ", "n")}`}
-                className={`font-bold transition-all duration-300 tracking-widest text-sm ${
+                className={`font-bold cursor-pointer transition-all duration-300 tracking-widest text-sm ${
                   isScrolled ? "text-black hover:text-cs-vino" : "text-cs-vino hover:text-black"
                 }`}
               >
@@ -123,7 +123,7 @@ const Navbar = () => {
             <Link
               key={item}
               href={item === "INICIO" ? "/home" : `/${item.toLowerCase()}`}
-              className="text-white text-2xl font-bold uppercase tracking-widest border-b border-white/20 pb-2"
+              className="text-white cursor-pointer text-2xl font-bold uppercase tracking-widest border-b border-white/20 pb-2"
               onClick={() => setIsMenuOpen(false)}
             >
               {item}

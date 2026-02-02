@@ -4,6 +4,7 @@ import NavbarWrapper from "@/components/navbar/NavbarWrapper";
 import { SessionProvider } from "@/components/src/components/SessionProvider";
 import { CartProvider } from '@/context/CartContext';
 import CartDrawer from '@/components/shop/CartDrawe';
+import FooterWrapper from '@/components/footer/FooterWrapper';
 
 export const metadata = {
   title: 'Casa Sansón',
@@ -29,9 +30,9 @@ export default function RootLayout({
         <CartProvider>
           <SessionProvider>
             <NavbarWrapper />
-            <CartDrawer /> {/* <--- Agrégalo aquí */}
+            <CartDrawer /> 
             <main>{children}</main>
-            <Footer />
+            <FooterWrapper />
           </SessionProvider>
         </CartProvider>
       </body>

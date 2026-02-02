@@ -68,7 +68,7 @@ export default function Summary({ cart, metodoEnvio, shippingRates }: SummaryPro
                 </div>
                 <div className="flex justify-between text-gray-200">
                     <span>Envío ({metodoEnvio === "express" ? "Express" : "Estándar"})</span>
-                    <span>{costoEnvio === 0 ? "Calculando..." : `$${costoEnvio}`}</span>
+                    <span>{costoEnvio === 0 ? "Ingresa tu código postal..." : `$${costoEnvio}`}</span>
                 </div>
                 <div className="flex text-white justify-between text-xl font-bold pt-4 border-t border-black">
                     <span >Total</span>

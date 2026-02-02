@@ -15,6 +15,11 @@ export default function NavbarAuth() {
         </Link>
       </button>
       <button className="text-white text-lg font-bold hover:text-red-200 focus:text-gray-400 w-full">
+        <Link href="/auth/productos">
+          PRODUCTOS
+        </Link>
+      </button>
+      <button className="text-white text-lg font-bold hover:text-red-200 focus:text-gray-400 w-full">
         <Link href="/auth/cartas">
           CARTAS
         </Link>
