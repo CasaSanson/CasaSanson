@@ -2,8 +2,9 @@
 import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabase"
 import { useParams, useRouter } from "next/navigation"
-import { toast } from "react-toastify"
-import { ImagePlus, Type, Info, Calendar, Save, ArrowLeft } from "lucide-react"
+import { toast, ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
+import { Type, Calendar, Save, ArrowLeft, ImageIcon, Plus, ChevronRight, FileText } from "lucide-react"
 import Link from "next/link"
 
 export default function AuthEditarCarta() {
@@ -12,6 +13,7 @@ export default function AuthEditarCarta() {
     
     const [loading, setLoading] = useState(true)
     const [updating, setUpdating] = useState(false)
+    const [step, setStep] = useState(1) // 1: Portada, 2: Bloques de Contenido
     const [formData, setFormData] = useState<any>({})
     const [files, setFiles] = useState<{ [key: string]: File | null }>({})
 
@@ -20,7 +22,7 @@ export default function AuthEditarCarta() {
             if (!id) return;
             const { data, error } = await supabase.from("entradas").select("*").eq("id", id).single();
             if (error) {
-                toast.error("Error al cargar datos");
+                toast.error("Error al cargar la entrada");
             } else {
                 setFormData(data);
             }
@@ -40,8 +42,7 @@ export default function AuthEditarCarta() {
     }
 
     const uploadToBucket = async (file: File, bucketName: string) => {
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${Date.now()}.${fileExt}`
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}`
         const { error: uploadError } = await supabase.storage.from(bucketName).upload(fileName, file)
         if (uploadError) throw uploadError
         const { data } = supabase.storage.from(bucketName).getPublicUrl(fileName)
@@ -51,154 +52,122 @@ export default function AuthEditarCarta() {
     const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault()
         setUpdating(true)
+        const loadToast = toast.loading("Actualizando entrada editorial...");
+
         try {
             const updatedUrls: { [key: string]: string } = {}
             for (const key in files) {
                 if (files[key]) {
-                    const targetBucket = (key === 'cover' || key === 'hover_cover') ? 'CARTA COVER' : 'CARTA_IMG'
+                    const targetBucket = key === 'imagen_titulo' ? 'carta cover' : 'carta_img'
                     const url = await uploadToBucket(files[key]!, targetBucket)
                     updatedUrls[key] = url
                 }
             }
+
             const { error } = await supabase.from("entradas").update({ ...formData, ...updatedUrls }).eq("id", id)
             if (error) throw error
-            toast.success("¡Carta actualizada con éxito!")
+
+            toast.update(loadToast, { render: "¡Entrada actualizada!", type: "success", isLoading: false, autoClose: 3000 });
             router.push("/auth/cartas")
         } catch (error: any) {
-            toast.error(`Error: ${error.message}`)
+            toast.update(loadToast, { render: `Error: ${error.message}`, type: "error", isLoading: false, autoClose: 5000 });
         } finally {
             setUpdating(false)
         }
     }
 
-    if (loading) return <div className="flex justify-center items-center h-screen font-bold">Cargando información de la carta...</div>
+    if (loading) return <div className="h-screen flex items-center justify-center font-black animate-pulse">CARGANDO DIARIO...</div>
 
     return (
-        <main className="p-4 md:p-8 max-w-6xl mx-auto bg-white text-slate-900 min-h-screen mb-20">
-            {/* Header de navegación */}
-            <div className="flex items-center gap-4 mb-8">
-                <Link href="/auth/cartas" className="p-2 hover:bg-slate-100 rounded-full transition-colors">
-                    <ArrowLeft size={24} />
-                </Link>
-                <div>
-                    <h1 className="text-3xl font-black uppercase tracking-tight text-slate-800">Editor de Contenido</h1>
-                    <p className="text-slate-500 italic">Modificando: {formData.nombre}</p>
-                </div>
-            </div>
+        <main className="min-h-screen bg-[#fcfcfc] p-6 lg:p-12 text-slate-900">
+            <ToastContainer position="top-right" theme="dark" />
+            
+            <div className="max-w-5xl mx-auto">
+                <header className="mb-12 flex justify-between items-center border-b pb-8">
+                    <div className="flex items-center gap-4">
+                        <Link href="/auth/cartas" className="p-3 bg-white rounded-xl shadow-sm hover:bg-slate-100 transition-all border">
+                            <ArrowLeft size={20} />
+                        </Link>
+                        <h1 className="text-4xl font-black italic tracking-tighter uppercase">Editor <span className="text-blue-600">Sanson</span></h1>
+                    </div>
+                    <div className="text-right hidden md:block">
+                        <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest leading-none">ID de Entrada</p>
+                        <p className="text-[10px] font-mono text-slate-300 italic">{id}</p>
+                    </div>
+                </header>
 
-            <form onSubmit={handleUpdate} className="space-y-12">
-                
-                {/* SECCIÓN 1: IDENTIDAD DE LA CARTA */}
-                <section>
-                    <div className="flex items-center gap-2 mb-4 border-b-2 border-slate-100 pb-2">
-                        <Info className="text-blue-600" size={20} />
-                        <h2 className="font-bold text-xl uppercase">1. Información Principal</h2>
+                <form onSubmit={handleUpdate} className="space-y-10">
+                    {/* Navegación por Pasos */}
+                    <div className="flex bg-slate-100 p-1.5 rounded-2xl max-w-md mx-auto">
+                        <button type="button" onClick={() => setStep(1)} className={`flex-1 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${step === 1 ? "bg-white text-blue-600 shadow-sm" : "text-slate-400"}`}>Configuración</button>
+                        <button type="button" onClick={() => setStep(2)} className={`flex-1 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${step === 2 ? "bg-white text-blue-600 shadow-sm" : "text-slate-400"}`}>Cuerpo de Carta</button>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold flex items-center gap-1"><Type size={14}/> Nombre Visible</label>
-                            <input type="text" name="nombre" value={formData.nombre || ""} onChange={handleInputChange} className="w-full border-2 border-slate-200 p-3 rounded-xl focus:border-blue-500 outline-none transition-all" placeholder="Ej: Menú de Temporada" required />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold flex items-center gap-1"><Calendar size={14}/> Fecha o Temporada</label>
-                            <input type="text" name="fecha" value={formData.fecha || ""} onChange={handleInputChange} className="w-full border-2 border-slate-200 p-3 rounded-xl focus:border-blue-500 outline-none transition-all" placeholder="Ej: Invierno 2024" />
-                        </div>
-                    </div>
-                </section>
 
-                {/* SECCIÓN 2: PORTADAS (BUCKET: CARTA COVER) */}
-                <section className="bg-blue-50/50 p-6 rounded-3xl border border-blue-100">
-                    <div className="flex items-center gap-2 mb-6">
-                        <ImagePlus className="text-blue-600" size={20} />
-                        <h2 className="font-bold text-xl uppercase">2. Portadas de Selección</h2>
-                    </div>
-                    <p className="text-sm text-blue-700 mb-6 bg-blue-100/50 p-3 rounded-lg">
-                        <strong>Nota para el equipo:</strong> Estas son las imágenes que se ven en el listado principal. La "Imagen de Portada" es la fija, y la "Imagen de Hover" es la que aparece al pasar el ratón por encima.
-                    </p>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Portada Principal */}
-                        <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
-                            <label className="text-sm font-black block mb-3 text-slate-700">Imagen de Portada (Fija)</label>
-                            <div className="flex flex-col gap-4">
-                                {formData.cover && <img src={formData.cover} className="w-full h-48 object-cover rounded-xl border" alt="Actual" />}
-                                <input type="file" name="cover" onChange={handleFileChange} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer" />
+                    {step === 1 ? (
+                        <section className="bg-white p-10 rounded-[3rem] shadow-xl shadow-slate-200/50 border border-slate-100 space-y-8 animate-in fade-in duration-500">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                                <div className="space-y-6 text-left">
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1 italic">Título Principal</label>
+                                        <input name="titulo" value={formData.titulo || ""} onChange={handleInputChange} className="w-full mt-2 p-5 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold text-xl" />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1 italic">Fecha o Período</label>
+                                        <input name="fecha" value={formData.fecha || ""} onChange={handleInputChange} className="w-full mt-2 p-5 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-medium" />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-slate-400 ml-1 italic">Bajada / Descripción</label>
+                                        <textarea name="descripcion_titulo" value={formData.descripcion_titulo || ""} onChange={handleInputChange} className="w-full mt-2 p-5 bg-slate-50 rounded-2xl h-32 resize-none outline-none focus:ring-2 ring-blue-500 font-medium" />
+                                    </div>
+                                </div>
+                                <div className="flex flex-col">
+                                    <label className="text-[10px] font-black uppercase text-slate-400 ml-1 italic mb-2 leading-none">Portada (Cover)</label>
+                                    <div className="flex-1 bg-slate-50 rounded-[2.5rem] border-4 border-dashed border-slate-200 relative overflow-hidden group hover:border-blue-400 transition-all">
+                                        {(files.imagen_titulo || formData.imagen_titulo) ? (
+                                            <img src={files.imagen_titulo ? URL.createObjectURL(files.imagen_titulo) : formData.imagen_titulo} className="w-full h-full object-cover" />
+                                        ) : <Plus className="m-auto absolute inset-0 text-slate-200" size={40}/>}
+                                        <input type="file" name="imagen_titulo" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-
-                        {/* Portada Hover */}
-                        <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
-                            <label className="text-sm font-black block mb-3 text-slate-700">Imagen de Hover (Al pasar el mouse)</label>
-                            <div className="flex flex-col gap-4">
-                                {formData.hover_cover && <img src={formData.hover_cover} className="w-full h-48 object-cover rounded-xl border" alt="Actual" />}
-                                <input type="file" name="hover_cover" onChange={handleFileChange} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer" />
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* SECCIÓN 3: CONTENIDO INTERNO (BUCKET: CARTA_IMG) */}
-                <section>
-                    <div className="flex items-center gap-2 mb-6 border-b-2 border-slate-100 pb-2">
-                        <Type className="text-green-600" size={20} />
-                        <h2 className="font-bold text-xl uppercase">3. Contenido Detallado</h2>
-                    </div>
-                    <p className="text-sm text-slate-500 mb-8">
-                        Aquí subimos las fotos de las cartas o detalles que van <strong>dentro</strong> de la carta. No es obligatorio llenar todos los campos.
-                    </p>
-
-                    <div className="space-y-6">
-                        {[1, 2, 3, 4, 5].map((num) => (
-                            <div key={num} className="group grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 border-2 border-slate-100 rounded-3xl hover:border-green-200 hover:bg-green-50/30 transition-all">
-                                {/* Subida de Imagen */}
-                                <div className="lg:col-span-4 space-y-3">
-                                    <label className="text-xs font-black uppercase text-slate-400 group-hover:text-green-600 transition-colors tracking-widest">Fotografía {num}</label>
-                                    {formData[`img${num}`] && (
-                                        <div className="relative">
-                                            <img src={formData[`img${num}`]} className="w-full h-32 object-cover rounded-2xl shadow-sm border-2 border-white" />
-                                            <span className="absolute top-2 left-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm">Actual</span>
+                        </section>
+                    ) : (
+                        <div className="space-y-8 animate-in fade-in duration-500">
+                            {[1, 2, 3, 4, 5, 6].map((num) => (
+                                <section key={num} className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-lg shadow-slate-200/50">
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                                        <div className="lg:col-span-4 space-y-4 text-left">
+                                            <div className="h-56 bg-slate-50 rounded-[2.5rem] border-2 border-dashed border-slate-200 relative overflow-hidden hover:bg-white transition-all">
+                                                {(files[`img${num}`] || formData[`img${num}`]) ? (
+                                                    <img src={files[`img${num}`] ? URL.createObjectURL(files[`img${num}`] as File) : formData[`img${num}`]} className="w-full h-full object-cover" />
+                                                ) : <div className="m-auto absolute inset-0 text-slate-200 font-black text-xs text-center uppercase">Foto {num}</div>}
+                                                <input type="file" name={`img${num}`} onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                                            </div>
+                                            <div>
+                                                <label className="text-[9px] font-black uppercase text-slate-400 ml-2 italic leading-none">Subtítulo {num}</label>
+                                                <input name={`subtxt${num}`} value={formData[`subtxt${num}`] || ""} onChange={handleInputChange} className="w-full mt-1 p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-green-500 italic text-sm font-medium" />
+                                            </div>
                                         </div>
-                                    )}
-                                    <input type="file" name={`img${num}`} onChange={handleFileChange} className="block w-full text-[10px] text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-slate-200 file:text-slate-700 hover:file:bg-green-600 hover:file:text-white cursor-pointer transition-all" />
-                                </div>
-                                
-                                {/* Texto descriptivo */}
-                                <div className="lg:col-span-8 space-y-3">
-                                    <label className="text-xs font-black uppercase text-slate-400 group-hover:text-green-600 transition-colors tracking-widest">Descripción o Título {num}</label>
-                                    <textarea 
-                                        name={`text${num}`} 
-                                        value={formData[`text${num}`] || ""} 
-                                        onChange={handleInputChange} 
-                                        className="w-full border-2 border-slate-200 p-4 rounded-2xl focus:border-green-500 outline-none transition-all min-h-[120px] bg-white"
-                                        placeholder={`Describe la imagen ${num} o añade contenido aquí...`}
-                                    />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
+                                        <div className="lg:col-span-8 flex flex-col text-left">
+                                            <label className="text-[10px] font-black uppercase text-slate-400 ml-2 italic mb-2 leading-none">Texto {num}</label>
+                                            <textarea name={`texto${num}`} value={formData[`texto${num}`] || ""} onChange={handleInputChange} className="w-full flex-1 p-6 bg-slate-50 rounded-3xl outline-none focus:ring-2 ring-green-500 text-lg leading-relaxed min-h-[200px]" />
+                                        </div>
+                                    </div>
+                                </section>
+                            ))}
+                        </div>
+                    )}
 
-                {/* BOTÓN FLOTANTE O FIJO AL FINAL */}
-                <div className="pt-10">
-                    <button 
-                        type="submit" 
-                        disabled={updating}
-                        className="w-full bg-slate-900 text-white py-6 rounded-3xl font-black text-xl hover:bg-blue-600 transition-all shadow-2xl shadow-blue-200 disabled:bg-slate-300 flex items-center justify-center gap-4 group"
-                    >
-                        {updating ? (
-                            <>Subiendo cambios al sistema...</>
-                        ) : (
-                            <>
-                                <Save className="group-hover:scale-110 transition-transform" />
-                                GUARDAR CAMBIOS EN LA CARTA
-                            </>
-                        )}
-                    </button>
-                    <p className="text-center text-slate-400 text-xs mt-4">
-                        Al presionar este botón, las imágenes nuevas se subirán a Supabase Storage y los textos se actualizarán en la base de datos.
-                    </p>
-                </div>
-            </form>
+                    <div className="pt-8 pb-20 flex gap-4">
+                        <button type="button" onClick={() => setStep(step === 1 ? 2 : 1)} className="px-10 py-5 bg-slate-200 rounded-3xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-300 flex items-center gap-2">
+                            {step === 1 ? <>Siguiente <ChevronRight size={16}/></> : "Volver"}
+                        </button>
+                        <button type="submit" disabled={updating} className="flex-1 bg-slate-900 text-white py-5 rounded-[2rem] font-black text-xs tracking-[0.3em] uppercase hover:bg-blue-600 transition-all shadow-2xl disabled:bg-slate-300">
+                            {updating ? "Guardando..." : "Finalizar Cambios"}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </main>
     )
 }

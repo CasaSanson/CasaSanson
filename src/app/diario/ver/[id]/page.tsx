@@ -11,23 +11,18 @@ import { useGSAP } from '@gsap/react';
 gsap.registerPlugin(ScrollTrigger)
 
 interface Entrada {
-    id: number;
-    nombre: string;
-    cover: string;
+    id: string; // UUID
+    titulo: string; // nombre
+    imagen_titulo: string; // cover
+    descripcion_titulo?: string; // Nuevo campo
     fecha: string;
-    hover_cover: string;
-    img1?: string;
-    img2?: string;
-    img3?: string;
-    img4?: string;
-    img5?: string;
-    text1?: string;
-    text2?: string;
-    text3?: string;
-    text4?: string;
-    text5?: string;
-    text6?: string;
-    text7?: string;
+    // Bloques mapeados a tu diseño actual
+    texto1?: string; img1?: string; subtxt1?: string;
+    texto2?: string; img2?: string; subtxt2?: string;
+    texto3?: string; img3?: string; subtxt3?: string;
+    texto4?: string; img4?: string; subtxt4?: string;
+    texto5?: string; img5?: string; subtxt5?: string;
+    texto6?: string; img6?: string; subtxt6?: string;
 }
 
 export default function Verjournal() {
@@ -35,23 +30,6 @@ export default function Verjournal() {
     const { id } = params;
     const [carta, setCarta] = useState<Entrada | null>(null);
     const [loading, setLoading] = useState(true);
-
-    // useGSAP(() => {
-    //     if (!carta) return;
-      
-    //     gsap.utils.toArray<HTMLElement>(".text-scroll").forEach((el) => {
-    //       gsap.from(el, {
-    //         y: 80,
-    //         scrollTrigger: {
-    //           trigger: el,
-    //           start: "top 90%",
-    //           end: "top 60%",
-    //           scrub: 1,
-    //         },
-    //       });
-    //     });
-    //   }, [carta]);
-      
 
     useEffect(() => {
         const fetchEntrada = async () => {
@@ -82,8 +60,10 @@ export default function Verjournal() {
                 <p className="text-lg uppercase text-gray-500 hover:text-black cursor-pointer">Regresar</p>
             </Link>
             <div className="mx-auto flex flex-col mt-10 text-center ">
-                <h1 className="font-bold text-5xl mb-8">{carta.nombre}</h1>
+                {/* Título adaptado */}
+                <h1 className="font-bold text-5xl mb-8">{carta.titulo}</h1>
 
+                {/* Bloque 1 - Imagen y Texto de introducción */}
                 {carta.img1 && (
                     <Image
                         src={carta.img1}
@@ -94,67 +74,83 @@ export default function Verjournal() {
                     />
                 )}
 
-                {carta.text1 && (
-                    <p className="mb-8 px-4 mt-10 text-xl font-bold px-[15%] text-scroll">{carta.text1}</p>
+                {carta.texto1 && (
+                    <p className="mb-8 px-4 mt-10 text-xl font-bold px-[15%] text-scroll">{carta.texto1}</p>
                 )}
 
-                {carta.text2 && (
-                    <p className="text-lg mb-8 px-4 text-left px-[15%] text-scroll">{carta.text2}</p>
+                {carta.subtxt1 && (
+                    <p className="mb-8 px-4 mt-10 text-xl font-bold px-[15%] text-scroll">{carta.subtxt1}</p>
+                )}
+
+                {/* Bloque 2 */}
+                {carta.texto2 && (
+                    <p className="text-lg mb-8 px-4 text-left px-[15%] text-scroll">{carta.texto2}</p>
                 )}
 
                 {carta.img2 && (
-                    <Image
-                        src={carta.img2}
-                        alt="imagen2"
-                        width={900}
-                        height={600}
-                        className="mx-auto mb-8 px-[10%] text-scroll"
-                    />
+                    <div className="space-y-2 mb-8">
+                        <Image
+                            src={carta.img2}
+                            alt="imagen2"
+                            width={900}
+                            height={600}
+                            className="mx-auto px-[10%] text-scroll"
+                        />
+                        {carta.subtxt2 && <p className="text-xs italic text-gray-400">{carta.subtxt2}</p>}
+                    </div>
                 )}
 
-                {carta.text3 && (
-                    <p className="text-lg mb-8 px-4 text-left px-[15%] text-scroll">{carta.text3}</p>
+                {/* Bloque 3 - El que tiene el fondo color crema */}
+                {carta.texto3 && (
+                    <p className="text-lg mb-8 px-4 text-left px-[15%] text-scroll">{carta.texto3}</p>
                 )}
-
-
 
                 {carta.img3 && (
-                    <div className="w-full h-full bg-[#E3DBCC] flex items-center mb-8 text-scroll">
+                    <div className="w-full h-full bg-[#E3DBCC] flex flex-col items-center mb-8 text-scroll">
                         <Image
                             src={carta.img3}
-                            alt="imagen2"
+                            alt="imagen3"
                             width={900}
                             height={600}
                             className="mx-auto px-[10%] p-10"
                         />
+                        {carta.subtxt3 && <p className="pb-4 text-xs italic text-gray-700">{carta.subtxt3}</p>}
                     </div>
                 )}
 
-                {carta.text4 && (
-                    <p className="text-lg mb-8 px-4 text-left px-[15%] text-scroll">{carta.text4}</p>
+                {/* Bloque 4 */}
+                {carta.texto4 && (
+                    <p className="text-lg mb-8 px-4 text-left px-[15%] text-scroll">{carta.texto4}</p>
                 )}
 
                 {carta.img4 && (
+                    <div className="space-y-2 mb-8">
+                        <Image
+                            src={carta.img4}
+                            alt="imagen4"
+                            width={900}
+                            height={600}
+                            className="mx-auto px-[10%]"
+                        />
+                        {carta.subtxt4 && <p className="text-xs italic text-gray-400">{carta.subtxt4}</p>}
+                    </div>
+                )}
 
+                {/* Bloque 5 */}
+                {carta.texto5 && (
+                    <p className="text-lg mb-8 px-4 text-left px-[15%]">{carta.texto5}</p>
+                )}
+
+                {/* Bloque 6 - Extra por si usas el sexto bloque en el futuro */}
+                {carta.img5 && (
                     <Image
-                        src={carta.img4}
-                        alt="imagen2"
+                        src={carta.img5}
+                        alt="imagen5"
                         width={900}
                         height={600}
                         className="mx-auto px-[10%] mb-8"
                     />
-
                 )}
-
-                {carta.text5 && (
-                    <p className="text-lg mb-8 px-4 text-left px-[15%]">{carta.text5}</p>
-                )}
-
-                
-
-
-
-
             </div>
         </div>
     )

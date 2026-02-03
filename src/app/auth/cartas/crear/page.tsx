@@ -1,20 +1,22 @@
 "use client"
 import { useState } from "react"
 import { supabase } from "@/lib/supabase"
+import { Save, Plus, X, Image as ImageIcon, Type, Layout, Calendar } from "lucide-react"
+import { toast, ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function AuthCrearCarta() {
     const [loading, setLoading] = useState(false)
     
-    // 1. Estado para los textos
-    const [formData, setFormData] = useState({
-        nombre: "", fecha: "",
-        text1: "", text2: "", text3: "", text4: "", text5: "", text6: "", text7: ""
+    const [formData, setFormData] = useState<any>({
+        titulo: "", fecha: "", descripcion_titulo: "",
+        texto1: "", subtxt1: "", texto2: "", subtxt2: "", 
+        texto3: "", subtxt3: "", texto4: "", subtxt4: "", 
+        texto5: "", subtxt5: "", texto6: "", subtxt6: ""
     })
 
-    // 2. Estado para los archivos
     const [files, setFiles] = useState<{ [key: string]: File | null }>({
-        cover: null, hover_cover: null, 
-        img1: null, img2: null, img3: null, img4: null, img5: null
+        imagen_titulo: null, img1: null, img2: null, img3: null, img4: null, img5: null, img6: null
     })
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -27,17 +29,10 @@ export default function AuthCrearCarta() {
         }
     }
 
-    // Función de subida dinámica según el bucket
-    const uploadToBucket = async (file: File, bucketName: string) => {
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
-        
-        const { error: uploadError } = await supabase.storage
-            .from(bucketName)
-            .upload(fileName, file)
-
-        if (uploadError) throw uploadError
-
+    const uploadFile = async (file: File, bucketName: string) => {
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}`
+        const { error } = await supabase.storage.from(bucketName).upload(fileName, file)
+        if (error) throw error
         const { data } = supabase.storage.from(bucketName).getPublicUrl(fileName)
         return data.publicUrl
     }
@@ -45,110 +40,144 @@ export default function AuthCrearCarta() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
+        const loadToast = toast.loading("Publicando en el Diario...")
 
         try {
-            const imageUrls: { [key: string]: string } = {}
-
-            // Procesar cada archivo según su destino
+            const imageUrls: any = {}
             for (const key in files) {
                 const file = files[key]
                 if (file) {
-                    // Lógica de buckets:
-                    // Si es cover o hover_cover va a "carta cover", el resto a "carta_img"
-                    const targetBucket = (key === 'cover' || key === 'hover_cover') 
-                        ? 'carta cover' 
-                        : 'carta_img'
-                    
-                    const url = await uploadToBucket(file, targetBucket)
-                    imageUrls[key] = url
+                    const bucket = key === 'imagen_titulo' ? 'carta cover' : 'carta_img'
+                    imageUrls[key] = await uploadFile(file, bucket)
                 }
             }
 
-            // Insertar todo en la tabla 'entradas'
-            const { error } = await supabase.from("entradas").insert([
-                {
-                    ...formData,
-                    ...imageUrls
-                }
-            ])
-
+            const { error } = await supabase.from("entradas").insert([{ ...formData, ...imageUrls }])
             if (error) throw error
-            alert("¡Carta creada y fotos subidas correctamente!")
-            
+
+            toast.update(loadToast, { render: "¡Entrada publicada con éxito!", type: "success", isLoading: false, autoClose: 3000 })
+            // Opcional: Resetear estados aquí
         } catch (error: any) {
-            console.error(error)
-            alert(`Error: ${error.message || 'No se pudo completar la operación'}`)
+            toast.update(loadToast, { render: `Error: ${error.message}`, type: "error", isLoading: false, autoClose: 5000 })
         } finally {
             setLoading(false)
         }
     }
 
     return (
-        <main className="p-8 max-w-5xl mx-auto bg-white text-black min-h-screen">
-            <h1 className="text-3xl font-bold mb-8 border-b pb-4">Portal de Creación de Cartas</h1>
+        <main className="min-h-screen bg-slate-50 p-6 lg:p-12 text-slate-900 font-sans">
+            <ToastContainer position="top-right" theme="dark" />
             
-            <form onSubmit={handleSubmit} className="space-y-8">
-                {/* SECCIÓN 1: DATOS BÁSICOS Y PORTADAS */}
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-6 rounded-lg">
-                    <div className="col-span-2">
-                        <h2 className="text-lg font-semibold mb-4 text-blue-700">1. Información Principal y Portadas</h2>
+            <div className="max-w-5xl mx-auto">
+                <header className="mb-12 flex justify-between items-end border-b pb-8 border-slate-200">
+                    <div>
+                        <h1 className="text-5xl font-black tracking-tighter italic">CASA SANSÓN <span className="text-blue-600 underline decoration-4">DIARIO</span></h1>
+                        <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px] mt-2 italic">Portal de Contenido Editorial</p>
                     </div>
-                    
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm font-medium">Nombre de la Carta</label>
-                        <input type="text" name="nombre" onChange={handleInputChange} className="border p-2 rounded" required />
+                    <div className="bg-slate-900 text-white p-4 rounded-2xl flex items-center gap-2">
+                        <Layout size={18}/>
+                        <span className="text-[10px] font-black uppercase tracking-widest">Editor de Entradas</span>
                     </div>
+                </header>
 
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm font-medium">Fecha (ej: Enero 2024)</label>
-                        <input type="text" name="fecha" onChange={handleInputChange} className="border p-2 rounded" />
-                    </div>
+                <form onSubmit={handleSubmit} className="space-y-12">
+                    {/* SECCIÓN 1: CABECERA */}
+                    <section className="bg-white p-10 rounded-[3rem] shadow-xl shadow-slate-200/50 border border-slate-100 space-y-8">
+                        <div className="flex items-center gap-3 text-blue-600 mb-4">
+                            <span className="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center font-black">1</span>
+                            <h2 className="text-xl font-black uppercase tracking-tight italic">Cabecera de la Entrada</h2>
+                        </div>
 
-                    <div className="flex flex-col gap-2 border-l-4 border-blue-400 pl-4">
-                        <label className="text-sm font-bold">Imagen de Portada (Cover)</label>
-                        <input type="file" name="cover" onChange={handleFileChange} accept="image/*" className="text-xs" />
-                    </div>
-
-                    <div className="flex flex-col gap-2 border-l-4 border-blue-400 pl-4">
-                        <label className="text-sm font-bold">Imagen de Hover</label>
-                        <input type="file" name="hover_cover" onChange={handleFileChange} accept="image/*" className="text-xs" />
-                    </div>
-                </section>
-
-                {/* SECCIÓN 2: CONTENIDO INTERNO */}
-                <section className="bg-gray-50 p-6 rounded-lg">
-                    <h2 className="text-lg font-semibold mb-6 text-green-700">2. Contenido de la Carta (Bucket: carta_img)</h2>
-                    
-                    <div className="grid grid-cols-1 gap-6">
-                        {[1, 2, 3, 4, 5].map((num) => (
-                            <div key={num} className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded bg-white">
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-sm font-medium italic">Imagen {num}</label>
-                                    <input type="file" name={`img${num}`} onChange={handleFileChange} accept="image/*" className="text-xs" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Título de la Carta</label>
+                                    <input name="titulo" onChange={handleInputChange} className="w-full mt-2 p-5 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-blue-500 font-bold text-xl" required />
                                 </div>
-                                <div className="md:col-span-2 flex flex-col gap-2">
-                                    <label className="text-sm font-medium">Texto {num}</label>
-                                    <textarea name={`text${num}`} onChange={handleInputChange} rows={2} className="border p-2 rounded w-full" />
+                                <div>
+                                    <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Fecha / Subtítulo General</label>
+                                    <div className="relative">
+                                        <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18}/>
+                                        <input name="fecha" onChange={handleInputChange} className="w-full mt-2 p-5 pl-12 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-blue-500 font-medium" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Descripción de Portada</label>
+                                    <textarea name="descripcion_titulo" onChange={handleInputChange} className="w-full mt-2 p-5 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-blue-500 h-24 resize-none" />
                                 </div>
                             </div>
-                        ))}
-                        
-                        {/* Textos adicionales sin imagen (6 y 7) */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <textarea name="text6" placeholder="Texto extra 6" onChange={handleInputChange} className="border p-2 rounded" />
-                            <textarea name="text7" placeholder="Texto extra 7" onChange={handleInputChange} className="border p-2 rounded" />
-                        </div>
-                    </div>
-                </section>
 
-                <button 
-                    type="submit" 
-                    disabled={loading}
-                    className="w-full bg-black text-white py-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-colors disabled:bg-gray-400"
-                >
-                    {loading ? "Procesando subida doble..." : "PUBLICAR CARTA EN SUPABASE"}
-                </button>
-            </form>
+                            <div className="relative group h-full">
+                                <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Imagen de Portada (Bucket: carta cover)</label>
+                                <div className="mt-2 h-[calc(100%-1.5rem)] min-h-[250px] bg-slate-100 rounded-[2.5rem] border-4 border-dashed border-slate-200 flex flex-col items-center justify-center relative overflow-hidden transition-all group-hover:border-blue-400">
+                                    {files.imagen_titulo ? (
+                                        <img src={URL.createObjectURL(files.imagen_titulo)} className="w-full h-full object-cover" />
+                                    ) : <ImageIcon size={48} className="text-slate-300"/>}
+                                    <input type="file" name="imagen_titulo" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* SECCIÓN 2: BLOQUES DE CONTENIDO */}
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-3 text-green-600 mb-8 px-4">
+                            <span className="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center font-black">2</span>
+                            <h2 className="text-xl font-black uppercase tracking-tight italic">Cuerpo de la Carta (6 Bloques)</h2>
+                        </div>
+
+                        {[1, 2, 3, 4, 5, 6].map((num) => (
+                            <section key={num} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-lg shadow-slate-200/50 hover:border-green-200 transition-all">
+                                <div className="flex justify-between items-center mb-6">
+                                    <span className="text-[10px] font-black uppercase bg-green-50 text-green-700 px-4 py-2 rounded-full tracking-widest italic">Bloque de Contenido {num}</span>
+                                </div>
+
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                                    {/* Subida de Foto */}
+                                    <div className="lg:col-span-4 space-y-4">
+                                        <div className="relative h-48 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden hover:bg-white transition-all">
+                                            {files[`img${num}`] ? (
+                                                <img src={URL.createObjectURL(files[`img${num}`] as File)} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="text-center opacity-30"><Plus size={24} className="mx-auto mb-1"/><p className="text-[9px] font-black uppercase">Foto {num}</p></div>
+                                            )}
+                                            <input type="file" name={`img${num}`} onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                                        </div>
+                                        <input 
+                                            name={`subtxt${num}`} 
+                                            placeholder={`Subtítulo de foto ${num}`} 
+                                            onChange={handleInputChange}
+                                            className="w-full p-3 bg-slate-50 rounded-xl border-none outline-none focus:ring-1 ring-green-500 italic text-sm font-medium" 
+                                        />
+                                    </div>
+
+                                    {/* Texto del Bloque */}
+                                    <div className="lg:col-span-8">
+                                        <label className="text-[9px] font-black uppercase text-slate-400 ml-1">Cuerpo del texto {num}</label>
+                                        <textarea 
+                                            name={`texto${num}`} 
+                                            onChange={handleInputChange} 
+                                            placeholder="Escribe el contenido de esta sección..." 
+                                            className="w-full mt-2 p-5 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-green-500 h-[calc(100%-1.5rem)] min-h-[200px] text-lg leading-relaxed" 
+                                        />
+                                    </div>
+                                </div>
+                            </section>
+                        ))}
+                    </div>
+
+                    {/* FOOTER ACCIÓN */}
+                    <div className="pt-8 pb-20">
+                        <button 
+                            type="submit" 
+                            disabled={loading}
+                            className="w-full bg-slate-900 text-white py-6 rounded-[2.5rem] font-black text-xl tracking-[0.2em] uppercase shadow-2xl shadow-blue-200 hover:bg-blue-600 transition-all active:scale-[0.98] flex items-center justify-center gap-4 disabled:bg-slate-400"
+                        >
+                            {loading ? "Sincronizando con Supabase..." : <><Save size={24}/> Publicar Diario</>}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </main>
     )
 }

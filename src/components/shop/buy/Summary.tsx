@@ -14,7 +14,7 @@ interface SummaryProps {
 export default function Summary({ cart, metodoEnvio, shippingRates }: SummaryProps) {
     // 1. Calcular Subtotal de todos los productos
     const subtotal = cart.reduce((acc, item) => {
-        const precio = item.selectedVariant.price ?? item.base_price ?? 0;
+        const precio =  item.base_price;
         return acc + (precio * item.quantity);
     }, 0);
 
@@ -54,7 +54,7 @@ export default function Summary({ cart, metodoEnvio, shippingRates }: SummaryPro
                             </div>
                         </div>
                         <p className="text-sm text-white font-medium">
-                            ${(item.selectedVariant.price ?? item.base_price) * item.quantity}
+                            ${(item.base_price) * item.quantity}
                         </p>
                     </div>
                 ))}

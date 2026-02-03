@@ -74,7 +74,7 @@ export default function Selected({ params }: { params: { id: string } }) {
     };
 
     const selectedVariant = product.product_variants.find((v) => v.size === selectedSize);
-    const displayPrice = selectedVariant?.price || product.base_price;
+    const displayPrice =  product.base_price;
     const isMaquila = product.maquila === true;
     const isPersonalizado = product.personalizacion == true;
 

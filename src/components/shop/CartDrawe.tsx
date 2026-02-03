@@ -13,7 +13,7 @@ export default function CartDrawer() {
   };
 
   const subtotal = cart.reduce((acc, item) => 
-    acc + (item.selectedVariant.price ?? item.base_price ?? 0) * item.quantity, 0
+    acc + (item.base_price) * item.quantity, 0
   );
 
   return (
@@ -77,7 +77,7 @@ export default function CartDrawer() {
                     
                     <div className="flex justify-between items-end mt-4">
                        <p className="font-bold text-lg">
-                          ${(item.selectedVariant.price ?? item.base_price) * item.quantity}
+                          ${(item.base_price) * item.quantity}
                        </p>
                        <button 
                          onClick={() => removeFromCart(item.selectedVariant.id)} 
