@@ -2,153 +2,158 @@
 import { useState } from "react"
 import { supabase } from "@/lib/supabase"
 import { useRouter } from "next/navigation"
-import { toast } from "react-toastify"
+import { toast, ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import { BookOpen, Upload, Link as LinkIcon, AlignLeft, Save, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
 export default function CrearLibro() {
-    const router = useRouter()
-    
-    const [loading, setLoading] = useState(false)
-    const [formData, setFormData] = useState({
-        titulo: "",
-        descripcion: "",
-        heyzine_link: ""
-    })
-    const [coverFile, setCoverFile] = useState<File | null>(null)
-    const [preview, setPreview] = useState<string | null>(null)
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({ titulo: "", descripcion: "", heyzine_link: "" })
+  const [coverFile, setCoverFile] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value })
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      setCoverFile(file)
+      setPreview(URL.createObjectURL(file))
     }
+  }
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0]
-            setCoverFile(file)
-            setPreview(URL.createObjectURL(file)) // Previsualización instantánea
-        }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!coverFile) return toast.error("Por favor, sube una portada")
+    setLoading(true)
+
+    try {
+      const fileExt = coverFile.name.split('.').pop()
+      const fileName = `${Date.now()}.${fileExt}`
+      const { error: uploadError } = await supabase.storage.from('libro_cover').upload(fileName, coverFile)
+      if (uploadError) throw uploadError
+
+      const { data: urlData } = supabase.storage.from('libro_cover').getPublicUrl(fileName)
+
+      const { error: insertError } = await supabase.from("libros").insert([{
+        titulo: formData.titulo,
+        descripcion: formData.descripcion,
+        heyzine_link: formData.heyzine_link,
+        cover: urlData.publicUrl
+      }])
+      if (insertError) throw insertError
+
+      toast.success("Libro publicado")
+      router.push("/auth/libros/lista")
+    } catch (error: any) {
+      toast.error(`Error: ${error.message}`)
+    } finally {
+      setLoading(false)
     }
+  }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!coverFile) return toast.error("Por favor, sube una portada")
-        
-        setLoading(true)
+  return (
+    <div className="min-h-screen bg-[#0b0d10] text-white">
+      <ToastContainer position="top-right" theme="dark" />
 
-        try {
-            // 1. Subir Portada a 'libro_cover'
-            const fileExt = coverFile.name.split('.').pop()
-            const fileName = `${Date.now()}.${fileExt}`
-            
-            const { error: uploadError } = await supabase.storage
-                .from('libro_cover')
-                .upload(fileName, coverFile)
+      <div className="max-w-3xl mx-auto px-6 py-10">
 
-            if (uploadError) throw uploadError
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-8 pb-6 border-b border-white/[0.06]">
+          <Link
+            href="/auth/libros"
+            className="w-8 h-8 flex items-center justify-center border border-white/[0.07] hover:border-white/[0.15] text-white/30 hover:text-white/60 transition-all"
+          >
+            <ArrowLeft size={14} strokeWidth={1.5} />
+          </Link>
+          <div>
+            <p className="text-[9px] uppercase tracking-[0.4em] text-white/20 mb-0.5">Biblioteca</p>
+            <h1 className="font-serif text-xl text-white/85">Nuevo libro</h1>
+          </div>
+        </div>
 
-            const { data: urlData } = supabase.storage
-                .from('libro_cover')
-                .getPublicUrl(fileName)
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-8">
 
-            // 2. Insertar datos en la tabla 'libros'
-            const { error: insertError } = await supabase.from("libros").insert([
-                {
-                    titulo: formData.titulo,
-                    descripcion: formData.descripcion,
-                    heyzine_link: formData.heyzine_link,
-                    cover: urlData.publicUrl
-                }
-            ])
+          {/* Cover upload */}
+          <div>
+            <label className="text-[9px] uppercase tracking-[0.3em] text-white/30 block mb-1.5">
+              Portada
+            </label>
+            <div className="relative h-72 bg-white/[0.03] border border-dashed border-white/[0.1] hover:border-white/[0.2] transition-colors flex items-center justify-center overflow-hidden">
+              {preview ? (
+                <img src={preview} className="w-full h-full object-cover" alt="Preview" />
+              ) : (
+                <div className="text-center">
+                  <Upload size={18} strokeWidth={1} className="mx-auto mb-2 text-white/20" />
+                  <p className="text-[9px] uppercase tracking-[0.2em] text-white/20">Seleccionar imagen</p>
+                </div>
+              )}
+              <input
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*"
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                required
+              />
+            </div>
+            <p className="text-[9px] text-white/20 mt-1.5 italic">Formato vertical recomendado</p>
+          </div>
 
-            if (insertError) throw insertError
-
-            toast.success("¡Libro publicado con éxito!")
-            router.push("/auth/libros/lista") // O a tu panel principal
-
-        } catch (error: any) {
-            toast.error(`Error: ${error.message}`)
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    return (
-        <main className="p-6 max-w-4xl mx-auto bg-white min-h-screen">
-            <div className="flex items-center gap-4 mb-10">
-                <Link href="/auth/libros" className="p-2 hover:bg-slate-100 rounded-full transition-colors">
-                    <ArrowLeft size={24} className="text-slate-600" />
-                </Link>
-                <h1 className="text-3xl font-black text-slate-800 uppercase tracking-tighter">Nuevo Libro</h1>
+          {/* Fields */}
+          <div className="flex flex-col gap-5">
+            <div>
+              <label className="text-[9px] uppercase tracking-[0.3em] text-white/30 flex items-center gap-1.5 mb-1.5">
+                <BookOpen size={10} strokeWidth={1.5} /> Título
+              </label>
+              <input
+                name="titulo"
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.07] text-[13px] text-white/80 outline-none focus:border-cs-verde-musgo/50 transition-colors placeholder:text-white/15"
+                placeholder="Ej: Crónicas de Sansón"
+                required
+              />
             </div>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                
-                {/* Columna Izquierda: Imagen */}
-                <div className="space-y-4">
-                    <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">Portada del Libro</label>
-                    <div className="relative border-4 border-dashed border-slate-200 rounded-3xl p-4 h-[450px] flex flex-col items-center justify-center hover:border-blue-400 transition-colors bg-slate-50 group overflow-hidden">
-                        {preview ? (
-                            <img src={preview} className="absolute inset-0 w-full h-full object-cover" alt="Preview" />
-                        ) : (
-                            <div className="text-center">
-                                <Upload className="mx-auto text-slate-300 mb-2 group-hover:text-blue-500 transition-colors" size={48} />
-                                <p className="text-slate-400 font-medium">Click para seleccionar imagen</p>
-                            </div>
-                        )}
-                        <input 
-                            type="file" 
-                            onChange={handleFileChange} 
-                            accept="image/*" 
-                            className="absolute inset-0 opacity-0 cursor-pointer" 
-                            required 
-                        />
-                    </div>
-                    <p className="text-xs text-slate-400 text-center italic">Recomendado: Formato vertical (A4 o similar)</p>
-                </div>
+            <div>
+              <label className="text-[9px] uppercase tracking-[0.3em] text-white/30 flex items-center gap-1.5 mb-1.5">
+                <LinkIcon size={10} strokeWidth={1.5} /> Link de Heyzine
+              </label>
+              <input
+                name="heyzine_link"
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.07] text-[13px] text-cs-verde-musgo/80 outline-none focus:border-cs-verde-musgo/50 transition-colors placeholder:text-white/15"
+                placeholder="https://heyzine.com/flip-book/..."
+              />
+            </div>
 
-                {/* Columna Derecha: Datos */}
-                <div className="flex flex-col gap-6">
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold flex items-center gap-2"><BookOpen size={16}/> Título del Libro</label>
-                        <input 
-                            name="titulo" 
-                            onChange={handleInputChange} 
-                            className="w-full border-2 border-slate-100 p-4 rounded-2xl focus:border-blue-500 outline-none font-bold text-lg" 
-                            placeholder="Ej: Crónicas de Sansón" 
-                            required 
-                        />
-                    </div>
+            <div className="flex-1">
+              <label className="text-[9px] uppercase tracking-[0.3em] text-white/30 flex items-center gap-1.5 mb-1.5">
+                <AlignLeft size={10} strokeWidth={1.5} /> Descripción
+              </label>
+              <textarea
+                name="descripcion"
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.07] text-[13px] text-white/70 outline-none focus:border-cs-verde-musgo/50 transition-colors resize-none h-32 placeholder:text-white/15"
+                placeholder="Breve reseña del libro..."
+              />
+            </div>
 
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold flex items-center gap-2"><LinkIcon size={16}/> Link de Heyzine</label>
-                        <input 
-                            name="heyzine_link" 
-                            onChange={handleInputChange} 
-                            className="w-full border-2 border-slate-100 p-4 rounded-2xl focus:border-blue-500 outline-none text-blue-600" 
-                            placeholder="https://heyzine.com/flip-book/..." 
-                        />
-                    </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex items-center justify-center gap-2 bg-white/[0.06] border border-white/[0.1] hover:bg-white/[0.1] hover:border-cs-verde-musgo/40 disabled:opacity-30 transition-all py-3.5 text-[10px] uppercase tracking-[0.3em] text-white/70 mt-auto"
+            >
+              <Save size={12} strokeWidth={1.5} />
+              {loading ? "Publicando..." : "Publicar libro"}
+            </button>
+          </div>
+        </form>
 
-                    <div className="space-y-2 flex-grow">
-                        <label className="text-sm font-bold flex items-center gap-2"><AlignLeft size={16}/> Descripción / Resumen</label>
-                        <textarea 
-                            name="descripcion" 
-                            onChange={handleInputChange} 
-                            className="w-full border-2 border-slate-100 p-4 rounded-2xl focus:border-blue-500 outline-none min-h-[150px]" 
-                            placeholder="Escribe una breve reseña del libro..."
-                        />
-                    </div>
-
-                    <button 
-                        type="submit" 
-                        disabled={loading}
-                        className="bg-slate-900 text-white py-5 rounded-2xl font-black text-xl hover:bg-blue-600 transition-all flex items-center justify-center gap-3 disabled:bg-slate-300"
-                    >
-                        {loading ? "Subiendo Libro..." : <><Save /> PUBLICAR LIBRO</>}
-                    </button>
-                </div>
-            </form>
-        </main>
-    )
+      </div>
+    </div>
+  )
 }

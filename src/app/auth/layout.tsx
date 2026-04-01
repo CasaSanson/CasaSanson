@@ -9,7 +9,7 @@ export default function AuthLayout({
   return (
     <>
       <NavbarWrapperAuth />
-      <main className="flex-grow">
+      <main className="flex-grow pt-[58px]">
         {children}
       </main>
     </>

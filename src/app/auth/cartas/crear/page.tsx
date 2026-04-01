@@ -1,183 +1,209 @@
 "use client"
 import { useState } from "react"
 import { supabase } from "@/lib/supabase"
-import { Save, Plus, X, Image as ImageIcon, Type, Layout, Calendar } from "lucide-react"
+import { Save, Plus, X, Image as ImageIcon, Calendar } from "lucide-react"
 import { toast, ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 
 export default function AuthCrearCarta() {
-    const [loading, setLoading] = useState(false)
-    
-    const [formData, setFormData] = useState<any>({
-        titulo: "", fecha: "", descripcion_titulo: "",
-        texto1: "", subtxt1: "", texto2: "", subtxt2: "", 
-        texto3: "", subtxt3: "", texto4: "", subtxt4: "", 
-        texto5: "", subtxt5: "", texto6: "", subtxt6: ""
-    })
+  const [loading, setLoading] = useState(false)
 
-    const [files, setFiles] = useState<{ [key: string]: File | null }>({
-        imagen_titulo: null, img1: null, img2: null, img3: null, img4: null, img5: null, img6: null
-    })
+  const [formData, setFormData] = useState<any>({
+    titulo: "", fecha: "", descripcion_titulo: "",
+    texto1: "", subtxt1: "", texto2: "", subtxt2: "",
+    texto3: "", subtxt3: "", texto4: "", subtxt4: "",
+    texto5: "", subtxt5: "", texto6: "", subtxt6: ""
+  })
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value })
+  const [files, setFiles] = useState<{ [key: string]: File | null }>({
+    imagen_titulo: null, img1: null, img2: null, img3: null, img4: null, img5: null, img6: null
+  })
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFiles({ ...files, [e.target.name]: e.target.files[0] })
     }
+  }
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setFiles({ ...files, [e.target.name]: e.target.files[0] })
+  const uploadFile = async (file: File, bucketName: string) => {
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}`
+    const { error } = await supabase.storage.from(bucketName).upload(fileName, file)
+    if (error) throw error
+    const { data } = supabase.storage.from(bucketName).getPublicUrl(fileName)
+    return data.publicUrl
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    const loadToast = toast.loading("Publicando entrada...")
+
+    try {
+      const imageUrls: any = {}
+      for (const key in files) {
+        const file = files[key]
+        if (file) {
+          const bucket = key === 'imagen_titulo' ? 'carta cover' : 'carta_img'
+          imageUrls[key] = await uploadFile(file, bucket)
         }
+      }
+
+      const { error } = await supabase.from("entradas").insert([{ ...formData, ...imageUrls }])
+      if (error) throw error
+
+      toast.update(loadToast, { render: "Entrada publicada", type: "success", isLoading: false, autoClose: 3000 })
+    } catch (error: any) {
+      toast.update(loadToast, { render: `Error: ${error.message}`, type: "error", isLoading: false, autoClose: 5000 })
+    } finally {
+      setLoading(false)
     }
+  }
 
-    const uploadFile = async (file: File, bucketName: string) => {
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}`
-        const { error } = await supabase.storage.from(bucketName).upload(fileName, file)
-        if (error) throw error
-        const { data } = supabase.storage.from(bucketName).getPublicUrl(fileName)
-        return data.publicUrl
-    }
+  return (
+    <div className="min-h-screen bg-[#0b0d10] text-white">
+      <ToastContainer position="top-right" theme="dark" />
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setLoading(true)
-        const loadToast = toast.loading("Publicando en el Diario...")
+      <div className="max-w-4xl mx-auto px-6 py-10">
 
-        try {
-            const imageUrls: any = {}
-            for (const key in files) {
-                const file = files[key]
-                if (file) {
-                    const bucket = key === 'imagen_titulo' ? 'carta cover' : 'carta_img'
-                    imageUrls[key] = await uploadFile(file, bucket)
-                }
-            }
+        {/* Header */}
+        <div className="mb-8 pb-6 border-b border-white/[0.06]">
+          <p className="text-[9px] uppercase tracking-[0.4em] text-white/20 mb-0.5">Editorial</p>
+          <h1 className="font-serif text-xl text-white/85">Nueva entrada</h1>
+        </div>
 
-            const { error } = await supabase.from("entradas").insert([{ ...formData, ...imageUrls }])
-            if (error) throw error
+        <form onSubmit={handleSubmit} className="space-y-8">
 
-            toast.update(loadToast, { render: "¡Entrada publicada con éxito!", type: "success", isLoading: false, autoClose: 3000 })
-            // Opcional: Resetear estados aquí
-        } catch (error: any) {
-            toast.update(loadToast, { render: `Error: ${error.message}`, type: "error", isLoading: false, autoClose: 5000 })
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    return (
-        <main className="min-h-screen bg-slate-50 p-6 lg:p-12 text-slate-900 font-sans">
-            <ToastContainer position="top-right" theme="dark" />
-            
-            <div className="max-w-5xl mx-auto">
-                <header className="mb-12 flex justify-between items-end border-b pb-8 border-slate-200">
-                    <div>
-                        <h1 className="text-5xl font-black tracking-tighter italic">CASA SANSÓN <span className="text-blue-600 underline decoration-4">DIARIO</span></h1>
-                        <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px] mt-2 italic">Portal de Contenido Editorial</p>
-                    </div>
-                    <div className="bg-slate-900 text-white p-4 rounded-2xl flex items-center gap-2">
-                        <Layout size={18}/>
-                        <span className="text-[10px] font-black uppercase tracking-widest">Editor de Entradas</span>
-                    </div>
-                </header>
-
-                <form onSubmit={handleSubmit} className="space-y-12">
-                    {/* SECCIÓN 1: CABECERA */}
-                    <section className="bg-white p-10 rounded-[3rem] shadow-xl shadow-slate-200/50 border border-slate-100 space-y-8">
-                        <div className="flex items-center gap-3 text-blue-600 mb-4">
-                            <span className="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center font-black">1</span>
-                            <h2 className="text-xl font-black uppercase tracking-tight italic">Cabecera de la Entrada</h2>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="space-y-6">
-                                <div>
-                                    <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Título de la Carta</label>
-                                    <input name="titulo" onChange={handleInputChange} className="w-full mt-2 p-5 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-blue-500 font-bold text-xl" required />
-                                </div>
-                                <div>
-                                    <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Fecha / Subtítulo General</label>
-                                    <div className="relative">
-                                        <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18}/>
-                                        <input name="fecha" onChange={handleInputChange} className="w-full mt-2 p-5 pl-12 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-blue-500 font-medium" />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Descripción de Portada</label>
-                                    <textarea name="descripcion_titulo" onChange={handleInputChange} className="w-full mt-2 p-5 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-blue-500 h-24 resize-none" />
-                                </div>
-                            </div>
-
-                            <div className="relative group h-full">
-                                <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Imagen de Portada (Bucket: carta cover)</label>
-                                <div className="mt-2 h-[calc(100%-1.5rem)] min-h-[250px] bg-slate-100 rounded-[2.5rem] border-4 border-dashed border-slate-200 flex flex-col items-center justify-center relative overflow-hidden transition-all group-hover:border-blue-400">
-                                    {files.imagen_titulo ? (
-                                        <img src={URL.createObjectURL(files.imagen_titulo)} className="w-full h-full object-cover" />
-                                    ) : <ImageIcon size={48} className="text-slate-300"/>}
-                                    <input type="file" name="imagen_titulo" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* SECCIÓN 2: BLOQUES DE CONTENIDO */}
-                    <div className="space-y-6">
-                        <div className="flex items-center gap-3 text-green-600 mb-8 px-4">
-                            <span className="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center font-black">2</span>
-                            <h2 className="text-xl font-black uppercase tracking-tight italic">Cuerpo de la Carta (6 Bloques)</h2>
-                        </div>
-
-                        {[1, 2, 3, 4, 5, 6].map((num) => (
-                            <section key={num} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-lg shadow-slate-200/50 hover:border-green-200 transition-all">
-                                <div className="flex justify-between items-center mb-6">
-                                    <span className="text-[10px] font-black uppercase bg-green-50 text-green-700 px-4 py-2 rounded-full tracking-widest italic">Bloque de Contenido {num}</span>
-                                </div>
-
-                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                                    {/* Subida de Foto */}
-                                    <div className="lg:col-span-4 space-y-4">
-                                        <div className="relative h-48 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden hover:bg-white transition-all">
-                                            {files[`img${num}`] ? (
-                                                <img src={URL.createObjectURL(files[`img${num}`] as File)} className="w-full h-full object-cover" />
-                                            ) : (
-                                                <div className="text-center opacity-30"><Plus size={24} className="mx-auto mb-1"/><p className="text-[9px] font-black uppercase">Foto {num}</p></div>
-                                            )}
-                                            <input type="file" name={`img${num}`} onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
-                                        </div>
-                                        <input 
-                                            name={`subtxt${num}`} 
-                                            placeholder={`Subtítulo de foto ${num}`} 
-                                            onChange={handleInputChange}
-                                            className="w-full p-3 bg-slate-50 rounded-xl border-none outline-none focus:ring-1 ring-green-500 italic text-sm font-medium" 
-                                        />
-                                    </div>
-
-                                    {/* Texto del Bloque */}
-                                    <div className="lg:col-span-8">
-                                        <label className="text-[9px] font-black uppercase text-slate-400 ml-1">Cuerpo del texto {num}</label>
-                                        <textarea 
-                                            name={`texto${num}`} 
-                                            onChange={handleInputChange} 
-                                            placeholder="Escribe el contenido de esta sección..." 
-                                            className="w-full mt-2 p-5 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-green-500 h-[calc(100%-1.5rem)] min-h-[200px] text-lg leading-relaxed" 
-                                        />
-                                    </div>
-                                </div>
-                            </section>
-                        ))}
-                    </div>
-
-                    {/* FOOTER ACCIÓN */}
-                    <div className="pt-8 pb-20">
-                        <button 
-                            type="submit" 
-                            disabled={loading}
-                            className="w-full bg-slate-900 text-white py-6 rounded-[2.5rem] font-black text-xl tracking-[0.2em] uppercase shadow-2xl shadow-blue-200 hover:bg-blue-600 transition-all active:scale-[0.98] flex items-center justify-center gap-4 disabled:bg-slate-400"
-                        >
-                            {loading ? "Sincronizando con Supabase..." : <><Save size={24}/> Publicar Diario</>}
-                        </button>
-                    </div>
-                </form>
+          {/* Section 1: Header */}
+          <div className="bg-white/[0.02] border border-white/[0.06] p-6">
+            <div className="flex items-center gap-2 mb-5">
+              <span className="text-[9px] bg-cs-verde-musgo/15 border border-cs-verde-musgo/25 text-cs-verde-musgo px-2 py-0.5 uppercase tracking-[0.2em]">
+                01
+              </span>
+              <p className="text-[10px] uppercase tracking-[0.25em] text-white/40">Cabecera</p>
             </div>
-        </main>
-    )
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="text-[9px] uppercase tracking-[0.3em] text-white/30 block mb-1.5">Título</label>
+                  <input
+                    name="titulo"
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.07] text-[13px] text-white/80 outline-none focus:border-cs-verde-musgo/50 transition-colors placeholder:text-white/15"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-[9px] uppercase tracking-[0.3em] text-white/30 flex items-center gap-1.5 mb-1.5">
+                    <Calendar size={9} strokeWidth={1.5} /> Fecha
+                  </label>
+                  <input
+                    name="fecha"
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.07] text-[13px] text-white/80 outline-none focus:border-cs-verde-musgo/50 transition-colors placeholder:text-white/15"
+                  />
+                </div>
+                <div>
+                  <label className="text-[9px] uppercase tracking-[0.3em] text-white/30 block mb-1.5">Descripción de portada</label>
+                  <textarea
+                    name="descripcion_titulo"
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.07] text-[13px] text-white/70 outline-none focus:border-cs-verde-musgo/50 transition-colors resize-none h-20 placeholder:text-white/15"
+                  />
+                </div>
+              </div>
+
+              {/* Cover image */}
+              <div>
+                <label className="text-[9px] uppercase tracking-[0.3em] text-white/30 block mb-1.5">Imagen de portada</label>
+                <div className="relative h-[200px] bg-white/[0.03] border border-dashed border-white/[0.1] hover:border-white/[0.2] transition-colors flex items-center justify-center overflow-hidden">
+                  {files.imagen_titulo ? (
+                    <img src={URL.createObjectURL(files.imagen_titulo)} className="w-full h-full object-cover" alt="" />
+                  ) : (
+                    <div className="text-center">
+                      <ImageIcon size={18} strokeWidth={1} className="mx-auto mb-2 text-white/20" />
+                      <p className="text-[9px] uppercase tracking-[0.2em] text-white/20">Subir portada</p>
+                    </div>
+                  )}
+                  <input type="file" name="imagen_titulo" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sections 2-7: Content blocks */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-[9px] bg-white/[0.05] border border-white/[0.08] text-white/30 px-2 py-0.5 uppercase tracking-[0.2em]">
+                02
+              </span>
+              <p className="text-[10px] uppercase tracking-[0.25em] text-white/30">Cuerpo de la carta · 6 bloques</p>
+            </div>
+
+            <div className="space-y-3">
+              {[1, 2, 3, 4, 5, 6].map((num) => (
+                <div
+                  key={num}
+                  className="bg-white/[0.02] border border-white/[0.05] p-5 hover:border-white/[0.08] transition-colors"
+                >
+                  <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 mb-4">Bloque {num}</p>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-[180px_1fr] gap-5">
+                    {/* Image + subtitle */}
+                    <div className="space-y-2">
+                      <div className="relative h-36 bg-white/[0.03] border border-dashed border-white/[0.08] hover:border-white/[0.15] transition-colors flex items-center justify-center overflow-hidden">
+                        {files[`img${num}`] ? (
+                          <img src={URL.createObjectURL(files[`img${num}`] as File)} className="w-full h-full object-cover" alt="" />
+                        ) : (
+                          <div className="text-center">
+                            <Plus size={14} strokeWidth={1} className="mx-auto mb-1 text-white/15" />
+                            <p className="text-[8px] uppercase tracking-wider text-white/15">Foto {num}</p>
+                          </div>
+                        )}
+                        <input type="file" name={`img${num}`} onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                      </div>
+                      <input
+                        name={`subtxt${num}`}
+                        placeholder={`Subtítulo ${num}`}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-white/[0.03] border border-white/[0.06] text-[11px] text-white/50 italic outline-none focus:border-cs-verde-musgo/40 transition-colors placeholder:text-white/15"
+                      />
+                    </div>
+
+                    {/* Text block */}
+                    <div>
+                      <label className="text-[8px] uppercase tracking-[0.3em] text-white/20 block mb-1.5">Texto {num}</label>
+                      <textarea
+                        name={`texto${num}`}
+                        onChange={handleInputChange}
+                        placeholder="Escribe el contenido de esta sección..."
+                        className="w-full px-4 py-3 bg-white/[0.03] border border-white/[0.06] text-[13px] text-white/70 outline-none focus:border-cs-verde-musgo/40 transition-colors resize-none h-36 leading-relaxed placeholder:text-white/15"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Submit */}
+          <div className="pb-10">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2 bg-white/[0.06] border border-white/[0.1] hover:bg-white/[0.1] hover:border-cs-verde-musgo/40 disabled:opacity-30 transition-all py-4 text-[10px] uppercase tracking-[0.35em] text-white/70"
+            >
+              <Save size={12} strokeWidth={1.5} />
+              {loading ? "Publicando..." : "Publicar entrada"}
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  )
 }

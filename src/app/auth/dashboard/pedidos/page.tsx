@@ -1,50 +1,34 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { ShoppingBag, Loader2, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react'
 
 export default function Admin() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
   const [orders, setOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
+  const [expandedId, setExpandedId] = useState<string | null>(null)
 
   useEffect(() => {
-    if (status === 'loading') return
-    if (!session) {
-      router.push('/auth')
-      return
-    }
-
     const fetchOrders = async () => {
       try {
-        // Consultamos ambas tablas
         const [
           { data: paidOrders, error: paidError },
           { data: allOrders, error: allOrdersError },
         ] = await Promise.all([
-          supabase.from('CS_ORDERS_PAID').select('*'),
-          supabase.from('CS_ORDERS').select('*'),
+          supabase.from('orders').select('*'),
+          supabase.from('orders_item').select('*'),
         ])
 
         if (paidError || allOrdersError) throw paidError || allOrdersError
 
-        // Unir registros por el mismo id
         const merged = (paidOrders || []).map((paid) => {
           const orderInfo = allOrders?.find((o) => o.id === paid.id)
-          return {
-            ...paid,       // nombre, apellido, status, created_at
-            ...orderInfo,  // producto, talla, precio, cantidad, etc.
-          }
+          return { ...paid, ...orderInfo }
         })
 
-        // Ordenar por fecha más reciente
         merged.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-
         setOrders(merged)
       } catch (err) {
         console.error(err)
@@ -55,64 +39,146 @@ export default function Admin() {
     }
 
     fetchOrders()
-  }, [session, status, router])
+  }, [])
 
-  if (status === 'loading' || loading) {
+  if (loading) {
     return (
-      <main className="bg-blue-500 min-h-screen w-full mt-[10%] mx-auto p-8">
-        <p>Cargando...</p>
-      </main>
+      <div className="min-h-screen bg-[#0b0d10] flex items-center justify-center">
+        <Loader2 className="animate-spin text-white/20" size={24} />
+      </div>
     )
   }
 
-  if (!session) return null
+  const toggleExpand = (id: string) => {
+    setExpandedId(expandedId === id ? null : id)
+  }
+
+  const statusColor = (s: string) => {
+    if (!s) return "text-white/30"
+    if (s.toLowerCase().includes("pagad") || s.toLowerCase().includes("complet")) return "text-cs-verde-musgo"
+    if (s.toLowerCase().includes("cancel")) return "text-cs-vino/80"
+    return "text-white/50"
+  }
 
   return (
-    <main className="bg-white min-h-screen w-full mx-auto p-8 md:w-[80%]">
-      <h1 className="text-5xl  mb-4 text-center">Nuestros Pedidos</h1>
+    <div className="min-h-screen bg-[#0b0d10] text-white">
+      <div className="max-w-5xl mx-auto px-6 py-10">
 
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
+        {/* Header */}
+        <div className="mb-8 pb-6 border-b border-white/[0.06]">
+          <div className="flex items-center gap-2 mb-1">
+            <ShoppingBag size={13} strokeWidth={1.5} className="text-white/30" />
+            <p className="text-[9px] uppercase tracking-[0.4em] text-white/25">Operaciones</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <h1 className="font-serif text-xl text-white/85">Pedidos</h1>
+            <span className="text-[9px] bg-white/[0.05] border border-white/[0.07] px-2 py-0.5 text-white/30 uppercase tracking-wider">
+              {orders.length} {orders.length === 1 ? "pedido" : "pedidos"}
+            </span>
+          </div>
         </div>
-      )}
 
-      {orders.length === 0 ? (
-        <p>No hay pedidos pagados</p>
-      ) : (
-        <div className="space-y-4 grid grid-cols-2 gap-4">
-          {orders.map((order) => (
-            <div key={order.id} className="border shadow-lg rounded-lg shadow-gray-300 border-green-500 border-2 p-4 rounded">
-              <h2 className="text-3xl">
-                {order.name} {order.last_name}
-              </h2>
-              <p className="text-2xl">Estado: {order.status}</p>
-              <p className="text-2xl">
-                Fecha de pago: {new Date(order.created_at).toLocaleDateString()}
-              </p>
-              <div className=" gap-4">
-              <p className="text-lg mb-2">Producto: {order.product_name}</p>
-              <p className="text-lg mb-2">Precio: {order.product_price}</p>
-              <p className="text-lg mb-2">Cantidad: {order.quantity}</p>
-              <p className="text-lg mb-2">Talla: {order.size}</p>
-              <p className="text-lg mb-2">Personalizado: {order.personalized}</p>
-              <p className="text-lg mb-2">ID de pedido: {order.id}</p>
-              <p className="text-lg mb-2">Mail: {order.customer_email}</p>
-              <p className="text-lg mb-2">Teléfono: {order.customer_telefono}</p>
-              <p className="text-lg mb-2">Dirección: {order.direccion}</p>
-              <p className="text-lg mb-2">Ciudad: {order.ciudad}</p>
-              <p className="text-lg mb-2">Código Postal: {order.codigo_postal}</p>
-              <p className="text-lg mb-2">País: {order.pais}</p>
-              <p className="text-lg mb-2">Método de envío: {order.metodo_envio}</p>
-              <p className="text-lg mb-2">Costo de envío: {order.costo_envio}</p>
-              <p className="text-lg mb-2">Subtotal: {order.subtotal}</p>
-              <p className="text-lg mb-2">Total: ${order.total}</p>
-            </div>
-            </div>
-           
-          ))}
-        </div>
-      )}
-    </main>
+        {/* Error */}
+        {error && (
+          <div className="flex items-center gap-2 px-4 py-3 bg-cs-vino/10 border border-cs-vino/25 mb-6 text-[11px] text-white/50">
+            <AlertCircle size={13} strokeWidth={1.5} />
+            {error}
+          </div>
+        )}
+
+        {/* Orders */}
+        {orders.length === 0 ? (
+          <div className="py-20 text-center border border-dashed border-white/[0.06]">
+            <p className="text-[10px] text-white/20 uppercase tracking-[0.3em]">No hay pedidos pagados</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-white/[0.05]">
+            {orders.map((order) => {
+              const isOpen = expandedId === order.id
+              return (
+                <div key={order.id} className="hover:bg-white/[0.01] transition-colors">
+                  {/* Row summary */}
+                  <button
+                    onClick={() => toggleExpand(order.id)}
+                    className="w-full flex items-center gap-4 py-4 px-2 text-left"
+                  >
+                    {/* Name + product */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-baseline gap-3">
+                        <p className="font-serif text-[13px] text-white/80">
+                          {order.name} {order.last_name}
+                        </p>
+                        {order.product_name && (
+                          <p className="text-[10px] text-white/35 truncate hidden sm:block">
+                            {order.product_name}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-3 mt-0.5">
+                        <p className="text-[9px] text-white/25">
+                          {new Date(order.created_at).toLocaleDateString("es-MX", {
+                            year: "numeric", month: "short", day: "numeric"
+                          })}
+                        </p>
+                        {order.status && (
+                          <span className={`text-[9px] uppercase tracking-wider ${statusColor(order.status)}`}>
+                            {order.status}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Total */}
+                    <div className="text-right flex-shrink-0">
+                      {order.total && (
+                        <p className="font-serif text-[15px] text-white/75">${order.total}</p>
+                      )}
+                    </div>
+
+                    {/* Expand icon */}
+                    <div className="text-white/20 ml-2 flex-shrink-0">
+                      {isOpen ? <ChevronUp size={14} strokeWidth={1.5} /> : <ChevronDown size={14} strokeWidth={1.5} />}
+                    </div>
+                  </button>
+
+                  {/* Expanded detail */}
+                  {isOpen && (
+                    <div className="px-4 pb-6">
+                      <div className="bg-white/[0.025] border border-white/[0.06] p-5 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
+                        {[
+                          ["Producto", order.product_name],
+                          ["Precio unitario", order.product_price ? `$${order.product_price}` : null],
+                          ["Cantidad", order.quantity],
+                          ["Talla", order.size],
+                          ["Personalización", order.personalized],
+                          ["Subtotal", order.subtotal ? `$${order.subtotal}` : null],
+                          ["Costo de envío", order.costo_envio ? `$${order.costo_envio}` : null],
+                          ["Método de envío", order.metodo_envio],
+                          ["Email", order.customer_email],
+                          ["Teléfono", order.customer_telefono],
+                          ["Dirección", order.direccion],
+                          ["Ciudad", order.ciudad],
+                          ["Código postal", order.codigo_postal],
+                          ["País", order.pais],
+                          ["ID de pedido", order.id],
+                        ].map(([label, value]) =>
+                          value ? (
+                            <div key={label as string} className="flex flex-col">
+                              <span className="text-[8px] uppercase tracking-[0.25em] text-white/25">{label}</span>
+                              <span className="text-[12px] text-white/65 mt-0.5 font-mono break-all">{value}</span>
+                            </div>
+                          ) : null
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+      </div>
+    </div>
   )
 }

@@ -27,7 +27,7 @@ export default function Tape() {
           </Link>
         </div>
         <div className="row-span-1  mx-auto">
-          <Link href="/journal">
+          <Link href="/diario">
             <button className="bg-white/60 text-black font-bold border-black border-2 hover:bg-cs-verde-musgo hover:text-white z-10 text-left p-4 w-auto h-10 pt-2 ml-2 mt-8">
               NOTICIAS
             </button>
@@ -42,7 +42,7 @@ export default function Tape() {
           </Link>
         </div>
         <div className="row-span-1  mx-auto ">
-          <Link href="/diario">
+          <Link href="/biblioteca">
             <button className="bg-white/60 mt-8 text-black font-bold border-black border-2 hover:bg-cs-verde-musgo hover:text-white z-10 text-left p-4 w-auto h-10 pt-2 ml-2 ">
               PROCESOS
             </button>

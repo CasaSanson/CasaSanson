@@ -1,41 +1,66 @@
 "use client"
-import { UploadCloudIcon, EditIcon, Trash2, Book } from "lucide-react" // Cambié Delete por Trash2 que es más común
+import { UploadCloudIcon, Trash2, BookOpen } from "lucide-react"
 import Link from "next/link"
 
-export default function AdminLibros(){
-    return(
-        <main className="px-20 min-h-screen bg-gray-100 text-black">
-            <div className="flex flex-col">
-                <h1 className="text-black text-4xl mt-10 font-bold">
-                    Libros Casa Sansón
-                </h1>
-                <p className="mt-10  text-gray-600">
-                    Este es el espacio para administrar nuestross libros: crearlas, editarlas o borrarlas. <br></br>
-                    Es muy importante avisar al CTO si se presenta algún error. <br></br>
-                    Revisen la página principal tras cada cambio.
-                </p>
-            </div>
+const actions = [
+  {
+    href: "/auth/libros/subir",
+    label: "Subir libro",
+    description: "Publica un nuevo libro con portada y link de Heyzine",
+    icon: UploadCloudIcon,
+    color: "#6f7b6a",
+  },
+  {
+    href: "/auth/libros/lista",
+    label: "Gestionar libros",
+    description: "Visualiza y elimina libros de la biblioteca",
+    icon: Trash2,
+    color: "#9b7b7b",
+  },
+]
 
-            <div className="mt-20 flex justify-center gap-10">
-                {/* CREAR */}
-                <div className="border-4 border-green-600 rounded-xl overflow-hidden flex flex-col items-center w-64">
-                    <UploadCloudIcon className="h-24 w-24 text-green-600 my-6" />
-                    <Link href="/auth/libros/subir" className="w-full">
-                         <button className="text-white bg-green-600 p-4 text-2xl w-full font-bold hover:bg-green-700 transition-colors">
-                            SUBIR LIBRO
-                         </button>
-                    </Link>
-                </div>
-                {/* BORRAR - También lleva a la LISTA pero para eliminar */}
-                <div className="border-4 border-red-600 rounded-xl overflow-hidden flex flex-col items-center w-64">
-                    <Trash2 className="h-24 w-24 text-red-600 my-6" />
-                    <Link href="/auth/libros/lista" className="w-full">
-                         <button className="text-white bg-red-600 p-4 text-2xl w-full font-bold hover:bg-red-700 transition-colors">
-                            BORRAR LIBRO
-                         </button>
-                    </Link>
-                </div>
-            </div>
-        </main>
-    )
+export default function AdminLibros() {
+  return (
+    <div className="min-h-screen bg-[#0b0d10] text-white">
+      <div className="max-w-3xl mx-auto px-6 py-10">
+
+        <div className="mb-10 pb-6 border-b border-white/[0.06]">
+          <div className="flex items-center gap-2 mb-1">
+            <BookOpen size={13} strokeWidth={1.5} className="text-white/30" />
+            <p className="text-[9px] uppercase tracking-[0.4em] text-white/25">Biblioteca</p>
+          </div>
+          <h1 className="font-serif text-xl text-white/85">Libros</h1>
+          <p className="text-[11px] text-white/30 mt-1.5 leading-relaxed max-w-lg">
+            Administra los libros de Casa Sansón. Revisa la página principal tras cada cambio y avisa al CTO si se presenta algún error.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {actions.map(({ href, label, description, icon: Icon, color }) => (
+            <Link
+              key={href}
+              href={href}
+              className="group flex items-center gap-4 p-5 bg-white/[0.025] border border-white/[0.055] hover:bg-white/[0.045] hover:border-white/[0.1] transition-all duration-200"
+            >
+              <div
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: `${color}18`, border: `1px solid ${color}28` }}
+              >
+                <Icon size={15} strokeWidth={1.5} style={{ color }} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-white/75 font-medium">
+                  {label}
+                </p>
+                <p className="text-[10px] text-white/28 mt-0.5">
+                  {description}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+      </div>
+    </div>
+  )
 }

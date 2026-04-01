@@ -1,16 +1,12 @@
 "use client";
-import { useState } from "react"
 import RippleEffect from "@/components/RippleEffect";
 import Image from "next/image";
-import Link from "next/link";
 
+interface LandingProps {
+  onEnter?: () => void;
+}
 
-
-export default function Landing() {
-
-  const handleEnterWebsite = () => {
-    window.dispatchEvent(new Event('enterhome')); // Dispara el evento
-  };
+export default function Landing({ onEnter }: LandingProps) {
   return (
     <div className="fixed inset-0  bg-cover bg-center h-screen w-screen flex items-center justify-center z-50 relative overflow-hidden">
       {/* Fondo con Ripple */}
@@ -48,14 +44,13 @@ export default function Landing() {
         </div>
 
         {/* Botón de entrada */}
-        <Link href={"/home"}>
-          <button
-            className="group relative pointer-events-auto px-12 py-4 bg-black  text-white text-xl rounded-none border-2 border-black transition-all duration-700 hover:bg-cs-verde-musgo hover:border-black/50 hover:shadow-2xl transform hover:scale-105 drop-shadow-lg"
-          >
-            <span className="relative z-30 text-md text-gray-500 ">COMING SOON...</span>
-            <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-          </button>
-        </Link>
+        <button
+          onClick={onEnter}
+          className="group relative pointer-events-auto px-12 py-4 bg-black text-white text-xl rounded-none border-2 border-black transition-all duration-700 hover:bg-cs-verde-musgo hover:border-black/50 hover:shadow-2xl transform hover:scale-105 drop-shadow-lg"
+        >
+          <span className="relative z-30 text-md text-gray-500">COMING SOON...</span>
+          <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+        </button>
 
 
       </div>
