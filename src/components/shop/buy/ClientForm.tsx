@@ -1,5 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useCart } from "@/context/CartContext";
+import { supabase } from "@/lib/supabase";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+
+export interface ShippingRate {
+    precio: number;
+    nombre: string;
+    rate_id: string;
+}
+
 export interface FormData {
     nombre: string;
     apellido: string;
@@ -9,35 +20,35 @@ export interface FormData {
     ciudad: string;
     codigoPostal: string;
     pais: string;
-    metodoEnvio: string;
-    talla: string;
-    personalizado: string;
 }
-
-import { Product, ProductVariant } from "@/lib/shop/interfaces";
-import { supabase } from "@/lib/supabase";
-import PhoneInput from "react-phone-number-input";
-import "react-phone-number-input/style.css";
 
 interface ClientFormProps {
-    product: Product;
-    selectedVariant: ProductVariant | null;
-    setSelectedVariant: React.Dispatch<React.SetStateAction<ProductVariant | null>>;
-    personalizedText: string;
-    setPersonalizedText: React.Dispatch<React.SetStateAction<string>>;
-    quantity: number;
+    cart: any[];
+    metodoEnvio: string;
+    setMetodoEnvio: (val: string) => void;
+    onRatesUpdate: (rates: { estandar: ShippingRate; express: ShippingRate }) => void;
 }
 
+const inputClass = (hasError: boolean) =>
+    `w-full py-3 bg-transparent text-[12px] text-cs-negro placeholder:text-cs-gris-ceniza/50 outline-none tracking-wide border-b transition-colors duration-400 ${
+        hasError ? "border-cs-vino" : "border-cs-negro/20 focus:border-cs-negro"
+    }`;
+
 export default function ClientForm({
-    product,
-    selectedVariant,
-    setSelectedVariant,
-    personalizedText,
-    setPersonalizedText,
-    quantity,
-}: ClientFormProps){
-    const text = personalizedText;
-    const size = selectedVariant?.size || "";
+    cart,
+    metodoEnvio,
+    setMetodoEnvio,
+    onRatesUpdate,
+}: ClientFormProps) {
+    const [errors, setErrors] = useState<Partial<FormData>>({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [isEstimating, setIsEstimating] = useState(false);
+
+    const [localRates, setLocalRates] = useState<{ estandar: ShippingRate; express: ShippingRate }>({
+        estandar: { precio: 0, nombre: "Ingresa tu C.P.", rate_id: "" },
+        express: { precio: 0, nombre: "Ingresa tu C.P.", rate_id: "" }
+    });
+
     const [formData, setFormData] = useState<FormData>({
         nombre: '',
         apellido: '',
@@ -47,65 +58,96 @@ export default function ClientForm({
         ciudad: '',
         codigoPostal: '',
         pais: 'México',
-        metodoEnvio: 'estandar',
-        talla: size,
-        personalizado: text,
     });
-    const validateForm = (): boolean => {
-        const newErrors: Partial<FormData> = {};
 
-        if (!formData.nombre.trim()) newErrors.nombre = 'El nombre es requerido';
-        if (!formData.apellido.trim()) newErrors.apellido = 'El apellido es requerido';
-        if (!formData.email.trim()) {
-            newErrors.email = 'El email es requerido';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'El email no es válido';
+    const fetchRates = async (zip: string) => {
+        setIsEstimating(true);
+        try {
+            const res = await fetch('/api/shipping/estimate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ zip_to: zip })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                const rates = {
+                    estandar: data.estandar,
+                    express: {
+                        precio: Math.ceil(data.estandar.precio * 1.3),
+                        rate_id: data.estandar.rate_id,
+                        nombre: "DHL Express (Rápido)"
+                    }
+                };
+                setLocalRates(rates);
+                onRatesUpdate(rates);
+            }
+        } catch (error) {
+            console.error("Error al cotizar:", error);
+        } finally {
+            setIsEstimating(false);
         }
-        if (!formData.telefono.trim()) newErrors.telefono = 'El teléfono es requerido';
-        if (!formData.direccion.trim()) newErrors.direccion = 'La dirección es requerida';
-        if (!formData.ciudad.trim()) newErrors.ciudad = 'La ciudad es requerida';
-        if (!formData.codigoPostal.trim()) newErrors.codigoPostal = 'El código postal es requerido';
+    };
+
+    useEffect(() => {
+        if (formData.codigoPostal.length === 5) {
+            fetchRates(formData.codigoPostal);
+        }
+    }, [formData.codigoPostal]);
+
+    const validateForm = (): boolean => {
+        const newErrors: any = {};
+        if (!formData.nombre.trim()) newErrors.nombre = 'Nombre requerido';
+        if (!formData.apellido.trim()) newErrors.apellido = 'Apellido requerido';
+        if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email inválido';
+        if (!formData.telefono) newErrors.telefono = 'Teléfono requerido';
+        if (!formData.direccion.trim()) newErrors.direccion = 'Dirección requerida';
+        if (!formData.ciudad.trim()) newErrors.ciudad = 'Ciudad requerida';
+        if (!/^\d{5}$/.test(formData.codigoPostal)) newErrors.codigoPostal = 'CP inválido';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-    if (!product) return null
-    const [errors, setErrors] = useState<Partial<FormData>>({});
-    const [isLoading, setIsLoading] = useState(false);
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-        
-        // Limpiar error cuando el usuario empiece a escribir
+        setFormData(prev => ({ ...prev, [name]: value }));
         if (errors[name as keyof FormData]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: ''
-            }));
+            setErrors(prev => ({ ...prev, [name]: '' }));
         }
     };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
-        if (!validateForm()) {
+        if (!validateForm()) return;
+        if (isEstimating || localRates.estandar.precio === 0) {
+            alert("Por favor espera a que se calcule el envío");
             return;
         }
 
         setIsLoading(true);
-        
+
+        const subtotal = cart.reduce((acc, item) => {
+            const precio = item.selectedVariant.price ?? item.base_price ?? 0;
+            return acc + (precio * item.quantity);
+        }, 0);
+
+        const currentRate = metodoEnvio === 'express' ? localRates.express : localRates.estandar;
+        const totalFinal = subtotal + currentRate.precio;
+
         try {
-            // Primero, guardar el pedido en Supabase
-            const variantPrice = selectedVariant?.price ?? product.base_price;
+            const itemsJson = cart.map(item => ({
+                id: item.id,
+                name: item.name,
+                size: item.selectedVariant.size,
+                price: item.selectedVariant.price ?? item.base_price,
+                quantity: item.quantity,
+                personalizedText: item.personalizedText || ""
+            }));
+
             const { data: orderData, error: orderError } = await supabase
                 .from('orders')
                 .insert({
-                    product_id: product.id,
-                    product_name: product.name,
-                    product_price: variantPrice,
-                    quantity: quantity,
                     customer_nombre: formData.nombre,
                     customer_apellido: formData.apellido,
                     customer_email: formData.email,
@@ -114,278 +156,190 @@ export default function ClientForm({
                     ciudad: formData.ciudad,
                     codigo_postal: formData.codigoPostal,
                     pais: formData.pais,
-                    metodo_envio: formData.metodoEnvio,
-                    costo_envio: envio,
-                    subtotal: subtotal,
-                    total: total,
+                    metodo_envio: metodoEnvio,
+                    costo_envio: currentRate.precio,
+                    subtotal,
+                    total: totalFinal,
+                    items: itemsJson,
                     status: 'pending',
-                    size: size,
-                    personalized: text,
                 })
-                .select()
-                .single();
+                .select().single();
 
-            if (orderError) {
-                console.error('Error al guardar el pedido:', orderError);
-                console.error('Datos que se intentaron insertar:', {
-                    product_id: product.id,
-                    product_name: product.name,
-                    product_price: variantPrice,
-                    quantity: quantity,
-                    customer_nombre: formData.nombre,
-                    customer_apellido: formData.apellido,
-                    customer_email: formData.email,
-                    customer_telefono: formData.telefono,
-                    direccion: formData.direccion,
-                    ciudad: formData.ciudad,
-                    codigo_postal: formData.codigoPostal,
-                    pais: formData.pais,
-                    metodo_envio: formData.metodoEnvio,
-                    costo_envio: envio,
-                    subtotal: subtotal,
-                    total: total,
-                    status: 'pending',
-                });
-                alert(`Error al guardar el pedido: ${orderError.message}`);
-                return;
-            }
+            if (orderError) throw orderError;
 
-            console.log('Pedido guardado con ID:', orderData.id);
-
-            // Ahora crear la sesión de Stripe con el ID del pedido
             const response = await fetch('/api/stripe/checkout', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    productId: product.id,
-                    variantId: selectedVariant?.id,
-                    quantity: quantity,
-                    customerInfo: formData,
-                    orderId: orderData.id // Pasar el ID del pedido a Stripe
+                    cart,
+                    shippingCost: currentRate.precio,
+                    orderId: orderData.id,
+                    customerInfo: formData
                 }),
             });
 
-            const { url } = await response.json();
-            
-            if (url) {
-                window.location.href = url;
+            const stripeData = await response.json();
+            if (stripeData.url) {
+                window.location.href = stripeData.url;
+            } else {
+                throw new Error("No se pudo generar la sesión de Stripe");
             }
-        } catch (error) {
-            console.error('Error al procesar el pago:', error);
-            alert('Error al procesar el pago. Por favor, inténtalo de nuevo.');
+
+        } catch (error: any) {
+            console.error("Error en Checkout:", error);
+            alert(`Error al procesar el pedido: ${error.message || "Inténtalo de nuevo"}`);
         } finally {
             setIsLoading(false);
         }
     };
-    const variantPrice = selectedVariant?.price ?? product.base_price;
-    const subtotal = variantPrice * quantity;
-    const envio = formData.metodoEnvio === 'express' ? 250 : formData.metodoEnvio === 'estandar' ? 150 : 0; 
-    const total = subtotal + envio;
-    return(
-        <div className="bg-white p-6 shadow-2xl shadow-gray-300 h-fit border border-gray-900">
-                        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6">Información de compra</h1>
-                        
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            {/* Información personal */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-md sm:text-lg font-medium text-black mb-1">
-                                        Nombre *
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="nombre"
-                                        value={formData.nombre}
-                                        onChange={handleInputChange}
-                                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black ${
-                                            errors.nombre ? 'border-red-500' : 'border-gray-300'
-                                        }`}
-                                        placeholder="Tu nombre"
-                                    />
-                                    {errors.nombre && <p className="text-red-500 text-xs mt-1">{errors.nombre}</p>}
-                                </div>
-                                
-                                <div>
-                                    <label className="block text-md sm:text-lg font-medium text-gray-700 mb-1">
-                                        Apellido *
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="apellido"
-                                        value={formData.apellido}
-                                        onChange={handleInputChange}
-                                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black ${
-                                            errors.apellido ? 'border-red-500' : 'border-gray-300'
-                                        }`}
-                                        placeholder="Tu apellido"
-                                    />
-                                    {errors.apellido && <p className="text-red-500 text-xs mt-1">{errors.apellido}</p>}
-                                </div>
-                            </div>
 
-                            <div>
-                                <label className="block text-md font-medium text-gray-700 mb-1">
-                                    <span className="block text-md sm:text-lg font-medium text-gray-700 mb-1">Email *</span>
-                                </label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black ${
-                                        errors.email ? 'border-red-500' : 'border-gray-300'
-                                    }`}
-                                    placeholder="tu@email.com"
-                                />
-                                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-                            </div>
+    return (
+        <div className="bg-white">
+            <p className="text-[8px] uppercase tracking-[0.45em] text-cs-gris-ceniza mb-8">
+                Información de envío
+            </p>
+            <form onSubmit={handleSubmit} className="space-y-6">
 
-                            <div>
-                                <label className="block text-md sm:text-lg font-medium text-gray-700 mb-1">
-                                    Teléfono *
-                                </label>
-                                <PhoneInput
-                                    international
-                                    defaultCountry="MX"
-                                    value={formData.telefono}
-                                    onChange={(value: string | undefined) => {
-                                        setFormData(prev => ({
-                                            ...prev,
-                                            telefono: value || ''
-                                        }));
-                                        if (errors.telefono) {
-                                            setErrors(prev => ({
-                                                ...prev,
-                                                telefono: ''
-                                            }));
-                                        }
-                                    }}
-                                    className={`w-full ${
-                                        errors.telefono ? 'border-red-500' : ''
-                                    }`}
-                                    numberInputProps={{
-                                        className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black ${
-                                            errors.telefono ? 'border-red-500' : 'border-gray-300'
-                                        }`
-                                    }}
-                                />
-                                {errors.telefono && <p className="text-red-500 text-xs mt-1">{errors.telefono}</p>}
-                            </div>
-
-                            {/* Dirección de envío */}
-                            <div className="border-t pt-[2rem]">
-                                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-4">Dirección de envío</h3>
-                                
-                                <div>
-                                    <label className="block text-md sm:text-lg font-medium text-gray-700 mb-1">
-                                        Dirección (calle, número, colonia) *
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="direccion"
-                                        value={formData.direccion}
-                                        onChange={handleInputChange}
-                                        className={`w-full mb-5 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black ${
-                                            errors.direccion ? 'border-red-500' : 'border-gray-300'
-                                        }`}
-                                        placeholder="Calle, número, colonia"
-                                    />
-                                    {errors.direccion && <p className="text-red-500 text-xs mb-1">{errors.direccion}</p>}
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-md sm:text-lg font-medium text-gray-700 mb-1">
-                                            Ciudad *
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="ciudad"
-                                            value={formData.ciudad}
-                                            onChange={handleInputChange}
-                                            className={`w-full mb-5 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black ${
-                                                errors.ciudad ? 'border-red-500' : 'border-gray-300'
-                                            }`}
-                                            placeholder="Ciudad"
-                                        />
-                                        {errors.ciudad && <p className="text-red-500 text-xs mt-1">{errors.ciudad}</p>}
-                                    </div>
-                                    
-                                    <div>
-                                        <label className="block text-md sm:text-lg font-medium text-gray-700 mb-1">
-                                            Código Postal *
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="codigoPostal"
-                                            value={formData.codigoPostal}
-                                            onChange={handleInputChange}
-                                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black ${
-                                                errors.codigoPostal ? 'border-red-500' : 'border-gray-300'
-                                            }`}
-                                            placeholder="12345"
-                                        />
-                                        {errors.codigoPostal && <p className="text-red-500 text-xs mt-1">{errors.codigoPostal}</p>}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-md sm:text-lg font-medium text-gray-700 mb-1">
-                                        País
-                                    </label>
-                                    <select
-                                        name="pais"
-                                        value={formData.pais}
-                                        onChange={handleInputChange}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                                    >
-                                        <option value="México">México</option>
-                                        <option value="España">España</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            {/* Método de envío */}
-                           <div className="border-t pt-[2rem]">
-                                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-4">Método de envío</h3>
-                                <div className="space-y-2">
-
-                                    <label className="flex items-center text-gray-500 text-md sm:text-lg md:text-xl">
-                                        <input
-                                            type="radio"
-                                            name="metodoEnvio"
-                                            value="express"
-                                            checked={formData.metodoEnvio === 'express'}
-                                            onChange={handleInputChange}
-                                            className="mr-2"
-                                        />
-                                        <span>Envío express (1-2 semanas) - $250 MXN</span>
-                                    </label>
-                                    <label className="flex items-center text-gray-500 text-md sm:text-lg md:text-xl">
-                                        <input
-                                            type="radio"
-                                            name="metodoEnvio"
-                                            value="estandar"
-                                            checked={formData.metodoEnvio === 'estandar'}
-                                            onChange={handleInputChange}
-                                            className="mr-2"
-                                        />
-                                        <span>Envío estándar (3-4 semanas) - $150 MXN</span>
-                                    </label>
-
-                                </div>
-                            </div> 
-
-                            <button
-                                type="submit"
-                                disabled={isLoading}
-                                className="w-full bg-black text-white py-3 px-4 rounded-md hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {isLoading ? 'Procesando...' : 'Proceder al pago'}
-                            </button>
-                        </form>
+                <div className="grid grid-cols-2 gap-6">
+                    <div>
+                        <input
+                            name="nombre"
+                            value={formData.nombre}
+                            placeholder="Nombre"
+                            onChange={handleInputChange}
+                            className={inputClass(!!errors.nombre)}
+                        />
+                        {errors.nombre && <span className="text-cs-vino text-[9px] uppercase tracking-wider mt-1 block">{errors.nombre}</span>}
                     </div>
-    )
+                    <div>
+                        <input
+                            name="apellido"
+                            value={formData.apellido}
+                            placeholder="Apellido"
+                            onChange={handleInputChange}
+                            className={inputClass(!!errors.apellido)}
+                        />
+                        {errors.apellido && <span className="text-cs-vino text-[9px] uppercase tracking-wider mt-1 block">{errors.apellido}</span>}
+                    </div>
+                </div>
+
+                <div>
+                    <input
+                        name="email"
+                        value={formData.email}
+                        type="email"
+                        placeholder="Correo electrónico"
+                        onChange={handleInputChange}
+                        className={inputClass(!!errors.email)}
+                    />
+                    {errors.email && <span className="text-cs-vino text-[9px] uppercase tracking-wider mt-1 block">{errors.email}</span>}
+                </div>
+
+                <div>
+                    <PhoneInput
+                        defaultCountry="MX"
+                        value={formData.telefono}
+                        onChange={(val) => setFormData(p => ({ ...p, telefono: val || '' }))}
+                        className={`text-cs-negro text-[12px] border-b w-full py-3 outline-none tracking-wide ${errors.telefono ? 'border-cs-vino' : 'border-cs-negro/20'}`}
+                    />
+                    {errors.telefono && <span className="text-cs-vino text-[9px] uppercase tracking-wider mt-1 block">{errors.telefono}</span>}
+                </div>
+
+                <div className="pt-4">
+                    <p className="text-[8px] uppercase tracking-[0.45em] text-cs-gris-ceniza mb-5">
+                        Domicilio
+                    </p>
+                    <div className="space-y-6">
+                        <div>
+                            <input
+                                name="direccion"
+                                value={formData.direccion}
+                                placeholder="Calle, número y colonia"
+                                onChange={handleInputChange}
+                                className={inputClass(!!errors.direccion)}
+                            />
+                            {errors.direccion && <span className="text-cs-vino text-[9px] uppercase tracking-wider mt-1 block">{errors.direccion}</span>}
+                        </div>
+                        <div className="grid grid-cols-2 gap-6">
+                            <div>
+                                <input
+                                    name="ciudad"
+                                    value={formData.ciudad}
+                                    placeholder="Ciudad / Municipio"
+                                    onChange={handleInputChange}
+                                    className={inputClass(!!errors.ciudad)}
+                                />
+                                {errors.ciudad && <span className="text-cs-vino text-[9px] uppercase tracking-wider mt-1 block">{errors.ciudad}</span>}
+                            </div>
+                            <div>
+                                <input
+                                    name="codigoPostal"
+                                    value={formData.codigoPostal}
+                                    placeholder="Código Postal"
+                                    onChange={handleInputChange}
+                                    maxLength={5}
+                                    className={inputClass(!!errors.codigoPostal)}
+                                />
+                                {errors.codigoPostal && <span className="text-cs-vino text-[9px] uppercase tracking-wider mt-1 block">{errors.codigoPostal}</span>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Opciones de envío */}
+                {!isEstimating && formData.codigoPostal.length === 5 && localRates.estandar.precio > 0 && (
+                    <div className="pt-4">
+                        <p className="text-[8px] uppercase tracking-[0.45em] text-cs-gris-ceniza mb-5">
+                            Método de entrega
+                        </p>
+                        <div className="space-y-3">
+                            {[
+                                { key: "estandar", rate: localRates.estandar },
+                                { key: "express", rate: localRates.express },
+                            ].map(({ key, rate }) => (
+                                <label
+                                    key={key}
+                                    className={`flex items-center justify-between py-4 border-b cursor-pointer transition-all duration-300 ${
+                                        metodoEnvio === key ? "border-cs-negro" : "border-cs-negro/15 opacity-60"
+                                    }`}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <input
+                                            type="radio"
+                                            name="envio"
+                                            checked={metodoEnvio === key}
+                                            onChange={() => setMetodoEnvio(key)}
+                                            className="accent-cs-negro"
+                                        />
+                                        <span className="text-[10px] uppercase tracking-[0.2em] text-cs-negro">
+                                            {rate.nombre}
+                                        </span>
+                                    </div>
+                                    <span className="text-[11px] text-cs-negro tracking-wide">
+                                        ${rate.precio.toLocaleString("es-MX")} MXN
+                                    </span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {isEstimating && (
+                    <p className="text-[9px] uppercase tracking-[0.35em] text-cs-gris-ceniza">
+                        Calculando envío...
+                    </p>
+                )}
+
+                <div className="pt-4">
+                    <button
+                        type="submit"
+                        disabled={isLoading || isEstimating || localRates.estandar.precio === 0}
+                        className="w-full py-5 text-[9px] uppercase tracking-[0.45em] bg-cs-negro text-white hover:bg-cs-vino transition-colors duration-500 disabled:opacity-30 disabled:cursor-not-allowed"
+                    >
+                        {isLoading ? 'Conectando...' : 'Finalizar y Pagar'}
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
 }

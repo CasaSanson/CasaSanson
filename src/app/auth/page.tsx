@@ -1,91 +1,130 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn, getSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
+import { Eye, EyeOff, LogIn } from 'lucide-react'
 
 export default function LoginPage() {
+  const router = useRouter()
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
 
-    try {
-      const result = await signIn('credentials', {
-        password,
-        redirect: false
-      })
+    const supabase = createClient()
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
 
-      if (result?.error) {
-        setError('Credenciales inválidas')
+    if (signInError) {
+      const msg = signInError.message.toLowerCase()
+      if (msg.includes('email not confirmed')) {
+        setError('Confirma tu correo antes de entrar.')
+      } else if (msg.includes('invalid login credentials') || msg.includes('invalid email or password')) {
+        setError('Correo o contraseña incorrectos.')
       } else {
-        // Verificar la sesión y redirigir
-        const session = await getSession()
-        if (session) {
-          router.push('/auth/dashboard')
-        }
+        setError(signInError.message)
       }
-    } catch (error) {
-      setError('Error al iniciar sesión')
-    } finally {
       setLoading(false)
+      return
     }
+
+    // El middleware en src/middleware.ts verifica que el email sea super_admin.
+    // Si no lo es, redirige automáticamente a '/'. No hace falta checar aquí.
+    router.push('/auth/dashboard')
+    router.refresh()
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-            CASA SANSÓN
-          </h2>
-          <p className="mt-2 text-center text-lg text-gray-600">
-            Página de administración
+    <div className="min-h-screen bg-[#0b0d10] flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+
+        {/* Brand */}
+        <div className="mb-10 text-center">
+          <p className="font-serif text-[11px] uppercase tracking-[0.4em] text-white/50 mb-1">
+            Casa Sansón
+          </p>
+          <p className="text-[9px] uppercase tracking-[0.3em] text-white/20">
+            Portal de administración
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm">
+
+        {/* Card */}
+        <div className="bg-white/[0.025] border border-white/[0.07] p-8">
+          <h1 className="font-serif text-lg text-white/85 mb-6">Iniciar sesión</h1>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email */}
             <div>
-              <label htmlFor="password" className="sr-only">
-                Contraseña
+              <label className="text-[9px] uppercase tracking-[0.3em] text-white/30 block mb-1.5">
+                Correo electrónico
               </label>
               <input
-                id="password"
-                name="password"
-                type="password"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="email"
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.07] text-[13px] text-white/80 outline-none focus:border-cs-verde-musgo/50 transition-colors placeholder:text-white/20"
+                placeholder="tu@correo.com"
               />
             </div>
-          </div>
 
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="text-sm text-red-700">{error}</div>
+            {/* Password */}
+            <div>
+              <label className="text-[9px] uppercase tracking-[0.3em] text-white/30 block mb-1.5">
+                Contraseña
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                  className="w-full px-4 py-3 pr-11 bg-white/[0.04] border border-white/[0.07] text-[13px] text-white/80 outline-none focus:border-cs-verde-musgo/50 transition-colors placeholder:text-white/20"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/50 transition-colors"
+                >
+                  {showPassword
+                    ? <EyeOff size={14} strokeWidth={1.5} />
+                    : <Eye size={14} strokeWidth={1.5} />}
+                </button>
+              </div>
             </div>
-          )}
 
-          <div>
+            {/* Error */}
+            {error && (
+              <div className="px-4 py-3 bg-cs-vino/15 border border-cs-vino/30 text-[11px] text-white/60">
+                {error}
+              </div>
+            )}
+
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 bg-white/[0.07] border border-white/[0.12] hover:bg-white/[0.12] hover:border-cs-verde-musgo/40 disabled:opacity-40 transition-all py-3.5 text-[10px] uppercase tracking-[0.35em] text-white/70 mt-2"
             >
-              {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+              <LogIn size={12} strokeWidth={1.5} />
+              {loading ? 'Entrando...' : 'Entrar'}
             </button>
-          </div>
+          </form>
 
-          <div className="text-center">
+        </div>
 
-          </div>
-        </form>
+        <p className="text-center text-[8px] uppercase tracking-[0.2em] text-white/15 mt-6">
+          Solo administradores autorizados pueden acceder al portal
+        </p>
       </div>
     </div>
   )

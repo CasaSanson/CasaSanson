@@ -3,7 +3,7 @@ export interface ProductVariant {
     id: string;
     size: string;
     color: string;
-    price?: number;
+    price: number;
     stock: number;
     personalizedText: string;
   }
