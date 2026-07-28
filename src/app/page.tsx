@@ -4,6 +4,7 @@ import Landing from "@/components/home/landing/Landing";
 import CircularText from "@/components/CircularText";
 import Header from "@/components/home/Header";
 import Tape from "@/components/home/Tape";
+import Newsletter from "@/components/home/Newsletter";
 import LastRelease from "@/components/shop/LastRelease";
 import Image from "next/image";
 import { Send, X } from "lucide-react";
@@ -145,9 +146,8 @@ export default function Home() {
       )}
       <Header />
       <LastRelease />
-      <div className="mb-10">
-        <Tape />
-      </div>
+      <Tape />
+      <Newsletter />
     </main>
   );
 }

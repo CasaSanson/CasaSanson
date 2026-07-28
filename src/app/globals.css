@@ -80,13 +80,12 @@
 /* Configuración de fuente global */
 
 
-/* Cursor personalizado */
+/* Cursor */
 * {
   cursor: default;
 }
-
 select:hover {
-  cursor: pointer
+  cursor: pointer;
 }
 
 
